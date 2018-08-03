@@ -1,0 +1,215 @@
+@mcolor : #26a69a;
+
+.my_follow {
+	width: 100%;
+	
+	.my_follow_item {
+		width: 100%;
+		height: 120px;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		background: white;
+		align-items: center;
+		border-bottom: 1px solid lightgray;
+		
+		&:hover{
+			background:rgba(179,224,220,0.1);
+
+			.continue {
+				.small {
+					display: flex;
+				}
+			}
+		}
+
+		.item_infor {
+			width: 260px;
+			height: 100%;
+			display: flex;
+			flex-direction: row;
+			justify-content: space-around;
+			align-items: center;
+
+			.check {
+				width: 18px;
+				height: 18px;
+				margin-left: 20px;
+				margin-right: 15px;
+			}
+
+			.item_img {
+				width: 60px;
+				height: 80px;
+				overflow: hidden;
+				position: relative;
+
+				.item_state_updating {
+					width: 100%;
+					height: 20px;
+					position: absolute;
+					background: rgb(66,132,237);
+					color: white;
+					font-size: 10px;
+					text-align: center;
+					bottom: 0;
+				}
+
+				.item_state_end {
+					.item_state_updating();
+					background: rgb(255,60,87);
+				}
+			}
+
+			.infor {
+				width: 150px;
+				height: 60%;
+
+				.tit {
+					width: 100%;
+					height: 40px;
+					margin:0;
+					text-indent: 10px;
+					line-height: 40px;
+					font-size: 17px;
+					font-weight: 1;
+					overflow: hidden;
+					white-space: nowrap;
+					text-overflow: ellipsis;
+
+				}
+
+				.name {
+					.tit();
+					height: 20px;
+					line-height: 18px;
+					font-size: 13px;
+					color: gray;
+				}
+			}
+		}
+
+		.more {
+			width: calc(100% - 480px);
+			height: 60%;
+
+			.more_infor {
+				width: 100%;
+				height: 40px;
+				font-size: 17px;
+				line-height: 40px;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+			}
+
+			.history {
+				.more_infor();
+				height: 20px;
+				color: gray;
+				font-size: 13px;
+				line-height: 20px;
+
+				a {
+					color: gray;
+
+					&:hover{
+						color: @mcolor;
+					}
+				}
+			}
+		}
+
+		.continue {
+			width: 100px;
+			height: 60px;
+			font-size: 16px;
+			margin-right: 20px;
+			
+			a {
+				color: white;
+				display: block;
+				width: 100%;
+				height: 40px;
+				line-height: 40px;
+				text-align:center;
+				color: white;
+				border-radius: 50px;
+				background: @mcolor;
+
+				&:hover {
+					color: white;
+				}
+			}
+
+			.small {
+				width: 100%;
+				height: 20px;
+				display: none;				
+				flex-direction: row;
+				justify-content: space-between;
+
+				a {
+					width: 40px;
+					height: 20px;
+					display: block;
+					font-size: 13px;
+					color: black;
+					background: none;
+					
+					&:hover{
+						color: @mcolor;
+					}
+				}
+			}
+		}
+
+		a {
+			color: black;
+			text-decoration: none;
+
+			&:hover{
+				color: @mcolor;
+			}
+		}
+	}
+
+	.tab {
+		width: 100%;
+		height: 80px;
+		margin-top: 20px;
+		background:white;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+
+		label {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+
+			&:hover {
+				color: @mcolor;
+			}
+		}
+
+		.check {
+			margin-left: 2px;
+			width: 18px;
+			height: 18px;
+			margin-left: 20px;
+			margin-right: 15px;
+		}
+
+		a {
+			color: black;
+			display: block;
+			text-decoration: none;
+			margin-left: 40px;
+
+			&:hover {
+				color: @mcolor;
+			}
+		}
+	}
+}

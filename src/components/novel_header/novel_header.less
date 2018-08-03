@@ -1,0 +1,236 @@
+@full: 100%;
+@mcolor: rgb(0.15*256,0.65*256,0.6*256);
+
+.flex_center {
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+}
+
+.img_center {
+	background-size: 100% auto;
+	background-position: center;
+}
+
+.novel_header {
+	width: @full;
+	height: 170px;
+	background: white;
+	@media screen {
+		.section_inner {
+			width: 1240px;
+			height: 100%;
+			margin: 0 auto;
+
+			.inner_nav {
+				width: @full;
+				height: 100px;
+				border-bottom: 1px solid lightgray;
+				.flex_center();
+				justify-content: space-between;
+
+				.novel_logo {
+					width: 200px;
+					margin-right: 10px;
+					height: 60%;
+					
+					.logo {
+						width: 170px;
+						height: 100%;
+						background: url('../../imgs/icons/logo.png') no-repeat;
+						background-size: 92% auto;
+						background-position: center left;
+					}
+
+					a {
+						display: block;
+						position: relative;
+						width: @full;
+						height: @full;
+					}
+
+					.back_icon {
+						width: 30px;
+						height: 30px;
+						position: absolute;
+						top:15px;
+						left: calc(100% - 25px);
+						background: url('../../imgs/icons/back.png') no-repeat;
+						background-size: 90% auto;
+						background-position: center;
+					}
+
+					
+					.active {
+						.back_icon {
+							display: none;
+						}
+					}
+				}
+
+				@media (max-width: 540px) {
+					.novel_logo {
+
+						.logo {
+							width: 0;
+						}
+					}
+				}
+
+				.novel_search {
+						.flex_center();
+						justify-content: space-between;
+						width: 33%;
+						height: 35px;
+						border: 2px solid @mcolor;
+						border-radius: 50px;
+						
+						input {
+							width: 80%;
+							height: 80%;
+							border: none;
+							outline: none;
+							font-size: 17px;
+							background: none;
+							text-indent: 15px;
+						}
+
+						button {
+							width: 40px;
+							height: 35px;
+							border: none;
+							outline: none;
+							background: url('../../imgs/icons/search.png') no-repeat;
+							background-size: 70% auto;
+							background-position: center;
+						}
+				}
+				
+				@media (max-width: 780px) {
+					.novel_search {
+						width: auto;
+						
+						input {
+							width: 0;
+						}
+					}
+				}
+				.novel_infor {
+					.novel_logo();
+					.flex_center();
+					width: auto;
+					justify-content: space-between;
+
+					.bookshelf_bar {
+						width: 170px;
+						height: 80%;
+						font-size: 18px;
+						.flex_center();
+
+						.bookshelf_icon {
+							width: 20%;
+							height: @full;
+							background:url('../../imgs/icons/a-shelf.png') no-repeat;
+							.img_center();
+						}
+
+						a {
+							text-indent: 10px;
+							display: block;
+							width: @full;
+							height: @full;
+							color: black;
+							text-decoration: none;
+							.flex_center();
+
+							&:hover {
+								color: @mcolor;
+							}
+						}
+					}
+
+					.message_icon {
+						width: 30px;
+						height: 50%;
+						.img_center();
+						background: url('../../imgs/icons/a-mess.png') no-repeat;
+
+						a {
+							display: block;
+							width: @full;
+							height: @full;
+						}
+					}
+					
+					.my_infor_icon {
+						.message_icon();
+						width: 38px;
+						height: 38px;
+						background: url('../../imgs/icons/self.png') no-repeat;
+						background-color: @mcolor;
+						background-size: 80% auto;
+						background-position: center;
+						border-radius: 50%;
+						margin-left: 30px;
+					}
+
+				}
+			}
+
+			ul {
+				padding: 0;
+				margin: 0;
+				width: @full;
+				height: 70px;
+				.flex_center();
+				font-size: 18px;
+				justify-content: flex-start;
+
+				li {
+					list-style: none;
+					padding: 15px;
+					display: block;
+					.flex_center();
+					&:hover {
+						a {
+							color: @mcolor;
+						}
+					}
+					
+					.icon {
+						width: 20px;
+						height: 70px;
+						background:url('../../imgs/icons/list.png') no-repeat;
+						.img_center();
+						margin-right: 10px;
+						
+					}
+
+					a {
+						.flex_center();
+						color: black;
+						text-decoration: none;
+					}
+
+				}
+				
+				.active {
+					color: @mcolor;
+				}
+			}
+		}
+	}
+
+	@media (max-width: 1240px) {
+		.section_inner {
+			width: 1020px;
+		}
+	}
+
+	@media (max-width: 1020px) {
+		.section_inner {
+			width: 100%;
+		}
+	}
+}
