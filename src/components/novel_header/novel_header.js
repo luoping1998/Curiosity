@@ -6,12 +6,25 @@ import {
 
 import './novel_header.less'
 
+class AllList extends Component{
+	render() {
+		return (
+			<ul className="all_list">
+				<li>玄幻言情</li>
+				<li>仙侠奇缘</li>
+				<li>古代言情</li>
+				<li>现代言情</li>
+				<li>浪漫青春</li>
+				<li>悬疑灵异</li>
+				<li>科幻空间</li>
+				<li>游戏竞技</li>
+				<li>耽美小说</li>
+			</ul>
+		)
+	}
+}
 
 class NoverHeader extends Component{
-	constructor(props) {
-		super(props);
-	}
-
 	render() {
 		return (
 			<div className="novel_header">
@@ -43,9 +56,14 @@ class NoverHeader extends Component{
 						</div>
 					</div>
 					<ul>
-						<li><NavLink activeClassName="active" to="/all_styles"><div className="icon"></div>全部分类</NavLink></li>
+						<li className="show">
+							<NavLink activeClassName="active" to="/all_styles">
+								<div className="icon"></div>全部分类
+							</NavLink>
+							<AllList />
+						</li>
 						<li><NavLink activeClassName="active" to="/toplist">排行榜</NavLink></li>
-						<li><NavLink activeClassName="active" to="/ended">完结</NavLink></li>
+						<li><NavLink activeClassName="active" to="/new">最新</NavLink></li>
 					</ul>
 				</div>
 			</div>

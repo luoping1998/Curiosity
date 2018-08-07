@@ -53,7 +53,6 @@ class Myslef extends Component {
 	}
 
 	handleClick() {
-		console.log(1);
 		this.setState({
 			show : !this.state.show
 		})

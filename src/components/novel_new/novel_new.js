@@ -1,10 +1,10 @@
 import React, {Component} from 'react'
-import './novel_recmd.less'
+import './novel_new.less'
 
 import NovelCard from '../novel_card/novel_card.js'
 
 
-class NovelRecmd extends Component {
+class NovelNew extends Component {
 	constructor(props) {
 		super(props);
 	}
@@ -12,22 +12,22 @@ class NovelRecmd extends Component {
 	component
 	render() {
 		return (
-			<div className="novel_recmd">
-				<h2 className="recmd_header">热门推荐</h2>
-				<div className="recmd_lists">
+			<div className="novel_new">
+				<h2 className="new_header">最新佳作</h2>
+				<div className="new_lists">
 					<NovelCard />
 					<NovelCard />
 					<NovelCard />
 					<NovelCard />
 					<NovelCard />
 					<NovelCard />
-					<NovelCard />
-					<NovelCard />
-					<NovelCard />
+					<NovelCard border="none"/>
+					<NovelCard border="none"/>
+					<NovelCard border="none"/>
 				</div>
 			</div>
 		)
 	}
 }
 
-export default  NovelRecmd
+export default  NovelNew

@@ -39,16 +39,16 @@ class ListItem extends Component {
 	}
 } 
 
-class NovelNew extends Component {
+class NovelRcmd extends Component {
 	constructor(props) {
 		super(props);
 	}
 
 	render() {
 		return (
-			<div className="novel_new">
+			<div className="novel_rcmd">
 				<div className="inner_bd">
-					<h2 className="tit">最新佳作</h2>
+					<h2 className="tit">热门推荐</h2>
 					<div className="inner_cont"></div>
 				</div>
 			</div>
@@ -127,7 +127,7 @@ class NovelBar extends Component {
 	render() {
 		return (
 			<div className="novel_bar">
-				<NovelNew />
+				<NovelRcmd />
 				<TopList />
 			</div>
 		)

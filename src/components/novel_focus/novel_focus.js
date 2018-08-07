@@ -37,15 +37,13 @@ class NovelFocus extends Component{
 	}
 
 	render() {
+		const imgs = [r0,r1,r2,r3,r4]
 		return (
 			<div className="novel_focus">
-				<FadeSlide 
-					lists = {['豪豪豪豪好','咿呀咿呀呦','巴拉拉本来','哈哈哈哈哈哈','哦哦哦哦哦']} 
-					imgs = {[ r0, r1, r2, r3, r4]}
-				/>
-
+				<FadeSlide imgs={imgs} />
 				<FocusNotice />
 			</div>
+			
 		)
 	}
 }

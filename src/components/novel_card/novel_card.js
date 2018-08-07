@@ -7,8 +7,13 @@ class NovelCard extends Component {
 	}
 
 	render() {
+		const note = {
+			'border' : 'none'
+		}
 		return (
-			<div className="novel_card">
+			<div className="novel_card" style={
+				this.props.border==='none' ? note : {'':''}
+			}>
 				<img className="card_img" src={require("../../imgs/90.jpg")} />
 				<div className="card_infor">
 					<div className="infor_tit">首长异能小军媳</div>

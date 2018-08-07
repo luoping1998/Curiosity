@@ -10,7 +10,9 @@ class NewList extends Component {
 
 	render() {
 		return (
-			<div className="new_list">新书</div>
+			<div className="new_list">
+				
+			</div>
 		)
 	}
 }

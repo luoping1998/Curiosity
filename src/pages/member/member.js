@@ -15,7 +15,11 @@ class Member extends Component {
 
 	render() {
 		return (
-			<div className="myself_cont">member</div>
+			<div className="myself_cont member">
+				用户名
+				账号
+				
+			</div>
 		)
 	}
 }
