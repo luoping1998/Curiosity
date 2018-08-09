@@ -1,5 +1,34 @@
 import axios from 'axios'
 
+//显示成功弹窗
+export const showSucPopup = mess => ({
+	type: 'SHOW_SUCPOP',
+	mess
+})
+
+//显示失败弹窗
+export const showFailPopup = mess => ({
+	type: 'SHOW_FAILPOP',
+	mess
+})
+
+//隐藏弹框
+export const hiddenPopup = cont => ({
+	type: 'HIDDEN_POPUP',
+	cont
+})
+
+//生成GUID
+export const generatGuID = () => ({
+	type: 'GENERAT_GUID'
+})
+
+//请求用户个人信息
+export const requestInfor = token => ({
+	type: 'REQUEST_INFOR',
+	token
+})
+
 //保存用户个人信息
 export const saveInfor = infor  => ({
 	type: 'SAVE_INFOR',

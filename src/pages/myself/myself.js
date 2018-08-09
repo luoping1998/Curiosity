@@ -6,6 +6,7 @@ import {
 	NavLink,
 	Switch
 } from 'react-router-dom'
+import PropTypes from 'prop-types';
 
 import '../../App.less'
 import './myself.less'
@@ -18,6 +19,10 @@ import Message from '../../pages/message/message.js'
 import Member from '../../pages/member/member.js'
 import Safe from '../../pages/safe/safe.js'
 
+import { connect } from 'react-redux'
+const mapStateToProps = state => ({
+	logif: state.logif
+})
 
 class ChangeBox extends Component {
 	constructor(props) {
@@ -39,6 +44,10 @@ class ChangeBox extends Component {
 }
 
 class Myslef extends Component {
+	static contextTypes = {
+		router: PropTypes.object.isRequired
+	}
+
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -50,6 +59,12 @@ class Myslef extends Component {
 			show : false
 		}
 		this.handleClick = this.handleClick.bind(this);
+	}
+
+	componentWillMount() {
+		if(!this.props.logif) {
+			this.context.router.history.push('/');
+		}
 	}
 
 	handleClick() {
@@ -75,4 +90,6 @@ class Myslef extends Component {
 	}
 }
 
-export default Myslef
+export default connect(
+	mapStateToProps
+)(Myslef)

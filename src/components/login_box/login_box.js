@@ -32,11 +32,17 @@ class UsernameBox extends Component {
 			<div className="box_log">
 				<div className="box_input">
 					<div className="icon log_icon"></div>
-					<input type="text" placeholder="账号登录" value={this.props.username} onChange={this.props.handleUsernamein}/>
+					<input type="text" placeholder="请输入用户名" value={this.props.username} onChange={this.props.handleUsernamein}/>
 				</div>
 				<div className="box_input">
 					<div className="icon pass_icon"></div>
-					<input type="password" placeholder="输入密码" value={this.props.pass} onChange={this.props.handlePassin}/>
+					<input type="password" placeholder="请输入密码" value={this.props.pass} onChange={this.props.handlePassin}/>
+				</div>
+				<div className="btn_input">
+					<input type="text" placeholder="请输入验证码" value={this.props.validateCode} onChange={this.props.handlevalidateCodein}/>
+					<div className="vcode" onClick={this.props.getImgCode}>
+						<a href="javascript:"><img src={this.props.codeSrc} /></a>
+					</div>
 				</div>
 				<p>
 					<label><input type="checkbox"/>自动登录</label>
@@ -72,8 +78,8 @@ class AccountBox extends Component {
 						(<a href="javascript:" onClick={this.props.getVcode}>获取验证码</a>) : 
 						(<div className="wait">请输入验证码</div>)
 					}
-	
 				</div>
+				<p></p>
 				<p></p>
 				<a href="javascript:"><div className="btn">登录</div></a>
 				<p className="center">
@@ -106,10 +112,11 @@ class RegBox extends Component {
 					}
 				</div>
 				<p></p>
+				<p></p>
 				<a href="javascript:"><div className="btn" onClick={this.props.toSuc} >下一步</div></a>
 				<p className="center">
 					<a href="javascript:" className="left" onClick={this.props.toLogp}>手机验证码登录</a>
-					<a href="javascript:" className="right" onClick={this.props.toLoga}>账号登录</a>
+					<a href="javascript:" className="right" onClick={this.props.toLoga}> 账 号 登 录 </a>
 				</p>
 			</div>
 		)
@@ -161,6 +168,8 @@ class LoginBox extends Component{
 			username: '',	//用户名
 			account : '',	//手机号
 			vcode : '',		//验证码
+			codeSrc: '',	//图片验证码src
+			validateCode: '', 	//用户输入的图片验证码
 			pass: '',		//密码
 			passone : '',	//注册验证时的首次密码
 			passtwo : '',	//重复密码
@@ -186,9 +195,14 @@ class LoginBox extends Component{
 		this.handlePassin = this.handlePassin.bind(this);
 		this.handleVcodein = this.handleVcodein.bind(this);
 		this.handleAccountin = this.handleAccountin.bind(this);
+		this.handlevalidateCodein = this.handlevalidateCodein.bind(this);
+		this.showFailPopup = this.showFailPopup.bind(this);
+		this.showSucPopup = this.showSucPopup.bind(this);
 
+		this.getImgCode = this.getImgCode.bind(this);
 		this.getVcode = this.getVcode.bind(this);
 		this.register = this.register.bind(this);
+		this.getInfor = this.getInfor.bind(this);
 		this.clear = this.clear.bind(this);
 		this.loginWithu = this.loginWithu.bind(this);
 	}
@@ -222,14 +236,14 @@ class LoginBox extends Component{
 
 	//跳转至注册信息页面
 	toSuc() {
-		if(isPoneAvailable(this.state.account)&&this.state.vcode.length===4){
+		if(isPoneAvailable(this.state.account)&&this.state.vcode.length===6){
 			this.setState({
 				suc : true,
 				log : false,
 				type : 0
 			})
 		}else {
-			alert("不合法！");
+			this.showFailPopup("请检查您的注册信息！");
 		}
 	}
 
@@ -300,7 +314,7 @@ class LoginBox extends Component{
 				canreg = true;
 
 			}
-			console.log(canreg);
+
 			this.setState({
 				committwo : {
 					"words" : words,
@@ -339,21 +353,84 @@ class LoginBox extends Component{
 		})
 	}
 
-	//获取验证码  后期完善  留出口
+	handlevalidateCodein(e) {
+		this.setState({
+			validateCode: e.target.value
+		})
+	}
+
+	//获取验证码
 	getVcode() {
 		if(isPoneAvailable(this.state.account)){
-			this.setState({
-				getv : true
+			axios.get("http://47.95.207.40/branch/code/phone", {
+				headers: {
+					deviceId: this.props.uid
+				},
+				params: {
+					phoneNum: this.state.account
+				}
+			}).then(res => {
+				this.showSucPopup(res.data.message);
+				this.setState({
+					getv : true
+				})
+			}).catch( err=> {
+				this.showFailPopup(err.response.data.message);
 			})
+			
 		}else {
-			alert("手机号不合法！");
-		}
-		
+			this.showFailPopup("手机号不合法！");
+		}		
+	}
+
+	//获取登录验证码
+	getImgCode() {
+		axios.get("http://47.95.207.40/branch/code/image",{
+			headers : {
+				"deviceId":this.props.uid
+			},
+			responseType: 'arraybuffer'
+		}).then(res => {
+			return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+		}).catch(err => {
+			console.log(err);
+		}).then(data => 
+			this.setState({
+				codeSrc: data
+			})
+		)
+	}
+
+	//获取个人信息  后台参数暂时有问题
+	getInfor() {
+		// axios.get("http://47.95.207.40/branch/me",{
+		// 	headers: {
+		// 		Authorization: "Bearer " + this.props.token.access_token
+		// 	}
+		// }).then( res => {
+		// 	if(!res.status) {
+		// 		this.props.saveInfor(res.data);
+		// 	}else {
+		// 		this.showFailPopup(res.data.message);
+		// 	}
+		// }).catch( err => {
+		// 	this.showFailPopup(err.response.data.message);
+		// })
+	}
+
+	//方便组件内部调用
+	showSucPopup(mess) {
+		this.props.showSucPopup(mess);
+	}
+
+	showFailPopup(mess) {
+		this.props.showFailPopup(mess);
 	}
 
 	//账号登录
 	loginWithu() {
-		let { saveToken, hasLogin } = this.props;
+		//引入store中的需要用的action
+		let { saveToken, hasLogin, handleChange} = this.props;
 		if(isPoneAvailable(this.state.username) && isPassAvailabel(this.state.pass)){
 			let data = {
 				"account": this.state.username,
@@ -364,7 +441,9 @@ class LoginBox extends Component{
 				{
 					headers: {
 						"Content-Type" : "application/json",
-						"Authorization" : 'Basic YnJhbmNoOnhpeW91M2c='
+						"Authorization" : 'Basic YnJhbmNoOnhpeW91M2c=',
+						"deviceId" : this.props.uid,
+						"validateCode" : this.state.validateCode
 					}
 				}
 			)
@@ -372,20 +451,22 @@ class LoginBox extends Component{
 				if(res.status === 200) {
 					saveToken(res.data);
 					hasLogin();
+					handleChange(false);
+					this.showSucPopup("登录成功！");
+					this.getInfor();
 				}
 			}).catch(err=>{
-				console.log(err);
+				this.showFailPopup(err.response.data.message);
+				this.getImgCode();
 			})
 
 		}else {
-			alert("账号密码不合法！");
+			this.showFailPopup("请检查您的登录信息！");
 		}
-		
 	}
 
 	//手机号登录
 	loginWitha(){
-
 	}
 
 	//初始化（清除）state
@@ -427,19 +508,23 @@ class LoginBox extends Component{
 				data: data
 			}).then(res=>{
 				if(!res.data.status) {
-					alert("注册成功：快去登录吧！");
+					this.showSucPopup("注册成功：快去登录吧！");
 					this.clear();
 					this.toLoga();
 				}else {
-					console.log(res);
+					this.showFailPopup(res.data.message);
 				}
 			}).catch(err=>{
-				alert(err.response.data.message);
+				this.showFailPopup(err.response.data.message);
 			})
 		}else {
-			alert("请检查注册信息")
+			this.showFailPopup("请检查注册信息");
 		}
 		
+	}
+
+	componentDidMount() {
+		this.getImgCode();
 	}
 
 	render() {
@@ -466,19 +551,23 @@ class LoginBox extends Component{
 							<UsernameBox 								
 								username={this.state.username} 
 								pass={this.state.pass} 
+								codeSrc={this.state.codeSrc}
+								validateCode={this.state.validateCode}
 								toLogp={this.toLogp} 
 								toReg={this.toReg} 
 								handleUsernamein={this.handleUsernamein} 
 								handlePassin={this.handlePassin}
+								handlevalidateCodein={this.handlevalidateCodein}
 								loginWithu={this.loginWithu}
+								getImgCode={this.getImgCode}
 								/>
 							) : (
 							<AccountBox 							
 								vcode={this.state.vcode} 
 								account={this.state.account} 
+								getv={this.state.getv} 
 								toLoga={this.toLoga} 
 								toReg={this.toReg} 
-								getv={this.getv} 
 								handleAccountin={this.handleAccountin} 
 								handleVcodein={this.handleVcodein} 
 								getVcode={this.getVcode}

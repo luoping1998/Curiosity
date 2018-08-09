@@ -46,13 +46,20 @@ class NoverHeader extends Component{
 						</div>
 						<div className="novel_infor">
 							<div className="bookshelf_bar">
-								<Link to="/my/shelf">
-									<div className="bookshelf_icon"></div>
-									<span>我的书架</span>
-								</Link>
+								{ 
+									this.props.log === false ? 
+									( <a href="javascript:" onClick = {this.props.handleClick} >
+										<div className="bookshelf_icon"></div>
+										<span>我的书架</span>
+									</a> ) : 
+									( <Link to="/my/shelf">
+										<div className="bookshelf_icon"></div>
+										<span>我的书架</span>
+									</Link>)	
+								}
 							</div>
 							<div className="message_icon">
-								<Link to="/my/message" title="消息中心"></Link>
+								{ this.props.log === false ? (<a href="javascript:" onClick = {this.props.handleClick} title="消息中心"></a>) : (<Link to="/my/message" title="消息中心"></Link>)	}
 							</div>
 							<div className="my_infor_icon">
 								{ this.props.log === false ? (<a href="javascript:" onClick = {this.props.handleClick} ></a>) : (<Link to="/my/member"></Link>)	}

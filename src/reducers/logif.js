@@ -3,7 +3,7 @@ const logif = (state = false, action) => {
 		case 'HAS_LOGIN':
 			return true
 		default : 
-			return false
+			return state
 	}
 }
 
