@@ -1,14 +1,17 @@
+@mcolor : #26a69a;
+
 .my_chat {
 	width: 100%;
 	padding-bottom: 20px;
-	background: white;
+	margin-top:20px;
 	display: flex;
 	flex-direction: row;
-
+	justify-content: space-between;
 	.chat_box {
-		width: 630px;
+		width: 585px;
 		height: 600px;
-		
+		background: white;	
+		border-radius: 5px;
 		.inner_box {
 			width: 90%;
 			height: 90%;
@@ -16,35 +19,194 @@
 			margin-top: 20px;
 			display: flex;
 			flex-direction: column;
+			align-items: center;
 			justify-content: space-between;
 
 			.box_header {
 				width: 100%;
-				height: 60px;
-				border: 1px solid black;
+				height: 80px;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+				flex-direction: row;
+
+				.avater {
+					border-radius: 50%;
+					width: 50px;
+					height: 50px;
+					border: 1px solid black;
+				}
+
+				.infor {
+					width: calc( 100% - 100px);
+					height: 70px;
+
+					.name {
+						width: 100%;
+						height: 40px;
+						font-size: 20px;
+						line-height: 45px;
+						margin: 0;
+						white-space: nowrap;
+						overflow: hidden;
+						color:@mcolor;
+						text-overflow: ellipsis;
+					}
+					.sign {
+						.name();
+						font-size: 16px;
+						color: gray;
+						line-height: 25px;
+					}
+				}
 			}
 
 			.box_body {
-				width: 100%;
-				border: 1px solid black;
-				height: calc( 100% - 150px);
+				width: 80%;
+				height: calc( 100% - 170px);
+				background: rgba(38,166,154,0.18);
+				overflow-y: scroll;
+
+				.friend_box {
+					width: 100%;
+					height: auto;
+					display: flex;
+					padding: 20px 0 20px 0;
+					justify-content: left;
+					flex-direction: row;
+					
+					.avater {
+						height: 50px;
+						width: 50px;
+						margin-left: 10px;
+						background: white;
+						border-radius: 50%;
+						border: none;
+					}
+					
+					.content {
+						padding:10px;
+						min-height:30px;
+						margin-left: 10px;
+						line-height: 30px;
+						border-radius: 5px;
+						background: @mcolor;
+						word-wrap:break-word;
+						color: white;
+						max-width: calc( 100% - 110px ); 
+					}
+				}
+
+				.me_box {
+					.friend_box();
+					justify-content: flex-end;
+					
+					.avater{
+						margin:0;
+						margin-right: 10px;
+					}
+					
+					.content {
+						margin:0;
+						margin-right: 10px;
+						background:white;
+						color: black;
+					}
+
+				}
 			}
 
 			.box_input {
-				border: 1px solid black;
-				width: 100%;
-				height: 60px;
+				border: 2px solid #D8EFED;
+				border-radius: 5px;
+				width: 80%;
+				height: 50px;
+				display: flex;
+				align-items: center;
+				justify-content: space-around;
+
+				input {
+					width: 70%;
+					height: 80%;
+					border: none;
+					outline: none;
+					font-size: 18px;
+					line-height: 50px;
+					text-indent: 10px;
+				}
+
+				.btns {
+					width: 100px;
+					height: 80%;
+					display: flex;
+					align-items: center;
+					justify-content: space-around;
+					
+					.mood_btn {
+						width:50px;
+						height: 50px;
+						background: url('../../imgs/icons/mood.png') no-repeat;
+						background-size: 100% auto;
+						background-position: center;
+
+						&:hover {
+							background: url('../../imgs/icons/a-mood.png') no-repeat;
+							background-size: 100% auto;
+							background-position: center;
+						}
+
+						a {
+							width: 100%;
+							height: 100%;
+							display: block;
+						}
+					}
+
+					.send_btn {
+						.mood_btn();
+						background: url('../../imgs/icons/send.png') no-repeat;
+						background-size: auto 55%;
+						background-position: center;
+					
+						&:hover {
+							background: url('../../imgs/icons/a-send.png') no-repeat;
+							background-size: 55% auto;
+							background-position: center;
+
+						}
+
+					}
+				} 
 			}
 		}	
+
+		::-webkit-scrollbar {  
+			width: 5px;  
+			height:10px;     
+			background-color:@mcolor;
+		}  
+		::-webkit-scrollbar-track {  
+			-webkit-box-shadow: inset 0 0 6px rgba(38,166,154,0.9);  
+			border-radius: 10px; 
+			background-color:white;    
+		}
+		::-webkit-scrollbar-thumb {  
+			border-radius: 10px;  
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);  
+			background-color:rgba(38,166,154,0.4);
+		} 
 	}
 
 	.chat_list {
-		width: calc(100% - 650px);
+		width: calc(100% - 600px);
+		background: white;
+		border-radius: 5px;
+		height:600px;
+		overflow-y: scroll; 
 		.chat_item {
-			width: 100%;
-			height: 80px;
+			width: 95%;
+			height: 90px;
 			margin: 0 auto;
-			border-bottom: 1px solid rgb(240,240,240);
 			display: flex;
 			flex-wrap: nowrap;
 			flex-direction: row;
@@ -65,7 +227,7 @@
 
 				.infor_name {
 					width: 100%;
-					padding-top: 10px;
+					padding-top: 15px;
 					height: 35px;
 					font-size: 18px;
 					line-height: 35px;
@@ -86,17 +248,33 @@
 			}
 
 			.item_data {
-				width: 50px;
-				height: 80%;
-				font-size: 13px;
-				line-height: 50px;
-				color: gray;
-				text-align: right;
+				width: 25px;
+				height: 25px;
+				font-size: 16px;
+				line-height: 25px;
+				background:@mcolor;
+				border-radius: 50%;
+				color: white;
+				text-align: center;
 			}
 		}
 	}
-	
 
+	::-webkit-scrollbar {  
+			width: 5px;  
+			height:10px;     
+			background-color:white;
+		}  
+		::-webkit-scrollbar-track {  
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);  
+			border-radius: 10px; 
+			background-color:white;    
+		}
+		::-webkit-scrollbar-thumb {  
+			border-radius: 10px;  
+			-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);  
+			background-color:white;
+		} 
 	.no-border {
 		border: none;
 	}

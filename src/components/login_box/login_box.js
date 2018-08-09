@@ -155,8 +155,8 @@ class LoginBox extends Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			log : true, //登录
-			type : 0,	//0:默认账号登录   1:手机号登录
+			log : true, 	//选择登录？
+			type : 0,		//0:默认账号登录   1:手机号登录
 			suc : false,	//验证码验证是否成功
 			username: '',	//用户名
 			account : '',	//手机号
@@ -353,23 +353,26 @@ class LoginBox extends Component{
 
 	//账号登录
 	loginWithu() {
+		let { saveToken, hasLogin } = this.props;
 		if(isPoneAvailable(this.state.username) && isPassAvailabel(this.state.pass)){
 			let data = {
 				"account": this.state.username,
 				"password": this.state.pass
 			}
 			axios.post("http://47.95.207.40/branch/login",
-				{
-					data: data
-				},
+				data: data,
 				{
 					headers: {
+						"Content-Type" : "application/json",
 						"Authorization" : 'Basic YnJhbmNoOnhpeW91M2c='
 					}
 				}
 			)
 			.then(res=>{
-				console.log(res);
+				if(res.status === 200) {
+					saveToken(res.data);
+					hasLogin();
+				}
 			}).catch(err=>{
 				console.log(err);
 			})

@@ -25,6 +25,10 @@ class AllList extends Component{
 }
 
 class NoverHeader extends Component{
+	constructor(props){
+		super(props);
+	}
+
 	render() {
 		return (
 			<div className="novel_header">

@@ -11,6 +11,12 @@ class NewList extends Component {
 	render() {
 		return (
 			<div className="new_list">
+				<div className="list_card color">
+				</div>
+				<div className="list_card blue">
+				</div>
+				<div className="list_card pink">
+				</div>
 				
 			</div>
 		)

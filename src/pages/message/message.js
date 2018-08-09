@@ -3,7 +3,8 @@ import {
 	Link,
 	Route,
 	NavLink,
-	Redirect
+	Redirect,
+	Switch
 } from 'react-router-dom'
 
 import SubLeader from '../../components/sub_leader/sub_leader.js'
@@ -31,11 +32,11 @@ class Message extends Component {
 		return (
 			<div className="myself_cont">
 				<SubLeader lists={lists} />
-				
-				<Route path="/my/message/inform" component={MyInform} />
-				<Redirect exact path="/my/message" to={{pathname: "/my/message/inform"}} />
-				<Route path="/my/message/chat" component={MyChat} />
-
+				<Switch>
+					<Route path="/my/message/inform" component={MyInform} />
+					<Redirect exact path="/my/message" to={{pathname: "/my/message/inform"}} />
+					<Route path="/my/message/chat" component={MyChat} />
+				</Switch>
 			</div>
 		)
 	}

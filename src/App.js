@@ -5,10 +5,11 @@ import './App.less'
 import NoverHeader from './components/novel_header/novel_header.js'
 import Footer from './components/footer/footer.js'
 import Cover from './components/cover/cover.js'
-import LoginBox from './components/login_box/login_box.js'
-
+import LoginBoxContainer from './containers/login_box_container.js'
 import Home from './pages/home/home.js'
 import Myslef from './pages/myself/myself.js'
+
+import { connect } from 'react-redux'
 
 
 class App extends Component{
@@ -16,7 +17,6 @@ class App extends Component{
 		super(props);
 
 		this.state = {
-			log : false,
 			show : false
 		}
 
@@ -33,8 +33,8 @@ class App extends Component{
 		return (
 			<BrowserRouter>
 				<div>
-					{ this.state.show ? (<Cover box={ <LoginBox />} handleClick = {this.handleClick} show={this.state.show}/>) : '' }
-					<NoverHeader log={this.state.log} handleClick={this.handleClick}/>
+					{ this.state.show ? (<Cover box={ <LoginBoxContainer />} handleClick = {this.handleClick} show={this.state.show}/>) : '' }
+					<NoverHeader log={this.props.logif} handleClick={this.handleClick}/>
 					<Route exact path="/" component={Home} />
 					<Route path="/my" component={Myslef} />
 					<Footer />
@@ -44,4 +44,10 @@ class App extends Component{
 	}
 }
 
-export default App;
+const mapStateToProps = state => ({
+	logif: state.logif
+}) 
+
+export default connect(
+	mapStateToProps
+)(App);

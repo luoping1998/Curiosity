@@ -82,6 +82,8 @@ class MyFollow extends Component {
 		return (
 			<div className="my_follow">
 				<FollowItem />
+				<FollowItem />
+				<FollowItem />
 				<Paging count={9} now={2} />
 				<Tab />
 			</div>
