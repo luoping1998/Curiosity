@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import axios from 'axios'
 
 import '../../App.less'
 import './all.less'
@@ -140,10 +141,20 @@ class AllPage extends Component {
 		super(props);
 		this.state = {
 			index: -1,
-			value: '全部'
+			count: 33,
+			value: '全部',
+			books: [],
+			pageNow: 1,
+			pageShow: 1
 		}
 		this.handleClick = this.handleClick.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+		this.handleGo = this.handleGo.bind(this);
 		this.toAll = this.toAll.bind(this);
+		this.getBooks = this.getBooks.bind(this);
+		this.goBack = this.goBack.bind(this);
+		this.goNext = this.goNext.bind(this);
+		this.goPage = this.goPage.bind(this);
 	}
 
 	handleClick(e) {
@@ -160,6 +171,70 @@ class AllPage extends Component {
 		})
 	}
 
+	getBooks() {
+		axios.get("http://47.95.207.40/branch/book",{
+			pageNow: this.state.pageNow,
+			pageSize: 10,
+			type: this.state.index
+		}).then(res => {
+			console.log(res);
+			this.setState({
+				books: res.data.data
+			})
+		}).catch(err => {
+			console.log(err);
+		})
+	}
+
+	goBack() {
+		let val = Number(this.state.pageNow) - 1;
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		})
+	}
+
+	goNext() {
+		let val = Number(this.state.pageNow) + 1;
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		})
+	}
+
+	goPage(e) {
+		let val = Number(e.target.innerHTML);
+		
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		})
+
+	}
+
+	handleChange(e) {
+		this.setState({
+			pageShow: Number(e.target.value)
+		})
+	}
+
+	handleGo() {
+		if(this.state.pageShow > this.state.count || this.state.pageShow < 1) {
+			this.setState({
+				pageShow: ''
+			})
+		}else {
+			this.setState({
+				pageNow: this.state.pageShow
+			})
+		}
+
+	}
+
+	componentDidMount() {
+		this.getBooks();
+	}
+
 	render() {
 		return (
 			<div className="main_body all">
@@ -174,7 +249,16 @@ class AllPage extends Component {
 					<div className="page_body">
 
 					</div>
-					<Paging now={1} count={4} />
+					<Paging 
+						now={this.state.pageNow} 
+						value={this.state.pageShow}
+						count={this.state.count} 
+						goBack={this.goBack}
+						goNext={this.goNext}
+						goPage={this.goPage}
+						handleChange={this.handleChange}
+						handleGo={this.handleGo}
+					/>
 				</div>
 			</div>
 		)

@@ -10,42 +10,25 @@ import './paging.less'
 class Paging extends Component {
 	constructor(props){
 		super(props);
-		this.state = {
-			now: this.props.now,
-			count: this.props.count,
-			value: this.props.now,
-			footer: []
-		}
-		this.handleChange = this.handleChange.bind(this);
-		this.handleGo = this.handleGo.bind(this);
-		this.reserve = this.reserve.bind(this);
 	}
 
-	handleGo(){
-
-	}
-
-	handleChange(e) {
-		this.setState({
-			value: e.target.value
-		})
-	}
-
-	reserve() {
-		const now = this.state.now;
-		const count = this.state.count;
+	render() {
+		//分页器代码
+		const now = this.props.now;
+		const count = this.props.count;
 		let footer = [];
 		if(count === 0) {
-			footer.push((<p>还没有关注任何人哦</p>));
+			footer.push((<p>什么都没有哦</p>));
 		}else {
+			//总页数少于5页时
 			if(count < 5) {
 				let start = 1, end = count;
 
 				if(now == 1) {
-					let one = (<li className="cannot" key={0}>{"<"}</li>);
+					let one = (<a className="noborder" key={0}><li className="cannot">{"<"}</li></a>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:" key={0}><li>{"<"}</li></a>);
+					let one = (<a href="javascript:" key={0} onClick={this.props.goBack}><li>{"<"}</li></a>);
 					footer.push(one);
 				}
 
@@ -57,72 +40,90 @@ class Paging extends Component {
 						footer.push(one);
 					}else {
 						let one = (
-							<a href="javascript:" key={i}><li>{i}</li></a>
+							<a href="javascript:" key={i} index={i} onClick={this.props.goPage}><li>{i}</li></a>
 						)
 						footer.push(one);
 					}
 				}
 
 				if(now == count) {
-					let one = (<li className="cannot" key={end+1}>></li>);
+					let one = (<a className="noborder" key={end+1}><li className="cannot" >{'>'}</li></a>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:" key={end+1}><li>></li></a>);
+					let one = (<a href="javascript:" key={end+1} onClick={this.props.goNext}><li>{'>'}</li></a>);
 					footer.push(one);
 				}
 			}
 			else {
+				//计算分页器从那页开始显示
 				const start = (count - now > 4 ? now : (count > 4 ? count - 4 : count ));
-
+				//当从第一页显示时 前一个 < 不可以点击至前一页  否则就可以点击翻转至前一页
 				if(start == 1) {
-					let one = (<li className="cannot" key={1}>{"<"}</li>);
+					let one = (<a className="noborder" key={0}><li className="cannot">{"<"}</li></a>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:" key={1}><li>{"<"}</li></a>);
+					let one = (<a href="javascript:" key={0} onClick={this.props.goBack}><li>{"<"}</li></a>);
 					footer.push(one);
 				}
-
+				//计算结尾显示的页码 限定最多显示5个页码 即从i~i+4
 				let end = start + 4 > count ? count : start + 4;
-
-				for(let i = start; i <= end; i ++) {
-					if(i == now) {
-						let one = (
-							<a href="javascript:" key={i}><li className="active">{i}</li></a>
-						)
+				//如果开始结尾正好差4 则进行下一步 考虑 > 的点击状态 即只有now == end才不可点击
+				if(count - start == 4) {
+					for(let i = start; i <= end; i ++) {
+						if(i == now) {
+							let one = (
+								<a href="javascript:" key={i}><li className="active">{i}</li></a>
+							)
+							footer.push(one);
+						}else {
+							let one = (
+								<a href="javascript:" key={i} index={i} onClick={this.props.goPage}><li>{i}</li></a>
+							)
+							footer.push(one);
+						}
+					}
+					//当now == end时设置为不可点击 
+					if(now == end) {
+						let one = (<a className="noborder" key={end+1}><li className="cannot">></li></a>);
 						footer.push(one);
 					}else {
-						let one = (
-							<a href="javascript:" key={i}><li>{i}</li></a>
-						)
+						let one = (<a href="javascript:" key={end+1} onClick={this.props.goNext}><li>></li></a>);
+						footer.push(one);
+					}
+				}else {
+					for(let i = start; i <= end; i ++) {
+						if(i == now) {
+							let one = (
+								<a href="javascript:" key={i}><li className="active">{i}</li></a>
+							)
+							footer.push(one);
+						}else {
+							let one = (
+								<a href="javascript:" key={i} index={i} onClick={this.props.goPage}><li>{i}</li></a>
+							)
+							footer.push(one);
+						}
+					}
+					
+					if(end == count) {
+						let one = (<a className="noborder" key={end+1}><li className="cannot">></li></a>);
+						footer.push(one);
+					}else {
+						let one = (<a href="javascript:" key={end+1} onClick={this.props.goNext}><li>></li></a>);
 						footer.push(one);
 					}
 				}
-				if(end == count) {
-					let one = (<li className="cannot" key={end+1}>></li>);
-					footer.push(one);
-				}else {
-					let one = (<a href="javascript:" key={end+1}><li>></li></a>);
-					footer.push(one);
-				}
+
 			}
 		}
-		this.setState({
-			footer: footer
-		})
-	}
-
-	componentDidMount() {
-		this.reserve();
-	}
-
-	render() {
-		const List = this.state.footer.map(val=> val)
+		const List = footer.map(val=> val)
+		console.log(List);
 		return (
 			<div className="paging">
 				<ul>
 					{List}
-					<input type="text" value={this.state.value} onChange= {this.handleChange} />
-					<a href="javascript:"><li className="short" onClick = {this.handleGo}>GO</li></a>
+					<input type="text" value={this.props.value} onChange= {this.props.handleChange} />
+					<a href="javascript:"><li className="short" onClick = {this.props.handleGo}>GO</li></a>
 				</ul>
 			</div>
 		)
