@@ -42,32 +42,32 @@ class Paging extends Component {
 				let start = 1, end = count;
 
 				if(now == 1) {
-					let one = (<li className="cannot">{"<"}</li>);
+					let one = (<li className="cannot" key={0}>{"<"}</li>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:"><li>{"<"}</li></a>);
+					let one = (<a href="javascript:" key={0}><li>{"<"}</li></a>);
 					footer.push(one);
 				}
 
 				for(let i = start; i <= end; i ++) {
 					if(i == now) {
 						let one = (
-							<a href="javascript:"><li className="active">{i}</li></a>
+							<a href="javascript:" key={i}><li className="active">{i}</li></a>
 						)
 						footer.push(one);
 					}else {
 						let one = (
-							<a href="javascript:"><li>{i}</li></a>
+							<a href="javascript:" key={i}><li>{i}</li></a>
 						)
 						footer.push(one);
 					}
 				}
 
 				if(now == count) {
-					let one = (<li className="cannot">></li>);
+					let one = (<li className="cannot" key={end+1}>></li>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:"><li>></li></a>);
+					let one = (<a href="javascript:" key={end+1}><li>></li></a>);
 					footer.push(one);
 				}
 			}
@@ -75,10 +75,10 @@ class Paging extends Component {
 				const start = (count - now > 4 ? now : (count > 4 ? count - 4 : count ));
 
 				if(start == 1) {
-					let one = (<li className="cannot">{"<"}</li>);
+					let one = (<li className="cannot" key={1}>{"<"}</li>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:"><li>{"<"}</li></a>);
+					let one = (<a href="javascript:" key={1}><li>{"<"}</li></a>);
 					footer.push(one);
 				}
 
@@ -87,21 +87,21 @@ class Paging extends Component {
 				for(let i = start; i <= end; i ++) {
 					if(i == now) {
 						let one = (
-							<a href="javascript:"><li className="active">{i}</li></a>
+							<a href="javascript:" key={i}><li className="active">{i}</li></a>
 						)
 						footer.push(one);
 					}else {
 						let one = (
-							<a href="javascript:"><li>{i}</li></a>
+							<a href="javascript:" key={i}><li>{i}</li></a>
 						)
 						footer.push(one);
 					}
 				}
 				if(end == count) {
-					let one = (<li className="cannot">></li>);
+					let one = (<li className="cannot" key={end+1}>></li>);
 					footer.push(one);
 				}else {
-					let one = (<a href="javascript:"><li>></li></a>);
+					let one = (<a href="javascript:" key={end+1}><li>></li></a>);
 					footer.push(one);
 				}
 			}
