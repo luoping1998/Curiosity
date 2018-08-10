@@ -5,6 +5,9 @@ const token = (state = {}, action) => {
 				...action.token
 			})
 		case 'DELETE_TOKEN':
+			return Object.assign({}, state, {
+				
+			})
 		case 'REQUEST_TOKEN':
 		default :
 			return state

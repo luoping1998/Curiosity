@@ -64,11 +64,14 @@ class NoverHeader extends Component{
 							<div className="my_infor_icon">
 								{ this.props.log === false ? (<a href="javascript:" onClick = {this.props.handleClick} ></a>) : (<Link to="/my/member"></Link>)	}
 							</div>
+							{
+								this.props.log === true ? (<div className="log_out_icon" onClick = {this.props.logOut} ><a href="javascript:">退出</a></div>) : ''
+							}
 						</div>
 					</div>
 					<ul>
 						<li className="show">
-							<NavLink activeClassName="active" to="/all_styles">
+							<NavLink activeClassName="active" to="/all">
 								<div className="icon"></div>全部分类
 							</NavLink>
 							<AllList />

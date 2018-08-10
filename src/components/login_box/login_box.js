@@ -3,23 +3,7 @@ import axios from 'axios'
 
 import './login_box.less'
 
-//判断是否为手机号
-function isPoneAvailable(str) {
-    var myreg=/^[1][3,4,5,7,8][0-9]{9}$/;
-	if (!myreg.test(str)) {
-    	return false;
-   	} else {
-        return true;
-    }
-}
-//判断密码
-function isPassAvailabel(str) {
-	if(str.length < 6) {
-		return false;
-	}else {
-		return true;
-	}
-}
+import { handleImg, isPoneAvailable, isPassAvailabel } from '../../public/common.js'
 
 //用户名登录box
 class UsernameBox extends Component {
@@ -202,7 +186,6 @@ class LoginBox extends Component{
 		this.getImgCode = this.getImgCode.bind(this);
 		this.getVcode = this.getVcode.bind(this);
 		this.register = this.register.bind(this);
-		this.getInfor = this.getInfor.bind(this);
 		this.clear = this.clear.bind(this);
 		this.loginWithu = this.loginWithu.bind(this);
 	}
@@ -391,7 +374,7 @@ class LoginBox extends Component{
 			},
 			responseType: 'arraybuffer'
 		}).then(res => {
-			return 'data:image/png;base64,' + btoa(new Uint8Array(res.data).reduce((data, byte) => data + String.fromCharCode(byte), ''))
+			return handleImg(res.data)
 		}).catch(err => {
 			console.log(err);
 		}).then(data => 
@@ -399,23 +382,6 @@ class LoginBox extends Component{
 				codeSrc: data
 			})
 		)
-	}
-
-	//获取个人信息  后台参数暂时有问题
-	getInfor() {
-		// axios.get("http://47.95.207.40/branch/me",{
-		// 	headers: {
-		// 		Authorization: "Bearer " + this.props.token.access_token
-		// 	}
-		// }).then( res => {
-		// 	if(!res.status) {
-		// 		this.props.saveInfor(res.data);
-		// 	}else {
-		// 		this.showFailPopup(res.data.message);
-		// 	}
-		// }).catch( err => {
-		// 	this.showFailPopup(err.response.data.message);
-		// })
 	}
 
 	//方便组件内部调用
@@ -453,9 +419,10 @@ class LoginBox extends Component{
 					hasLogin();
 					handleChange(false);
 					this.showSucPopup("登录成功！");
-					this.getInfor();
+					this.props.getInfor(this.props.token);
 				}
 			}).catch(err=>{
+				console.log(err);
 				this.showFailPopup(err.response.data.message);
 				this.getImgCode();
 			})
@@ -505,7 +472,11 @@ class LoginBox extends Component{
 			axios({
 				method: "POST",
 				url: "http://47.95.207.40/branch/user/register",
-				data: data
+				data: data,
+				headers: {
+					deviceId: this.props.uid,
+					validateCode: this.state.vcode
+				}
 			}).then(res=>{
 				if(!res.data.status) {
 					this.showSucPopup("注册成功：快去登录吧！");
@@ -520,7 +491,7 @@ class LoginBox extends Component{
 		}else {
 			this.showFailPopup("请检查注册信息");
 		}
-		
+		this.clear();
 	}
 
 	componentDidMount() {

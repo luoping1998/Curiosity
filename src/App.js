@@ -11,9 +11,12 @@ import PopupContainer from './containers/popup_container.js'
 
 import Home from './pages/home/home.js'
 import Myslef from './pages/myself/myself.js'
+import All from './pages/all/all.js'
 
 import { connect } from 'react-redux'
-import { hiddenPopup, generatGuID } from './actions/index.js'
+import ACTIONS from './actions/index.js'
+
+import { hiddenPopup, generatGuID, logOut } from './actions/index.js'
 
 class App extends Component{
 	constructor(props) {
@@ -49,9 +52,10 @@ class App extends Component{
 				<div>
 					<PopupContainer />
 					{ this.state.show ? (<Cover box={ <LoginBoxContainer handleChange={this.handleChange}/>} handleClick = {this.handleClick} show={this.state.show}/>) : '' }
-					<NoverHeader log={this.props.logif} handleClick={this.handleClick}/>
+					<NoverHeader log={this.props.logif} handleClick={this.handleClick} logOut={this.props.logOut} />
 					<Route exact path="/" component={Home} />
 					<Route path="/my" component={Myslef} />
+					<Route path="/all" component={All} />
 					<Footer />
 				</div>
 			</BrowserRouter>
@@ -64,8 +68,9 @@ const mapStateToProps = state => ({
 }) 
 
 const mapDispatchToProps = dispatch => ({
-	hiddenPopup: cont => dispatch(hiddenPopup(cont)),
-	generatGuID: () => dispatch(generatGuID())
+	hiddenPopup: cont => dispatch(ACTIONS.POPUP.hiddenPopup(cont)),
+	generatGuID: () => dispatch(ACTIONS.OTHER.generatGuID()),
+	logOut: () => dispatch(ACTIONS.OTHER.logOut())
 })
 
 export default connect(

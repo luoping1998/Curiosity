@@ -19,7 +19,6 @@ class InforBox extends Component {
 					</div>
 					<div className="name">
 						<div className="name_bd">{this.props.infor.username}</div>
-						<a href="javascript:"><div className="name_btn" onClick={this.props.handleClick}></div></a>
 					</div>
 					<div className="infor_id">ID:{this.props.infor.account}</div>
 				</div>
