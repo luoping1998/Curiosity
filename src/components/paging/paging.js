@@ -7,6 +7,17 @@ import {
 
 import './paging.less'
 
+class Nothing extends Component {
+	render() {
+		return (
+			<div className="nothing">
+				<img src={require("../../imgs/others/cry.jpg")} />
+				<p>暂时什么都没有哦~</p>	
+			</div>
+		)
+	}
+}
+
 class Paging extends Component {
 	constructor(props){
 		super(props);
@@ -18,7 +29,7 @@ class Paging extends Component {
 		const count = this.props.count;
 		let footer = [];
 		if(count === 0) {
-			footer.push((<p>什么都没有哦</p>));
+			footer.push(<Nothing key={0} />);
 		}else {
 			//总页数少于5页时
 			if(count < 5) {
@@ -117,13 +128,12 @@ class Paging extends Component {
 			}
 		}
 		const List = footer.map(val=> val)
-		console.log(List);
 		return (
 			<div className="paging">
 				<ul>
 					{List}
-					<input type="text" value={this.props.value} onChange= {this.props.handleChange} />
-					<a href="javascript:"><li className="short" onClick = {this.props.handleGo}>GO</li></a>
+					{ count === 0 ? "" : (<input type="text" value={this.props.value} onChange= {this.props.handleChange} />)}
+					{ count === 0 ? "" : (<a href="javascript:"><li className="short" onClick = {this.props.handleGo}>GO</li></a>)}
 				</ul>
 			</div>
 		)

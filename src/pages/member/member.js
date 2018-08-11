@@ -49,7 +49,7 @@ class Member extends Component {
 	save() {
 		axios.post("http://47.95.207.40/branch/me",
 			{
-				signText: this.props.infor.userMessage.signText
+				signText: this.props.infor.signText
 			},
 			{
 				headers: {
@@ -82,13 +82,13 @@ class Member extends Component {
 									<a href="javascript:" title="保存"></a>
 								</div>
 								<div className="avater">
-									<img src={require('../../imgs/avater.jpg')}/>
+									<img src={"http://47.95.207.40/branch/file/user/" + this.props.infor.icon} />
 									<input type="file"/>
 								</div>
 								<div className="box_infor">
-									<input className="name" type="text" value={this.props.infor.simpleUserMessage.username} onChange={this.handleNamein} />
-									<p className="id">{this.props.infor.simpleUserMessage.account}</p>
-									<input className="sign" type="text" value={this.props.infor.userMessage.signText} onChange={this.handleSignin} />
+									<input className="name" type="text" value={this.props.infor.username} onChange={this.handleNamein} />
+									<p className="id">{this.props.infor.account}</p>
+									<input className="sign" type="text" value={this.props.infor.signText} onChange={this.handleSignin} />
 								</div>
 							</div>
 						) : (
@@ -97,12 +97,12 @@ class Member extends Component {
 									<a href="javascript:" title="修改"></a>
 								</div>
 								<div className="avater">
-									<img src={require('../../imgs/avater.jpg')}/>
+									<img src={"http://47.95.207.40/branch/file/user/" + this.props.infor.icon}/>
 								</div>
 								<div className="box_infor">
-									<h1 className="name">{this.props.infor.simpleUserMessage.username} </h1>
-									<p className="id" style={{"paddingTop":"10px"}}>{this.props.infor.simpleUserMessage.account} </p>
-									<p className="sign" style={{"paddingTop":"10px"}}>{this.props.infor.userMessage.signText}</p>
+									<h1 className="name">{this.props.infor.username} </h1>
+									<p className="id" style={{"paddingTop":"10px"}}>{this.props.infor.account} </p>
+									<p className="sign" style={{"paddingTop":"10px"}}>{this.props.infor.signText}</p>
 								</div>
 							</div>
 						)

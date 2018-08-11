@@ -5,6 +5,8 @@ import '../../App.less'
 import './all.less'
 import Paging from '../../components/paging/paging.js'
 
+import { changeStyle } from '../../public/common.js'
+
 class AllNav extends Component {
 	constructor(props) {
 		super(props);
@@ -100,6 +102,7 @@ class AllNav extends Component {
 		)
 	}
 }
+
 class AllHeader extends Component {
 	constructor(props){
 		super(props);
@@ -136,6 +139,53 @@ class AllHeader extends Component {
 	}
 }
 
+class PageItem extends Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		const book = this.props.book;
+		let cont = changeStyle(book.bookType);
+		let style = {
+			color: cont.color,
+			border: "1px solid " + cont.color
+		}
+		return (
+			<div className="page_item">
+				<div className="item_img">
+					<img src={"http://47.95.207.40/branch/file/book/" + book.bookImage}/>
+				</div>
+				<div className="item_infor">
+					<div className="item tit">{book.bookName}</div>
+					<div className="item author">{book.author.username}</div>
+					<span className="type" style={style}>{cont.words}</span>
+					<div className="intor">{book.content}</div>
+				</div>
+			</div>
+		)
+	}
+}
+
+class AllBody extends Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		const List = this.props.books.map(val => {
+			return (
+				<PageItem book={val} key={val.bookId}/>
+			)			
+		});
+		return (
+			<div className="page_body">
+				{List}
+			</div>
+		)
+	}
+}
+
 class AllPage extends Component {
 	constructor(props) {
 		super(props);
@@ -161,6 +211,8 @@ class AllPage extends Component {
 		this.setState({
 			index: Number(e.target.getAttribute('index')),
 			value: e.target.innerHTML
+		},()=>{
+			this.getBooks();
 		})
 	}
 
@@ -168,18 +220,27 @@ class AllPage extends Component {
 		this.setState({
 			index: -1,
 			value: '全部'
+		},()=>{
+			this.getBooks();
 		})
 	}
 
 	getBooks() {
-		axios.get("http://47.95.207.40/branch/book",{
+		let params = (this.state.index === -1) ? {
+			pageNow: this.state.pageNow,
+			pageSize: 10
+		} : {
 			pageNow: this.state.pageNow,
 			pageSize: 10,
 			type: this.state.index
+		}
+		axios.get("http://47.95.207.40/branch/book",{
+			params: params
 		}).then(res => {
-			console.log(res);
+			const data = res.data.data;
 			this.setState({
-				books: res.data.data
+				books: data.list,
+				count: Math.ceil(data.total/10)
 			})
 		}).catch(err => {
 			console.log(err);
@@ -209,7 +270,6 @@ class AllPage extends Component {
 			pageNow: val,
 			pageShow: val
 		})
-
 	}
 
 	handleChange(e) {
@@ -228,7 +288,6 @@ class AllPage extends Component {
 				pageNow: this.state.pageShow
 			})
 		}
-
 	}
 
 	componentDidMount() {
@@ -246,9 +305,7 @@ class AllPage extends Component {
 				/>
 				<div className="all_page">
 					<AllHeader />
-					<div className="page_body">
-
-					</div>
+					<AllBody books={this.state.books} />
 					<Paging 
 						now={this.state.pageNow} 
 						value={this.state.pageShow}

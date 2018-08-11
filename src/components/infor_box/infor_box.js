@@ -15,7 +15,7 @@ class InforBox extends Component {
 			<div className="infor_box">
 				<div className="infor_bg">
 					<div className="avatar">
-						<img src={require('../../imgs/avater.jpg')} />
+						<img src={"http://47.95.207.40/branch/file/user/" + this.props.infor.icon} />
 					</div>
 					<div className="name">
 						<div className="name_bd">{this.props.infor.username}</div>

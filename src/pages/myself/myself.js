@@ -23,7 +23,7 @@ import { connect } from 'react-redux'
 
 const mapStateToProps = state => ({
 	logif: state.logif,
-	infor: state.infor.simpleUserMessage
+	infor: state.infor
 })
 
 
