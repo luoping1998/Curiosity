@@ -1,0 +1,275 @@
+.my_start {
+	width: 100%;
+	padding: 20px 0;
+	
+	.start_header {
+		width: 100%;
+		height: 80px;
+		background: white;
+		margin-bottom: 5px;
+		display: flex;
+		justify-content: flex-end;
+		align-items: center;
+
+		.btn {
+			margin-right: 20px;
+			width: 120px;
+			height: 45px;
+			line-height: 40px;
+			text-align: center;
+			font-size: 17px;
+			border: 2px solid black;
+
+			&:hover {
+				color: #26a69a;
+				font-weight: bold;
+				border: 2px solid #26a69a;
+			}
+		}
+
+		.big {
+			font-size: 20px;
+		}
+	}
+
+	.start_item {
+		width: 100%;
+		height: 160px;
+		background: white;
+		display: flex;
+		border-bottom: 1px solid lightgray;
+		align-items: center;
+
+		.item_infor {
+			width: 360px;
+			height: 130px;
+			display: flex;
+			align-items: center;
+			.item_img {
+				width: 95px;
+				height: 120px;
+				display: block;
+				margin-left: 40px;
+				border: 1px solid black;
+			}
+			.infor_detail {
+				width: 180px;
+				height: 100px;
+				margin-left: 20px;
+				.infor_name {
+					width: 100%;
+					height: 50px;
+					margin: 0;
+					font-size: 17px;
+					line-height: 46px;
+				}
+
+				.type {
+					width: auto;
+					height: 28px;
+					padding: 3px 5px;
+					font-size: 13px;
+				}	
+
+				.pub {
+					display: inline-block;
+					padding: 3px 5px;
+					font-size: 13px;			
+					border: 1px solid red;
+					color: red;
+				}			
+
+				.notpub {
+					.pub();
+					border: 1px solid blue;
+					color: blue;
+				}
+			}
+		}
+
+		.details {
+			width: 330px;
+			height: auto;
+			text-align: center;
+			.infor_intro {					
+				height: 50px;
+				width: 100%;
+				color: gray;
+				font-size: 14px;
+				line-height: 20px;
+				white-space: wrap;
+				text-overflow: ellipsis;
+				overflow: hidden;
+				border: 1px solid black;
+			}
+		}
+
+		.actions {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			.details();
+			width: 265px;
+			.btn {
+				width: 100px;
+				height: 40px;
+				line-height: 40px;
+				background: #26a69a;
+				color: white;
+				border-radius: 50px;
+			}	
+
+			p {
+				width: 100px;
+				height: 20px;
+				display: flex;
+				margin: 0;
+				margin-top: 10px;
+				justify-content: space-around;
+				a {
+					width: auto;
+					height: auto;
+					display: none;
+					color: black;
+					&:hover{
+						color:#26a69a;
+					}
+				}
+			}
+		}
+
+		&:hover {
+			.actions a {
+				display:block;
+			}
+			background:rgba(179,224,220,0.1);
+		}
+	}
+	
+	.add_infor {
+		width: 100%;
+		height: auto;
+		background: white;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+		.add_img {
+			width: 300px;
+			height: 400px;
+
+			.input_cover {
+				width: 180px;
+				height: 250px;
+				margin: 0 auto;
+				margin-top: 50px;
+				position: relative;
+				
+				img {
+					width: 100%;
+					height: 100%;
+					position: absolute;
+				}
+				input {
+					opacity: 0;
+					width: 100%;
+					height: 100%;
+				}
+			}
+			
+			p {
+				text-align: center;
+			}
+		}
+
+		.add_detail {
+			width: calc( 100% - 400px);
+			margin-top: 20px;
+			padding-top: 20px;
+			border-left: 1px dashed lightgray;
+			height: 340px;
+			
+			.add_item {
+				display: flex;
+				justify-content: center;
+				font-size: 20px;
+				line-height: 40px;
+				margin-bottom: 15px;
+				.commit {
+					width: auto;
+					height: 40px;
+					margin-right: 30px;
+				}
+
+				.nomarl {
+					width: 300px;
+					height: 40px;
+					border: none;
+					outline: none;
+					font-size: 18px;
+					text-indent: 10px;
+					line-height: 40px;
+					border: 1px solid black;
+				}
+				input {
+					.nomarl();
+				}
+				select {
+					.nomarl();
+					width: 300px;
+					
+					option {
+						width: 300px;
+						height: 40px;
+					}
+				}
+
+				textarea{
+					.nomarl();
+					text-indent: 0;
+					width: 290px;
+					height: 200px;
+					padding: 5px;
+					line-height: 25px;
+					resize: none;
+					margin-top: 12px;
+				}
+			}
+		}
+
+		.add_footer {
+			width: 100%;
+			height: 270px;
+			margin-top: 20px;
+			border-top: 15px solid #f5f5f5;
+			padding-top: 25px;
+			.item {
+				width: 90%;
+				height:	40px;
+				margin: 0 auto;
+				font-size: 18px;
+				margin-bottom: 20px;
+				input {
+					margin-left: 40px;
+				}
+			}
+
+			.header {
+				.item();
+				font-size: 18px;
+				font-weight: bold;
+				border-bottom: 1px solid black;
+			}
+
+			.next {
+				float: right;
+				margin-right: 5%;
+				width: 110px;
+				height: 40px;
+				line-height: 40px;
+				font-size: 18px;
+				text-align: center;
+				border: 1px solid black;
+			}
+		}
+	}
+} 

@@ -12,6 +12,7 @@ import PopupContainer from './containers/popup_container.js'
 import Home from './pages/home/home.js'
 import Myslef from './pages/myself/myself.js'
 import All from './pages/all/all.js'
+import BookDetails from './pages/book_details/book_detail.js'
 
 import { connect } from 'react-redux'
 import ACTIONS from './actions/index.js'
@@ -52,10 +53,16 @@ class App extends Component{
 				<div>
 					<PopupContainer />
 					{ this.state.show ? (<Cover box={ <LoginBoxContainer handleChange={this.handleChange}/>} handleClick = {this.handleClick} show={this.state.show}/>) : '' }
-					<NoverHeader log={this.props.logif} handleClick={this.handleClick} logOut={this.props.logOut} />
+					<NoverHeader 
+						log={this.props.logif} 
+						icon={this.props.icon}
+						handleClick={this.handleClick} 
+						logOut={this.props.logOut} 
+					/>
 					<Route exact path="/" component={Home} />
 					<Route path="/my" component={Myslef} />
 					<Route path="/all" component={All} />
+					<Route path="/book_details" component={BookDetails} />
 					<Footer />
 				</div>
 			</BrowserRouter>
@@ -64,7 +71,8 @@ class App extends Component{
 }
 
 const mapStateToProps = state => ({
-	logif: state.logif
+	logif: state.logif,
+	icon: state.infor.icon
 }) 
 
 const mapDispatchToProps = dispatch => ({

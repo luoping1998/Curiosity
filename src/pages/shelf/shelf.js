@@ -10,6 +10,7 @@ import '../myself/myself.less'
 
 import MyFollow from '../../components/my_follow/my_follow.js'
 import SubLeader from '../../components/sub_leader/sub_leader.js'
+import MyStart from '../../components/my_start/my_start.js'
 
 class Shelf extends Component {
 	constructor(props) {
@@ -41,6 +42,7 @@ class Shelf extends Component {
 				<Switch>
 					<Route path="/my/shelf/my_follow" component={MyFollow} />
 					<Redirect exact path="/my/shelf" to={{pathname: "/my/shelf/my_follow"}} />
+					<Route path="/my/shelf/my_start" component={MyStart} />
 				</Switch>
 			</div>
 		)

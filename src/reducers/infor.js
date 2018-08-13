@@ -6,7 +6,7 @@ const initialState = {
 		"signText": "",
 		"experience": 0,
 		"userGrade": 0,
-		"icon":""
+		"icon":"default_avatr.jpg"
 }
 
 const infor = (state = initialState, action) => {

@@ -154,10 +154,16 @@ class PageItem extends Component {
 		return (
 			<div className="page_item">
 				<div className="item_img">
+					<a href={ "/book_details/" + book.bookId }>
 					<img src={"http://47.95.207.40/branch/file/book/" + book.bookImage}/>
+					</a>
 				</div>
 				<div className="item_infor">
-					<div className="item tit">{book.bookName}</div>
+					<div className="item tit">
+						<a href={ "/book_details/" + book.bookId }>
+							{book.bookName}
+						</a>
+					</div>
 					<div className="item author">{book.author.username}</div>
 					<span className="type" style={style}>{cont.words}</span>
 					<div className="intor">{book.content}</div>
@@ -321,5 +327,6 @@ class AllPage extends Component {
 		)
 	}
 }
+
 
 export default AllPage

@@ -19,6 +19,7 @@ import Message from '../../pages/message/message.js'
 import Member from '../../pages/member/member.js'
 import Safe from '../../pages/safe/safe.js'
 
+
 import { connect } from 'react-redux'
 
 const mapStateToProps = state => ({

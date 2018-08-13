@@ -1,0 +1,163 @@
+.editor {
+	width: 100%;
+	height: auto;
+	background: white;
+
+	.e_header {
+		width: 100%;
+		height: 60px;
+		border-bottom: 1px solid gray;
+		display: flex;
+		align-items: center;
+		.icon {
+			text-align: center;
+			line-height: 35px;
+			font-size: 20px;
+			width: 35px;
+			height: 35px;
+			color: lightgray;
+			margin-left: 10px;
+
+			&:hover {
+				color:black;
+			}
+
+			.undo {
+				width: 100%;
+				height: 100%;
+				background: url("../../imgs/icons/n-undo.png") no-repeat;
+				background-position: center;
+				&:hover {
+					background: url("../../imgs/icons/a-undo.png") no-repeat;
+					background-position: center;
+				}
+			}
+
+			.redo {
+				width: 100%;
+				height: 100%;
+				background: url('../../imgs/icons/n-redo.png') no-repeat;
+				background-position: center;
+				&:hover {
+					background:url('../../imgs/icons/a-redo.png') no-repeat;
+					background-position: center;
+				}
+			}
+		}
+	}
+
+	.heading {
+		position: relative;
+		.h_list {
+			width: 100px;
+			height: auto;
+			padding: 0;
+			top: 20px;
+			left: 20px;
+			display: none;
+			position: absolute;
+			background: white;
+			border: 1px solid lightgray;
+
+			li {
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+
+				&:hover {
+					background:rgb(222,222,222);
+				}
+			}
+
+			h1, h2, h3, h4, h5, h6, p {
+				text-align: center;
+				margin: 0;
+				padding: 5px;
+			}
+
+			p {
+				font-size: 14px;
+				color: gray;
+				border-bottom: 1px solid lightgray;
+			}
+		}
+
+		&:hover {
+			.h_list {
+				display: block;
+			}
+		}
+	}
+
+	.font {
+		position: relative;
+		.f_list {
+			width: 150px;
+			height: auto;
+			padding: 0;
+			top: 20px;
+			left: 20px;
+			display: none;
+			position: absolute;
+			background: white;
+			border: 1px solid lightgray;
+
+			li {
+				width: 100%;
+				padding: 0;
+				margin: 0;
+				list-style: none;
+
+				&:hover {
+					background:rgb(222,222,222);
+				}
+			}
+
+			p, .font13, .font16, .font20, .font25, .font30, .font40 {
+				text-align: center;
+			}
+			.font13 {
+				font-size: 13px;
+			}
+			.font16 {
+				font-size: 16px;
+			}
+
+			.font20 {
+				font-size: 22px;
+			}
+
+			.font25 {
+				font-size: 25px;
+			}
+
+			.font30 {
+				font-size: 30px;
+			}
+
+			.font40 {
+				font-size: 40px;
+			}
+			p {
+				padding: 5px;
+				margin: 0;
+				font-size: 14px;
+				color: gray;
+				border-bottom: 1px solid lightgray;
+			}
+		}
+
+		&:hover {
+			.f_list {
+				display: block;
+			}
+		}
+	}
+	.e_body {
+		width: calc( 100% - 30px);
+		outline: none;
+		padding: 15px;
+		min-height: 400px;
+	}
+}

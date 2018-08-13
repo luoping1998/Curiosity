@@ -16,7 +16,8 @@ class Member extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			change : false
+			change : false,
+			pre: this.props.infor
 		}
 
 		this.handleSignin = this.handleSignin.bind(this);
@@ -47,27 +48,35 @@ class Member extends Component {
 	}
 
 	save() {
-		axios.post("http://47.95.207.40/branch/me",
-			{
-				signText: this.props.infor.signText
-			},
-			{
-				headers: {
-					Authorization: "Bearer " + this.props.token.access_token
+		if(this.props.infor !== this.state.pre) {
+			axios.post("http://47.95.207.40/branch/me",
+				{
+					signText: this.props.infor.signText
+				},
+				{
+					headers: {
+						Authorization: "Bearer " + this.props.token.access_token
+					}
 				}
-			}
-		).then(res => {
-			if(!res.data.status) {
-				this.props.showSucPopup("修改成功！");
-				this.setState({
-					change: false
-				})
-			}else {
-				this.props.showFailPopup(res.data.message);
-			}
-		}).catch(err => {
-			this.props.showFailPopup(err.message);
-		})
+			).then(res => {
+				if(!res.data.status) {
+					this.props.showSucPopup("修改成功！");
+					this.props.getInfor();
+					this.setState({
+						change: false
+					})
+				}else {
+					this.props.showFailPopup(res.data.message);
+				}
+			}).catch(err => {
+				this.props.showFailPopup(err.message);
+			})
+		}else {
+			this.setState({
+				change: false
+			})
+		}
+
 	}
 
 	render() {
@@ -108,9 +117,9 @@ class Member extends Component {
 						)
 					}
 					<div className="box_cards">
-						<div className="card"></div>
-						<div className="card"></div>
-						<div className="card"></div>
+						<div className="card">我的作品</div>
+						<div className="card">我的关注</div>
+						<div className="card">我的粉丝</div>
 					</div>
 					<div className="box_works">
 						<h2 className="works_header">
@@ -142,6 +151,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	saveInfor: infor => dispatch(ACTIONS.INFOR.saveInfor(infor)),
+	getInfor: token => dispatch(ACTIONS.INFOR.getInfor(token)),
 	showSucPopup: mess => dispatch(ACTIONS.POPUP.showSucPopup(mess)),
 	showFailPopup: mess => dispatch(ACTIONS.POPUP.showFailPopup(mess)),
 	updateSign: sign => dispatch(ACTIONS.INFOR.updateSign(sign)),
