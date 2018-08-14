@@ -35,7 +35,10 @@ export const updateToken = token => dispatch => {
 			}
 		})
 	.then(res => {
-		dispatch(saveToken(res.data));
+		let time = (new Date().getTime())/1000;
+		let token = res.data;
+		token.time = time;
+		dispatch(saveToken(token));
 	}).catch(err => {
 		dispatch(showFailPopup(err.response.data.error_description));
 	})

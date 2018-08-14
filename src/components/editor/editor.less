@@ -1,14 +1,31 @@
 .editor {
 	width: 100%;
-	height: auto;
+	height: 100%;
 	background: white;
 
+	.e_tit {
+		width: 100%;
+		height: 100px;
+		display: flex;
+		align-items: center;
+
+		input {
+			width: 95%;
+			height: 70px;
+			line-height: 70px;
+			margin: 0 auto;
+			border: none;
+			outline: none;
+			font-size: 30px;
+		}
+	}
 	.e_header {
 		width: 100%;
 		height: 60px;
-		border-bottom: 1px solid gray;
 		display: flex;
 		align-items: center;
+		border-top: 2px solid rgb(244,244,244);
+		border-bottom: 2px solid rgb(244,244,244);
 		.icon {
 			text-align: center;
 			line-height: 35px;
@@ -27,9 +44,12 @@
 				height: 100%;
 				background: url("../../imgs/icons/n-undo.png") no-repeat;
 				background-position: center;
-				&:hover {
+				.active {
 					background: url("../../imgs/icons/a-undo.png") no-repeat;
 					background-position: center;
+				}
+				&:hover {
+					.active();
 				}
 			}
 
@@ -38,54 +58,74 @@
 				height: 100%;
 				background: url('../../imgs/icons/n-redo.png') no-repeat;
 				background-position: center;
-				&:hover {
+
+				.active {
 					background:url('../../imgs/icons/a-redo.png') no-repeat;
 					background-position: center;
+				}
+				&:hover {
+					.active();
+				}
+			}
+
+			.save {
+				width: 100%;
+				height: 100%;
+				background: url('../../imgs/icons/n-save.png') no-repeat;
+				background-position: center;
+
+				.active {
+					background:url('../../imgs/icons/a-save.png') no-repeat;
+					background-position: center;
+				}
+				&:hover {
+					.active();
 				}
 			}
 		}
 	}
+	.e_footer {
+		width: 100%;
+		height: 300px;
+		padding-top: 30px;
+		border-top: 1px solid lightgray;
+		display: flex;
+		flex-wrap: wrap;
 
-	.heading {
-		position: relative;
-		.h_list {
-			width: 100px;
-			height: auto;
-			padding: 0;
-			top: 20px;
-			left: 20px;
-			display: none;
-			position: absolute;
-			background: white;
+		.summary {
+			width: 90%;
+			height: 130px;
+			margin: 0 auto;
+			resize: none;
+			outline: none;
+			font-size: 18px;
+			padding: 15px;
 			border: 1px solid lightgray;
+		}
 
-			li {
-				width: 100%;
-				padding: 0;
-				margin: 0;
-				list-style: none;
+		.btn {
+			width: auto;
+			height: 35px;
+			line-height: 35px;
+			margin-left: 80px;
+			color: #26a69a;
+			border-radius: 5px;
+			border: 1px solid #26a69a;
+			padding: 0 15px;
 
-				&:hover {
-					background:rgb(222,222,222);
-				}
-			}
-
-			h1, h2, h3, h4, h5, h6, p {
-				text-align: center;
-				margin: 0;
-				padding: 5px;
-			}
-
-			p {
-				font-size: 14px;
-				color: gray;
-				border-bottom: 1px solid lightgray;
+			&:hover {
+				background:#26a69a;
+				color: white;
 			}
 		}
 
-		&:hover {
-			.h_list {
-				display: block;
+		.back {
+			border: 1px solid gray;
+			color: gray;
+			margin-left: 30px;
+
+			&:hover{
+				background:gray;
 			}
 		}
 	}
@@ -108,43 +148,10 @@
 				padding: 0;
 				margin: 0;
 				list-style: none;
-
+				text-align: center;
 				&:hover {
 					background:rgb(222,222,222);
 				}
-			}
-
-			p, .font13, .font16, .font20, .font25, .font30, .font40 {
-				text-align: center;
-			}
-			.font13 {
-				font-size: 13px;
-			}
-			.font16 {
-				font-size: 16px;
-			}
-
-			.font20 {
-				font-size: 22px;
-			}
-
-			.font25 {
-				font-size: 25px;
-			}
-
-			.font30 {
-				font-size: 30px;
-			}
-
-			.font40 {
-				font-size: 40px;
-			}
-			p {
-				padding: 5px;
-				margin: 0;
-				font-size: 14px;
-				color: gray;
-				border-bottom: 1px solid lightgray;
 			}
 		}
 
@@ -154,10 +161,94 @@
 			}
 		}
 	}
+
+	.family {
+		.font();
+		.f_list {
+			li {
+				height: 30px;
+				font-size: 18px;
+				line-height: 30px;
+			}
+		}
+	}
+
 	.e_body {
-		width: calc( 100% - 30px);
+		width: calc( 100% - 50px);
 		outline: none;
-		padding: 15px;
-		min-height: 400px;
+		padding: 10px 25px;
+		height: auto;
+
+		#text {
+			width: 100%;
+			height: 700px;
+			display: block;
+			outline: none;
+			border: none;
+			font-size: 16px;
+			line-height: 30px;
+			resize: none;
+		}
+	}
+			
+	.font13 {
+		font-size: 13px;
+	}
+
+	.font16 {
+		font-size: 16px;
+	}
+	
+	.font18 {
+		font-size: 18px;
+	}
+
+	.font20 {
+		font-size: 20px;
+	}
+
+	.font23 {
+		font-size: 23px;
+	}
+
+	.font25 {
+		font-size: 25px;
+	}
+
+	.font30 {
+		font-size: 30px;
+	}
+
+	p {
+		padding: 5px;
+		margin: 0;
+		font-size: 14px;
+		color: gray;
+		text-align: center;
+		border-bottom: 1px solid lightgray;
+	}
+
+	.f-DFKai-SB {
+		font-family: "DFKai-SB";
+	}
+
+	.f-FangSong {
+		font-family: "FangSong";
+	}
+
+	.f-KaiTi {
+		font-family: "KaiTi";
+	}
+
+	.f-Microsoft-YaHei {
+		font-family: "Microsoft YaHei";
+	}
+
+	.f-SimHei {
+		font-family: "SimHei";
+	}
+
+	.f-SimSun {
+		font-family: "SimSun";
 	}
 }

@@ -16,14 +16,15 @@
 			width: 120px;
 			height: 45px;
 			line-height: 40px;
+			border-radius: 10px;
+			color: #26a69a;
 			text-align: center;
 			font-size: 17px;
-			border: 2px solid black;
+			border: 1px solid #26a69a;
 
 			&:hover {
-				color: #26a69a;
-				font-weight: bold;
-				border: 2px solid #26a69a;
+				background: #26a69a;
+				color: white;
 			}
 		}
 
@@ -54,7 +55,7 @@
 			}
 			.infor_detail {
 				width: 180px;
-				height: 100px;
+				height: 140px;
 				margin-left: 20px;
 				.infor_name {
 					width: 100%;
@@ -65,8 +66,9 @@
 				}
 
 				.type {
-					width: auto;
-					height: 28px;
+					width: 55px;
+					height: auto;
+					margin-bottom: 20px;
 					padding: 3px 5px;
 					font-size: 13px;
 				}	
@@ -100,7 +102,6 @@
 				white-space: wrap;
 				text-overflow: ellipsis;
 				overflow: hidden;
-				border: 1px solid black;
 			}
 		}
 
@@ -268,8 +269,33 @@
 				line-height: 40px;
 				font-size: 18px;
 				text-align: center;
-				border: 1px solid black;
+				border: 1px solid #26a69a;
+				color:#26a69a;
+				border-radius: 5px;
+
+				&:hover{
+					color:white;
+					background: #26a69a;
+				}
 			}
+		}
+	}
+
+	.cut {
+		width: 800px;
+		height: 800px;
+		background: white;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		position: relative;
+
+		#cutbox {
+			position: absolute;
+			top:0;
+			right: 0;
+			background: rgba(0,0,0,0);
+			z-index: 99999;
 		}
 	}
 } 

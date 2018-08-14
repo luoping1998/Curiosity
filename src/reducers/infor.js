@@ -1,4 +1,4 @@
-const initialState = {
+const initialState = (new Date().getTime()/1000) - localStorage.getItem("time") <= 7000 ? JSON.parse(localStorage.getItem("infor")) : {
 		"userId": 0,
 		"username": "",
 		"account": "",
@@ -12,9 +12,13 @@ const initialState = {
 const infor = (state = initialState, action) => {
 	switch (action.type) {
 		case 'SAVE_INFOR':
-			return Object.assign({}, state, {
+			let infor = {
 				...action.infor.data.simpleUserMessage,
 				...action.infor.data.userMessage,
+			}
+			localStorage.setItem("infor", JSON.stringify(infor));
+			return Object.assign({}, state, {
+				...infor
 			})
 		case 'UPDATE_SIGN':
 			return Object.assign({}, state, {
@@ -23,9 +27,17 @@ const infor = (state = initialState, action) => {
 					signText: action.sign
 				}
 			)
+		case 'LOG_OUT':
 		case 'DELETE_INFOR':
 			return Object.assign({}, state, {
-				...initialState
+					"userId": 0,
+					"username": "",
+					"account": "",
+					"id": 0,
+					"signText": "",
+					"experience": 0,
+					"userGrade": 0,
+					"icon":"default_avatr.jpg"
 			})
 		case 'REQUEST_INFOR':
 		default :

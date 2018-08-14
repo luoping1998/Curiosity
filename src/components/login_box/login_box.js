@@ -415,6 +415,9 @@ class LoginBox extends Component{
 			)
 			.then(res=>{
 				if(res.status === 200) {
+					let time = (new Date().getTime())/1000;
+					let token = res.data;
+					token.time = time;
 					saveToken(res.data);
 					hasLogin();
 					handleChange(false);
