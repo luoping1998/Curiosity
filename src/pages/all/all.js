@@ -154,7 +154,7 @@ class PageItem extends Component {
 		return (
 			<div className="page_item">
 				<div className="item_img">
-					<a href={ "/book_details/" + book.bookId }>
+					<a href={ "/book_details?bookId=" + book.bookId }>
 					<img src={"http://47.95.207.40/branch/file/book/" + book.bookImage}/>
 					</a>
 				</div>
@@ -197,7 +197,7 @@ class AllPage extends Component {
 		super(props);
 		this.state = {
 			index: -1,
-			count: 33,
+			count: 0,
 			value: '全部',
 			books: [],
 			pageNow: 1,
@@ -216,7 +216,9 @@ class AllPage extends Component {
 	handleClick(e) {
 		this.setState({
 			index: Number(e.target.getAttribute('index')),
-			value: e.target.innerHTML
+			value: e.target.innerHTML,
+			pageShow: 1,
+			pageNow: 1
 		},()=>{
 			this.getBooks();
 		})
@@ -233,10 +235,10 @@ class AllPage extends Component {
 
 	getBooks() {
 		let params = (this.state.index === -1) ? {
-			pageNow: this.state.pageNow,
+			pageNo: this.state.pageNow,
 			pageSize: 10
 		} : {
-			pageNow: this.state.pageNow,
+			pageNo: this.state.pageNow,
 			pageSize: 10,
 			type: this.state.index
 		}
@@ -258,6 +260,8 @@ class AllPage extends Component {
 		this.setState({
 			pageNow: val,
 			pageShow: val
+		},()=>{
+			this.getBooks();
 		})
 	}
 
@@ -266,6 +270,8 @@ class AllPage extends Component {
 		this.setState({
 			pageNow: val,
 			pageShow: val
+		},()=>{
+			this.getBooks();
 		})
 	}
 
@@ -275,6 +281,8 @@ class AllPage extends Component {
 		this.setState({
 			pageNow: val,
 			pageShow: val
+		},()=>{
+			this.getBooks();
 		})
 	}
 
@@ -292,6 +300,8 @@ class AllPage extends Component {
 		}else {
 			this.setState({
 				pageNow: this.state.pageShow
+			},()=>{
+				this.getBooks();
 			})
 		}
 	}

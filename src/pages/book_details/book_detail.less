@@ -4,12 +4,368 @@
 		background: white;
 		width: calc( 100% - 40px );
 		height: 310px;
-		padding: 20px;
+		padding: 25px 20px;
 		display: flex;
+		justify-content: space-between;
 		.book_img {
-			width: 250px;
-			height: 100%;
+			width: 230px;
+			height: 310px;
 			border: 1px solid black; 
 		}
+
+		.book_infor {
+			width: calc( 100% - 260px);
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: space-around;
+			.book_name {
+				width: 100%;
+				height: 50px;
+				line-height: 50px;
+				font-size: 25px;
+				margin: 0;
+
+				.author {
+					font-size: 16px;
+					margin-left: 20px;
+					font-weight: 1;
+				}
+			}
+
+			.types {
+				width: 100%;
+				height: 30px;
+				display: flex;
+
+				.type {
+					width: auto;
+					height: 20px;
+					display: inline-block;
+					padding: 2px 6px;
+					margin-right: 20px;
+					font-size: 13px;
+					border: 1px solid black;
+				}				
+			}
+
+			.count {
+				width: 100%;
+				height: auto;
+				.item {
+					width: auto;
+					display: inline-block;
+					padding: 0 10px;
+					height: 25px;
+					line-height: 25px;
+					letter-spacing: 1px;
+					font-size: 15px;
+					border-right: 1px solid black;
+				
+					.big {
+						font-size: 19px;
+					}
+				}
+				.no-border {
+					border: none;
+				}
+			}
+
+			.intro {
+				width: calc( 100% - 20px);
+				height: 100px;
+				font-size: 16px;
+				line-height: 25px;
+				position: relative;
+				
+				.text {
+					width: 90%;
+					height: 100%;
+					overflow: hidden;
+				}
+				.more {
+					position: absolute;
+					font-size: 15px;
+					bottom: 0;
+					right: 0;
+				}
+				a {
+					&:hover {
+						color:gray;
+					}
+				}
+			}
+
+			.actions {
+				width: 100%;
+				height: 60px;
+				display: flex;
+				align-items: flex-end;
+				.btn {
+					width: 130px;
+					height: 45px;
+					outline: none;
+					margin-right: 20px;
+					background: #26a69a;
+					color: white;
+					font-size: 16px;
+					letter-spacing: 2px;
+					line-height: 45px;
+					text-align: center;
+					border: 1px solid #26a69a;
+					border-radius: 50px;
+					&:hover{
+						background: rgba(38, 166, 154, 0.8);
+					}
+				}
+
+				.more {
+					background: white;
+					border: 1px solid #26a69a;
+					color: #26a69a;
+
+					&:hover{
+						background: rgba(38, 166, 154, 0.05);
+					}
+				}
+			}
+		}
+	}
+
+	.book_sub {
+		width: 100%;
+		height: 60px;
+		padding: 0;
+		margin: 20px 0;
+		background: white;
+		li {
+			width: 130px;
+			height: 60px;
+			font-size: 18px;
+			text-align: center;
+			line-height: 60px;
+			list-style: none;
+			padding: none;
+			display: inline-block;
+
+			&:hover{
+				color: #26a69a;
+			}
+		}
+
+		.active {
+			height: 58px;
+			line-height: 58px;
+			color: #26a69a;
+			border-bottom: 2px solid #26a69a;
+		}
+	}
+	
+	.book_show {
+		width: 100%;
+		height: auto;
+		display: flex;
+		justify-content: space-between;
+
+		.commit {
+			width: calc(100% - 300px);
+			height: 900px;
+			background: white;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			h2 {
+				width: 100%;
+				font-size:23px;
+				height: 65px;
+				margin:0;
+				line-height: 65px;
+				text-indent: 25px;
+				border-bottom: 1px solid lightgray; 
+			}
+
+			.do_commit {
+				width: calc(100% - 40px);
+				padding: 30px 0;
+				margin: 0 auto;
+				height: 200px;
+				display: flex;
+				justify-content: space-between;
+				.avater {
+					width: 60px;
+					height: 60px;
+					border: 1px solid black;
+				}
+
+				.cmt_body {
+					width: calc( 100% - 80px);
+					height: 100%;
+
+					textarea {
+						width: calc( 100% - 20px );
+						height: 130px;
+						resize: none;
+						padding: 10px;
+						font-size: 18px; 
+						line-height: 26px;
+						border: 1px solid gray;
+						outline: none;
+					}
+
+					.footer{
+						width: 100%;
+						height: 50px;
+						.btn {
+							float: right;
+							width: 100px;
+							height: 40px;
+							margin-right: 20px;
+							text-align: center;
+							line-height: 40px;
+							border-radius: 50px;
+							background: #26a69a;
+							color: white;							
+							&:hover{
+								background: rgba(38, 166, 154, 0.8);
+							}
+						}
+
+						.cancle {
+							margin-right: 40px;
+							background: white;
+							color: gray;
+							&:hover{
+								color:#26a69a;
+								background:white;
+							}
+						}
+					}
+				}
+			}
+
+			.commit_list {
+				width: calc(100% - 40px);
+				height: auto;
+				margin: 0 auto;
+				
+				.list_sub {					
+					.book_sub();
+					margin: 0;
+					border-bottom: 1px solid lightgray;
+					height: 60px;	
+					li {
+						width: 80px;
+						font-size: 16px;
+						line-height: 80px;
+					}
+
+					.active {
+						height: 48px;
+					}
+				}
+
+				.commit_item {
+					width: 100%;
+					height: auto;
+				}
+			}
+		}
+
+		.author {
+			width: 280px;
+			height: auto;
+
+			.infor_card {
+				width: 100%;
+				height: 270px;
+				padding-top: 20px;
+				background: white;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				border-bottom: 1px solid lightgray;
+				font-family: "Simsun";
+				.avater {
+					width: 80px;
+					height: 80px;
+					border-radius: 90%;
+					border: 1px solid black;
+				}
+
+				.name {
+					width: 80%;
+					margin:0;
+					margin-top:10px;
+					text-align: center;
+					font-size: 19px;
+				}
+
+				.sign {
+					.name();
+					width: 90%;
+					font-size: 13px;
+					color: gray;
+				}
+
+				.details {
+					width: 90%;
+					margin: 10px 0;
+					height: 90px;
+					display: flex;
+					justify-content: space-between;
+					
+					.de_card {
+						width: 33%;
+						height: 100%;
+						.icon {
+							width: 40px;
+							height: 40px;
+							margin: 0 auto;
+						}
+						.start {
+							background: url('../../imgs/icons/start.png') no-repeat;
+							background-position: center;
+							background-size: 75% auto;
+						}
+						.jion {
+							background: url('../../imgs/icons/jion.png') no-repeat;
+							background-position: center;
+							background-size: 75% auto;
+						}
+						.focus {
+							background: url('../../imgs/icons/focus.png') no-repeat;
+							background-position: center;
+							background-size: 75% auto;
+						}
+						p {
+							margin: 0;
+							margin-top: 5px;
+							font-size: 14px;
+							text-align: center;
+							font-weight: 1;
+						}
+						.num {
+							color: #26a69a;
+							font-size: 15px;
+							font-weight: bold;
+						}
+
+					}
+				}
+			}
+
+			.more_card {
+				width: 100%;
+				height: 300px;
+				background: white;
+			}
+		}
+	}
+
+	.book_catalog {
+		width: 100%;
+		height: 400px;
+		padding: 20px 0 ;
+		background: white;
 	}
 }
