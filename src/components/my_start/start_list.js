@@ -37,7 +37,7 @@ class StartCard extends Component {
 						</div>
 					</div>
 					<div className="details">
-						<p>共xxx字 共xxx人参与续写</p>
+						<p>当前共{this.props.joinUsers}人参与续写&nbsp;&nbsp;最快续写至第{this.props.maxLayer}章</p>
 						<div className="infor_intro">{this.props.content}</div>
 					</div>
 					<div className="actions">
@@ -67,6 +67,7 @@ class StartList extends Component {
 				Authorization: "Bearer " + this.props.token.access_token
 			}
 		}).then(res => {
+			console.log(res);
 			this.setState({
 				arr: res.data.data
 			})
@@ -88,8 +89,16 @@ class StartList extends Component {
 						<div className="btn"> <span className="big">+</span> 添加发起</div>
 					</Link>
 				</div>
-				{List}
-				<Paging />
+				{
+					List.length ? (List) : (	
+						<div className="nt_box">		
+							<div className="nothing">
+								<img src={require("../../imgs/others/cry.jpg")} />
+								<p>你还没有发起哦~</p>	
+							</div>
+						</div>
+					)
+				}
 			</div>
 		)
 	}

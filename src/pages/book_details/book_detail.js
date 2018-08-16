@@ -19,27 +19,28 @@ class Author extends Component {
 	}
 
 	render() {
+		const author = this.props.author;
 		return (
 			<div className="author">
 				<div className="infor_card">
-					<img className="avater" />
-					<h2 className="name">{this.props.username}</h2>
-					<p className="sign">{this.props.sign}</p>
+					<img className="avater" src={"http://47.95.207.40/branch/file/user/" + author.icon}/>
+					<h2 className="name">{author.username}</h2>
+					<p className="sign">{author.signText}</p>
 					<div className="details">
 						<div className="de_card">
 							<div className="icon start"></div>
 							<p>发起数量</p>
-							<p className="num">2</p>
+							<p className="num"></p>
 						</div>
 						<div className="de_card">
 							<div className="icon jion"></div>
 							<p>参与数量</p>
-							<p className="num">2</p>
+							<p className="num"></p>
 						</div>
 						<div className="de_card">
 							<div className="icon focus"></div>
 							<p>关注数量</p>
-							<p className="num">2</p>
+							<p className="num"></p>
 						</div>
 					</div>
 				</div>
@@ -70,22 +71,27 @@ class BookDetails extends Component {
 	}
 
 	focusBook() {
-		axios.put("http://47.95.207.40/branch/user/focusOn/book/" + this.state.bookId,
-			{},
-			{
-				headers: {
-					"Authorization": "Bearer " + this.props.token.access_token
+		if(this.props.logif) {
+			axios.put("http://47.95.207.40/branch/user/focusOn/book/" + this.state.bookId,
+				{},
+				{
+					headers: {
+						"Authorization": "Bearer " + this.props.token.access_token
+					}
 				}
-			}
-		).then( res => {
-			this.props.showSucPopup(res.data.message);
-			this.props.getFocus(this.props.token);
-			this.setState({
-				focused: true
+			).then( res => {
+				this.props.showSucPopup(res.data.message);
+				this.props.getFocus(this.props.token);
+				this.setState({
+					focused: true
+				})
+			}).catch( err => {
+				this.props.showFailPopup(err.response.data.error_description);
 			})
-		}).catch( err => {
-			this.props.showFailPopup(err.response.data.message);
-		})
+		}else {
+			this.props.showFailPopup("您还没有登录呢！");
+		}
+
 	}
 
 	unfocusBook() {
@@ -109,6 +115,7 @@ class BookDetails extends Component {
 	getBook() {
 		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId)
 			 .then(res=> {
+				console.log(res);
 			 	this.setState({
 			 		bookInfor: res.data.data,
 			 		author: res.data.data.author
@@ -156,16 +163,18 @@ class BookDetails extends Component {
 						<h1 className="book_name">{bookInfor.bookName}<span className="author">{this.state.author.username} 发起</span></h1>
 						<div className="types">
 							<div className="type" style={style}>{cont.words}</div>
+							<div className="type quick">最快续写至第{bookInfor.maxLayer}章</div>
+							<div className="type count">当前共{bookInfor.branchNum}章</div>
 						</div>
 						<div className="count">
 							<div className="item">
-								<span className="big">445</span>关注量
+								<span className="big">n</span>关注量
 							</div>
 							<div className="item">
-								<span className="big">25</span>参与量
+								<span className="big">{bookInfor.joinUsers}</span>参与
 							</div>
 							<div className="item no-border">
-								<span className="big">4</span>阅读量
+								<span className="big">{bookInfor.readNum}</span>阅读量
 							</div>
 						</div>
 						<div className="intro">
@@ -200,7 +209,7 @@ class BookDetails extends Component {
 								<Commit head= "作品评论区"/>
 							</div>
 							<Author 
-								username={this.state.author.username}
+								author={this.state.author}
 							/>
 						</div>
 					) : (

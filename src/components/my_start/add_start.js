@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import Editor from '../editor/editor.js'
 import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
-
+import { withRouter } from 'react-router-dom'
 import axios from 'axios'
 import './my_start.less'
 
@@ -25,7 +25,9 @@ class AddStart extends Component{
 			tit: '',
 			text: '',
 			blob: '',
-			src: ''
+			src: '',
+			bookId: ''
+
 		}
 		this.writeFirst = this.writeFirst.bind(this);
 		this.handleBack = this.handleBack.bind(this);
@@ -53,8 +55,7 @@ class AddStart extends Component{
 	    reader.onload = function(e) {        //监听reader读取完成事件
 	    //当读取完成时，reader.result就是要的base64
 	        _this.setState({
-	        	src: this.result,
-	        	cut: true
+	        	src: this.result
 	        })
 	        oImg.src = this.result;
 	    }
@@ -182,8 +183,14 @@ class AddStart extends Component{
 				}
 			)
 			.then( res => {
+				this.setState({
+					bookId: res.data.data.bookId
+				})
 				this.props.showSucPopup(res.data.message);
-				
+				if(this.state.blob) {
+					this.sendImg();	
+				}else{
+					this.props.history.push('/book_details?bookId='+this.state.bookId);				}
 			})
 			.catch( err => {
 				this.props.showFailPopup(err.response.data.error_description);
@@ -200,6 +207,24 @@ class AddStart extends Component{
 
 	}
 
+	sendImg() {
+		let formData = new FormData();
+		formData.append("file", this.state.blob);
+		axios.post("http://47.95.207.40/branch/book/upload/book_image/" + this.state.bookId,
+				formData ,{
+					headers: {
+						"Authorization": "Bearer " + this.props.token.access_token,
+						"Content-Type": "application/x-www-form-urlencoded"
+					}
+				}
+		).then(res => {
+			console.log(res);
+			this.props.history.push('/book_details?bookId='+this.state.bookId);
+		}).catch(err => {
+			console.log(err);
+		})
+	}
+
 	render() {
 		console.log(this.state);
 		return (
@@ -210,7 +235,7 @@ class AddStart extends Component{
 						<div className="add_infor">
 							<div className="add_img">
 								<div className="input_cover">
-									<img id="bookImg"/>
+									<img id="bookImg" src={this.state.src}/>
 									<input type="file" onChange={this.handleImg}/>
 								</div>
 								<p>请选择一张图片作为书的封面</p>
@@ -297,4 +322,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
 	mapStateToProps,
 	mapDispatchToProps
-)(AddStart)
+)(withRouter(AddStart))

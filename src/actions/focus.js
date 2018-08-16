@@ -34,3 +34,21 @@ export const getFocus = token => dispatch => {
 		dispatch(showFailPopup(err.response.data.message));
 	})
 }
+
+//添加关注
+export const addFocus = (bookId, token, callback) => dispatch => {
+	axios.put("http://47.95.207.40/branch/user/focusOn/book/" + bookId,
+		{},
+		{
+			headers: {
+				"Authorization": "Bearer " + token.access_token
+				}
+		}
+		).then( res => {
+			showSucPopup(res.data.message);
+			getFocus(token);
+			callback(true);
+		}).catch( err => {
+			showFailPopup(err.response.data.error_description);
+	})
+}

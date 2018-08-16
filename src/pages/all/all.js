@@ -6,7 +6,24 @@ import './all.less'
 import Paging from '../../components/paging/paging.js'
 
 import { changeStyle } from '../../public/common.js'
-
+function transSort(num) {
+	switch(num) {
+		case 0:
+			return 'READ_NUM'
+		case 1:
+			return 'FOUCUS_ON'
+		case 2:
+			return 'COMMENT'
+		case 3:
+			return 'JOIN_USERS'
+		case 4:
+			return 'WORDS'
+		case 5:
+			return 'BRANCH_NUM'
+		case 6:
+			return 'LAYER'
+	}
+}
 class AllNav extends Component {
 	constructor(props) {
 		super(props);
@@ -106,34 +123,47 @@ class AllNav extends Component {
 class AllHeader extends Component {
 	constructor(props){
 		super(props);
-		this.state = {
-			now: 0
-		}
-		this.handleClick = this.handleClick.bind(this);
-	}
-
-	handleClick(e) {
-		this.setState({
-			now: e.target.parentNode.getAttribute('index') - 0
-		})
 	}
 
 	render() {
-		const now = this.state.now;
+		const now = this.props.now;
 		return (
 			<ul className="page_header">
-				<li className={now === 0 ? "active" : ''} index={0} onClick={this.handleClick}>
-					<a href="javascript:">综合</a>
+				<a href="javascript:">
+				<li className={now === 0 ? "active" : ''} index={0} onClick={this.props.handleSort}>
+					阅读量
 				</li>
-				<li className={now === 1 ? "active" : ''} index={1} onClick={this.handleClick}>
-					<a href="javascript:">字数</a>
+				</a>
+				<a href="javascript:">
+				<li className={now === 1 ? "active" : ''} index={1} onClick={this.props.handleSort}>
+					关注量
 				</li>
-				<li className={now === 2 ? "active" : ''} index={2} onClick={this.handleClick}>
-					<a href="javascript:">参与</a>
+				</a>
+				<a href="javascript:">
+				<li className={now === 2 ? "active" : ''} index={2} onClick={this.props.handleSort}>
+					评论量
 				</li>
-				<li className={now === 3 ? "active" : ''} index={3} onClick={this.handleClick}>
-					<a href="javascript:">时间</a>
+				</a>
+				<a href="javascript:">
+				<li className={now === 3 ? "active" : ''} index={3} onClick={this.props.handleSort}>
+					参与数
 				</li>
+				</a>
+				<a href="javascript:">
+				<li className={now === 4 ? "active" : ''} index={4} onClick={this.props.handleSort}>
+					字数
+				</li>
+				</a>
+				<a href="javascript:">
+				<li className={now === 5 ? "active" : ''} index={5} onClick={this.props.handleSort}>
+					续写量
+				</li>
+				</a>
+				<a href="javascript:">
+				<li className={now === 6 ? "active" : ''} index={6} onClick={this.props.handleSort}>
+					续写进度
+				</li>
+				</a>
 			</ul>
 		)
 	}
@@ -160,7 +190,7 @@ class PageItem extends Component {
 				</div>
 				<div className="item_infor">
 					<div className="item tit">
-						<a href={ "/book_details/" + book.bookId }>
+						<a href={ "/book_details?bookId=" + book.bookId }>
 							{book.bookName}
 						</a>
 					</div>
@@ -203,11 +233,15 @@ class AllPage extends Component {
 			value: changeStyle(index).words || '全部',	//当前类型
 			books: [],		//当前页展示的book数组
 			pageNow: 1,		//当前页
-			pageShow: 1 	//当前框显示数字
+			pageShow: 1, 	//当前框显示数字
+			sort: 'READ_NUM',	//排序内容
+			sortType: 0,	//默认排序方式
+			now: 0
 		}
 		this.handleClick = this.handleClick.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 		this.handleGo = this.handleGo.bind(this);
+		this.handleSort = this.handleSort.bind(this);
 		this.toAll = this.toAll.bind(this);
 		this.getBooks = this.getBooks.bind(this);
 		this.goBack = this.goBack.bind(this);
@@ -226,6 +260,13 @@ class AllPage extends Component {
 		})
 	}
 
+	handleSort(e) {
+		let now = e.target.getAttribute('index') - 0;
+		this.setState({
+			sort: transSort(now),
+			now: now
+		})
+	}
 	toAll() {
 		this.setState({
 			index: -1,
@@ -238,11 +279,15 @@ class AllPage extends Component {
 	getBooks() {
 		let params = (this.state.index === -1) ? {
 			pageNo: this.state.pageNow,
-			pageSize: 10
+			pageSize: 10,
+			sort: this.state.sort,
+			sortType: this.sortType
 		} : {
 			pageNo: this.state.pageNow,
 			pageSize: 10,
-			type: this.state.index
+			type: this.state.index,
+			sort: this.state.sort,
+			sortType: this.sortType
 		}
 		axios.get("http://47.95.207.40/branch/book",{
 			params: params
@@ -322,7 +367,7 @@ class AllPage extends Component {
 					value={this.state.value}
 				/>
 				<div className="all_page">
-					<AllHeader />
+					<AllHeader now={this.state.now} handleSort={this.handleSort}/>
 					<AllBody books={this.state.books} />
 					<Paging 
 						now={this.state.pageNow} 
