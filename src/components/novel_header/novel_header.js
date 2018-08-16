@@ -69,16 +69,21 @@ class NoverHeader extends Component{
 							}
 						</div>
 					</div>
-					<ul>
-						<li className="show">
-							<NavLink activeClassName="active" to="/all">
-								<div className="icon"></div>全部分类
-							</NavLink>
-							<AllList />
-						</li>
-						<li><NavLink activeClassName="active" to="/toplist">排行榜</NavLink></li>
-						<li><NavLink activeClassName="active" to="/new">最新</NavLink></li>
-					</ul>
+					{
+						this.props.read === false ? 
+						(
+							<ul>
+								<li className="show">
+									<NavLink activeClassName="active" to="/all">
+										<div className="icon"></div>全部分类
+									</NavLink>
+									<AllList />
+								</li>
+								<li><NavLink activeClassName="active" to="/toplist">排行榜</NavLink></li>
+								<li><NavLink activeClassName="active" to="/new">最新</NavLink></li>
+							</ul>
+						) :	""
+					}
 				</div>
 			</div>
 		)

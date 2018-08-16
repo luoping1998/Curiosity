@@ -1,0 +1,131 @@
+.commit {
+	width: 100%;
+	height: 900px;
+	background: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	h2 {
+		width: 100%;
+		font-size:23px;
+		height: 65px;
+		margin:0;
+		line-height: 65px;
+		text-indent: 25px;
+		border-bottom: 1px solid lightgray; 
+	}
+
+	.do_commit {
+		width: calc(100% - 40px);
+		padding: 30px 0;
+		margin: 0 auto;
+		height: 200px;
+		display: flex;
+		justify-content: space-between;
+		.avater {
+			width: 60px;
+			height: 60px;
+			border: 1px solid black;
+		}
+
+		.cmt_body {
+			width: calc( 100% - 80px);
+			height: 100%;
+
+			textarea {
+				width: calc( 100% - 20px );
+				height: 130px;
+				resize: none;
+				padding: 10px;
+				font-size: 18px; 
+				line-height: 26px;
+				border: 1px solid gray;
+				outline: none;
+			}
+
+			.footer{
+				width: 100%;
+				height: 50px;
+				.btn {
+					float: right;
+					width: 100px;
+					height: 40px;
+					margin-right: 20px;
+					text-align: center;
+					line-height: 40px;
+					border-radius: 50px;
+					background: #26a69a;
+					color: white;							
+					&:hover{
+						background: rgba(38, 166, 154, 0.8);
+					}
+				}
+
+				.cancle {
+					margin-right: 40px;
+					background: white;
+					color: gray;
+					&:hover{
+						color:#26a69a;
+						background:white;
+					}
+				}
+			}
+		}
+	}
+
+	.commit_list {
+		width: calc(100% - 40px);
+		height: auto;
+		margin: 0 auto;
+		
+		.book_sub {
+			width: 100%;
+			height: 60px;
+			padding: 0;
+			margin: 20px 0;
+			background: white;
+			li {
+				width: 130px;
+				height: 60px;
+				font-size: 18px;
+				text-align: center;
+				line-height: 60px;
+				list-style: none;
+				padding: none;
+				display: inline-block;
+
+				&:hover{
+					color: #26a69a;
+				}
+			}
+
+			.active {
+				height: 58px;
+				line-height: 58px;
+				color: #26a69a;
+				border-bottom: 2px solid #26a69a;
+			}
+		}	
+		.list_sub {					
+			.book_sub();
+			margin: 0;
+			border-bottom: 1px solid lightgray;
+			height: 60px;	
+			li {
+				width: 80px;
+				font-size: 16px;
+				line-height: 80px;
+			}
+
+			.active{
+				height: 48px;
+			}
+		}
+	}
+
+	.commit_item {
+		width: 100%;
+		height: auto;
+	}
+}

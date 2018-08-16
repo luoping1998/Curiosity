@@ -92,7 +92,11 @@ class Member extends Component {
 								</div>
 								<div className="avater">
 									<img src={"http://47.95.207.40/branch/file/user/" + this.props.infor.icon} />
-									<input type="file"/>
+									<div className="cover">
+										<input type="file"/>
+										<p>点击修改头像</p>
+									</div>
+
 								</div>
 								<div className="box_infor">
 									<input className="name" type="text" value={this.props.infor.username} onChange={this.handleNamein} />

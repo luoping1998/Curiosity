@@ -13,6 +13,7 @@ import Home from './pages/home/home.js'
 import Myslef from './pages/myself/myself.js'
 import All from './pages/all/all.js'
 import BookDetails from './pages/book_details/book_detail.js'
+import Reader from './pages/read/read.js'
 
 import { connect } from 'react-redux'
 import ACTIONS from './actions/index.js'
@@ -24,11 +25,19 @@ class App extends Component{
 		super(props);
 
 		this.state = {
-			show : false
+			show: false,
+			read: false
 		}
 
 		this.handleClick = this.handleClick.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.handleSub = this.handleSub.bind(this);
+	}
+
+	handleSub(val) {
+		this.setState({
+			read: val
+		})
 	}
 
 	handleClick() {
@@ -42,8 +51,9 @@ class App extends Component{
 			show: value
 		})
 	}
-
+	
 	componentDidMount() {
+		console.log(this.props);
 		this.props.generatGuID();
 	}
 
@@ -51,18 +61,20 @@ class App extends Component{
 		return (
 			<BrowserRouter>
 				<div>
-					<PopupContainer />
+					<PopupContainer/>
 					{ this.state.show ? (<Cover box={ <LoginBoxContainer handleChange={this.handleChange}/>} handleClick = {this.handleClick} show={this.state.show}/>) : '' }
 					<NoverHeader 
 						log={this.props.logif} 
 						icon={this.props.icon}
 						handleClick={this.handleClick} 
-						logOut={this.props.logOut} 
+						logOut={this.props.logOut}
+						read={this.state.read} 
 					/>
 					<Route exact path="/" component={Home} />
 					<Route path="/my" component={Myslef} />
 					<Route path="/all" component={All} />
 					<Route path="/book_details" component={BookDetails} />
+					<Route path="/read" component={Reader} />
 					<Footer />
 				</div>
 			</BrowserRouter>

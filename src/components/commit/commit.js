@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import '../../pages/book_details/book_detail.less'
+import './commit.less'
 
 class CommitItem extends Component {
 	constructor(props) {
@@ -12,6 +12,7 @@ class CommitItem extends Component {
 		)
 	}
 }
+
 class Commit extends Component {
 	constructor(props) {
 		super(props);
@@ -24,7 +25,7 @@ class Commit extends Component {
 		const show = this.state.show;
 		return (
 			<div className="commit">
-				<h2>作品评论区</h2>
+				<h2>{this.props.head}</h2>
 				<div className="do_commit">
 					<img className="avater" />
 					<div className="cmt_body">

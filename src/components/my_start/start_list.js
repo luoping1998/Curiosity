@@ -23,11 +23,15 @@ class StartCard extends Component {
 		return (
 				<div className="start_item">
 					<div className="item_infor">
-						<img className="item_img" src={"http://47.95.207.40/branch " + this.props.bookImage}/>
+						<a href={"/book_details?bookId=" + this.props.bookId}>
+							<img className="item_img" src={"http://47.95.207.40/branch/file/book/" + this.props.bookImage }/>
+						</a>
 						<div className="infor_detail">
-							<h2 className="infor_name">
-							{this.props.bookName}
-							</h2>
+							<a href={"/book_details?bookId=" + this.props.bookId}>
+								<h2 className="infor_name">
+								{this.props.bookName}
+								</h2>
+							</a>
 							<div className="type" style={style}>{cont.words}</div>
 							<div className="pub">已发布</div>
 						</div>
@@ -37,7 +41,7 @@ class StartCard extends Component {
 						<div className="infor_intro">{this.props.content}</div>
 					</div>
 					<div className="actions">
-						<a href="javascript:"><div className="btn">查看详情</div></a>
+						<a href={"/book_details?bookId=" + this.props.bookId}><div className="btn">查看详情</div></a>
 						<p>
 							<a href="javascript:">编辑</a>
 							<a href="javascript:">删除</a>

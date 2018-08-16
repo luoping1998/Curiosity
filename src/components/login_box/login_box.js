@@ -423,9 +423,9 @@ class LoginBox extends Component{
 					handleChange(false);
 					this.showSucPopup("登录成功！");
 					this.props.getInfor(this.props.token);
+					this.props.getFocus(this.props.token);
 				}
 			}).catch(err=>{
-				console.log(err);
 				this.showFailPopup(err.response.data.message);
 				this.getImgCode();
 			})

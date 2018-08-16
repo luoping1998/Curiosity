@@ -4,6 +4,7 @@ import token from './token.js'
 import logif from './logif.js'
 import popup from './popup.js'
 import guid from './guid.js'
+import focus from './focus.js'
 
 
 export default combineReducers({
@@ -11,5 +12,6 @@ export default combineReducers({
 	token,	//token 验证是否登录
 	logif,	//是否登录flag
 	popup,	//alert弹窗 
-	guid 	//用户唯一guid
+	guid,	//用户唯一guid
+	focus 	//用户的关注列表
 })

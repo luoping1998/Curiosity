@@ -154,7 +154,7 @@ class PageItem extends Component {
 		return (
 			<div className="page_item">
 				<div className="item_img">
-					<a href={ "/book_details?bookId=" + book.bookId }>
+					<a href={ "/book_details?bookId=" + book.bookId } target="_blank">
 					<img src={"http://47.95.207.40/branch/file/book/" + book.bookImage}/>
 					</a>
 				</div>
@@ -195,13 +195,15 @@ class AllBody extends Component {
 class AllPage extends Component {
 	constructor(props) {
 		super(props);
+		let val = this.props.location.search.split("=")[1];
+		const index = (val!=="" ? Number(val) : -1);
 		this.state = {
-			index: -1,
-			count: 0,
-			value: '全部',
-			books: [],
-			pageNow: 1,
-			pageShow: 1
+			index: index || -1,	//当前类型对应的index
+			count: 0,		//共count页
+			value: changeStyle(index).words || '全部',	//当前类型
+			books: [],		//当前页展示的book数组
+			pageNow: 1,		//当前页
+			pageShow: 1 	//当前框显示数字
 		}
 		this.handleClick = this.handleClick.bind(this);
 		this.handleChange = this.handleChange.bind(this);
