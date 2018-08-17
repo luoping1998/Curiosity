@@ -6,486 +6,607 @@
 	flex-wrap: wrap;
 	justify-content: center;
 
-	.left_nav {
-		width: 70px;
-		height: 425px;
-		border: 1px solid lightgray;
-		border-bottom: none;
-		margin-top: 35px;
-		.nav_li {
+	@media screen {
+		.left_nav {
 			width: 70px;
-			height: 70px;
-			position: relative;
-			border-bottom: 1px solid lightgray;
-			/*
-			 * 以下为icon的css 
-			 */
-			.icon {
-				margin: 0 auto;
-				width: 40px;
-				height: 40px;
-			}
-			
-			.list {
-				background:url('../../imgs/icons/n-list.png') no-repeat;
-				background-size: 50% auto;
-				background-position: 10px 20px;
-			}
-			.shezhi {
-				background:url('../../imgs/icons/n-shezhi.png') no-repeat;
-				background-size: 50% auto;
-				background-position: 10px 20px;
-			}			
-			.star {
-				background:url('../../imgs/icons/n-star.png') no-repeat;
-				background-size: 60% auto;
-				background-position: 10px 15px;
-			}
-			.foc {
-				background:url('../../imgs/icons/n-foc.png') no-repeat;
-				background-size: 60% auto;
-				background-position: 10px 15px;
-			}
-
-			.hasfoc {
-				background:url('../../imgs/icons/n-hasfoc.png') no-repeat;
-				background-size: 60% auto;
-				background-position: 10px 15px;
-			}
-			.cmt {
-				background:url('../../imgs/icons/n-cmt.png') no-repeat;
-				background-size: 60% auto;
-				background-position: 10px 15px;
-			}
-			.top {
-				background:url('../../imgs/icons/n-top.png') no-repeat;
-				background-size: 50% auto;
-				background-position: bottom;
-			}
-			.words {
-				width: 100%;
-				height: 30px;
-				font-size: 13px;
-				text-align: center;
-				line-height: 30px;
-			}
-
-			&:hover{
-				.words {
-					color: #26a69a;
+			height: 425px;
+			border: 1px solid lightgray;
+			border-bottom: none;
+			margin-top: 35px;
+			.nav_li {
+				width: 70px;
+				height: 70px;
+				position: relative;
+				border-bottom: 1px solid lightgray;
+				/*
+				 * 以下为icon的css 
+				 */
+				.icon {
+					margin: 0 auto;
+					width: 40px;
+					height: 40px;
 				}
-
+				
 				.list {
-					background:url('../../imgs/icons/a-list.png') no-repeat;
-					background-size: 50% auto;
-					background-position: 10px 20px;				
-				}
-
-				.shezhi{
-					background:url('../../imgs/icons/a-shezhi.png') no-repeat;
+					background:url('../../imgs/icons/n-list.png') no-repeat;
 					background-size: 50% auto;
 					background-position: 10px 20px;
 				}
-				.star{
-					background:url('../../imgs/icons/a-star.png') no-repeat;
+				.shezhi {
+					background:url('../../imgs/icons/n-shezhi.png') no-repeat;
+					background-size: 50% auto;
+					background-position: 10px 20px;
+				}			
+				.star {
+					background:url('../../imgs/icons/n-star.png') no-repeat;
 					background-size: 60% auto;
 					background-position: 10px 15px;
 				}
-
-				.foc{
-					background:url('../../imgs/icons/a-foc.png') no-repeat;
+				.foc {
+					background:url('../../imgs/icons/n-foc.png') no-repeat;
 					background-size: 60% auto;
 					background-position: 10px 15px;
 				}
 
 				.hasfoc {
-					background:url('../../imgs/icons/a-hasfoc.png') no-repeat;
+					background:url('../../imgs/icons/n-hasfoc.png') no-repeat;
 					background-size: 60% auto;
 					background-position: 10px 15px;
 				}
-				.cmt{
-					background:url('../../imgs/icons/a-cmt.png') no-repeat;
+				.cmt {
+					background:url('../../imgs/icons/n-cmt.png') no-repeat;
 					background-size: 60% auto;
 					background-position: 10px 15px;
 				}
-
-				.top{
-					background:url('../../imgs/icons/a-top.png') no-repeat;
+				.top {
+					background:url('../../imgs/icons/n-top.png') no-repeat;
 					background-size: 50% auto;
 					background-position: bottom;
 				}
-			}
-			
-			/*
-			 * 连接部分小div css
-			 */
-			.gap {
-				width: 21px;
-				height: 70px;
-				position: absolute;
-				top:0;
-				left: 70px;
-			}
-
-			/*
-			 * 设置部分css
-			 */
-			
-			.setup {
-				position: absolute;
-				margin: 0;
-				padding: 0;
-				width: 490px;
-				height: 354px;
-				top:-70px;
-				left:91px;
-				box-shadow: 5px 7px 5px rgba(0,0,0,0.2);
-				li {
+				.words {
 					width: 100%;
-					height: 70px;
-					list-style: none;
-					display: flex;
-					align-items: center;
-					h2 {
-						height: auto;
-						font-size: 22px;
-						line-height: 80px;
-						text-indent: 20px;
-						margin: 0;
-					}
-					
-					.close {
-						width: 20px;
-						height: 20px;
-						position: absolute;
-						top: 15px;
-						right: 15px;
-						background: url('../../imgs/icons/n-close.png') no-repeat;
-						background-size: 80% auto;
-						background-position: center;
-						&:hover{
-							background: url('../../imgs/icons/a-close.png') no-repeat;
-							background-size: 80% auto;
-							background-position: center;
-						}
-					}
-					.name_sub {
-						width: 100px;
-						height: 70px;
-						line-height: 70px;
-						font-size: 15px;
-						text-align: center;
-					}
+					height: 30px;
+					font-size: 13px;
+					text-align: center;
+					line-height: 30px;
+				}
 
-					/*
-					 * 主题颜色
-					 */
-					.c_circle {
-						width: 40px;
-						height: 40px;
-						border: 1px solid lightgray;
-						border-radius: 50%;
-						margin-right: 20px;
-					}
-					
-					.c_normal {
-						background: white;
-					}
-					
-					.c_eye {
-						background:  #d4f1d8;
-					}
-					
-					.c_kraft {
-						background: #f2e1bf;
-					}
-
-					.c_pink {
-						background: rgb(244, 232, 230);
-					}
-
-					.c_blue {
-						background: rgb(232, 242, 243);
-					}
-
-					.c_pure {
-						background: rgb(229, 226, 226);
-					}
-					.c_active {
-						border: 1px solid #26a69a;
-					}
-					/*
-					 * 字体样式
-					 */
-					.font_item {
-						width: 90px;
-						height: 35px;
-						margin-right: 20px;
-						line-height: 35px;
-						text-align: center;
-						border:1px solid black;
-					}
-					
-					.font_active {
-						border: 1px solid #26a69a;
+				&:hover{
+					.words {
 						color: #26a69a;
-						background: rgba( 38, 166, 154, 0.1)
 					}
-					/*宋体*/
-					.font_SimSun {
-						font-family: "SimSun";
+
+					.list {
+						background:url('../../imgs/icons/a-list.png') no-repeat;
+						background-size: 50% auto;
+						background-position: 10px 20px;				
 					}
-					/*雅黑*/
-					.font_Yahei {
-						font-family: "Microsoft Yahei";
+
+					.shezhi{
+						background:url('../../imgs/icons/a-shezhi.png') no-repeat;
+						background-size: 50% auto;
+						background-position: 10px 20px;
 					}
-					/*楷书*/
-					.font_Kaiti {
-						font-family: "KaiTi";
+					.star{
+						background:url('../../imgs/icons/a-star.png') no-repeat;
+						background-size: 60% auto;
+						background-position: 10px 15px;
 					}
-					.con_nav {
-						width: 310px;
-						height: 35px;
-						border: 1px solid black;
+
+					.foc{
+						background:url('../../imgs/icons/a-foc.png') no-repeat;
+						background-size: 60% auto;
+						background-position: 10px 15px;
+					}
+
+					.hasfoc {
+						background:url('../../imgs/icons/a-hasfoc.png') no-repeat;
+						background-size: 60% auto;
+						background-position: 10px 15px;
+					}
+					.cmt{
+						background:url('../../imgs/icons/a-cmt.png') no-repeat;
+						background-size: 60% auto;
+						background-position: 10px 15px;
+					}
+
+					.top{
+						background:url('../../imgs/icons/a-top.png') no-repeat;
+						background-size: 50% auto;
+						background-position: bottom;
+					}
+				}
+				
+				/*
+				 * 连接部分小div css
+				 */
+				.gap {
+					width: 21px;
+					height: 70px;
+					position: absolute;
+					top:0;
+					left: 70px;
+				}
+
+				/*
+				 * 设置部分css
+				 */
+				
+				.setup {
+					position: absolute;
+					margin: 0;
+					padding: 0;
+					width: 490px;
+					height: 354px;
+					top:-70px;
+					left:91px;
+					box-shadow: 5px 7px 5px rgba(0,0,0,0.2);
+					li {
+						width: 100%;
+						height: 70px;
+						list-style: none;
 						display: flex;
 						align-items: center;
-						justify-content: space-between;
-						.con_nav_li {
-							width: 33%;
-							height: 80%;
-							display: block;
-							border-right: 1px solid lightgray;
+						h2 {
+							letter-spacing: 10px;
+							height: auto;
+							font-size: 22px;
+							line-height: 80px;
+							text-indent: 20px;
+							margin: 0;
+						}
+						
+						.close {
+							width: 20px;
+							height: 20px;
+							position: absolute;
+							top: 15px;
+							right: 15px;
+							background: url('../../imgs/icons/n-close.png') no-repeat;
+							background-size: 80% auto;
+							background-position: center;
+							&:hover{
+								background: url('../../imgs/icons/a-close.png') no-repeat;
+								background-size: 80% auto;
+								background-position: center;
+							}
+						}
+						.name_sub {
+							width: 100px;
+							height: 70px;
+							line-height: 70px;
+							font-size: 15px;
 							text-align: center;
+						}
+
+						/*
+						 * 主题颜色
+						 */
+						.c_circle {
+							width: 40px;
+							height: 40px;
+							border: 1px solid lightgray;
+							border-radius: 50%;
+							margin-right: 20px;
+						}
+						
+						.c_normal {
+							background: white;
+						}
+						
+						.c_eye {
+							background:  #d4f1d8;
+						}
+						
+						.c_kraft {
+							background: #f2e1bf;
+						}
+
+						.c_pink {
+							background: rgb(244, 232, 230);
+						}
+
+						.c_blue {
+							background: rgb(232, 242, 243);
+						}
+
+						.c_pure {
+							background: rgb(229, 226, 226);
+						}
+						.c_active {
+							border: 1px solid #26a69a;
+						}
+						/*
+						 * 字体样式
+						 */
+						.font_item {
+							width: 90px;
+							height: 35px;
+							margin-right: 20px;
+							line-height: 35px;
+							text-align: center;
+							border:1px solid black;
+						}
+						
+						.font_active {
+							border: 1px solid #26a69a;
+							color: #26a69a;
+							background: rgba( 38, 166, 154, 0.1)
+						}
+						/*宋体*/
+						.font_SimSun {
+							font-family: "SimSun";
+						}
+						/*雅黑*/
+						.font_Yahei {
+							font-family: "Microsoft Yahei";
+						}
+						/*楷书*/
+						.font_Kaiti {
+							font-family: "KaiTi";
+						}
+						.con_nav {
+							width: 310px;
+							height: 35px;
+							border: 1px solid black;
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+							.con_nav_li {
+								width: 33%;
+								height: 80%;
+								display: block;
+								border-right: 1px solid lightgray;
+								text-align: center;
+								font-size: 18px;
+								line-height: 28px;
+							}
+
+							.canadd {
+								background: url('../../imgs/icons/n-add.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+
+								&:hover {
+									background: url('../../imgs/icons/a-add.png') no-repeat;
+									background-size: auto 80%;
+									background-position: center;
+								}
+							}
+
+							.notadd {
+								background: url('../../imgs/icons/notadd.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+							}
+
+							.candel {
+								background: url('../../imgs/icons/n-del.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+								&:hover {
+									background: url('../../imgs/icons/a-del.png') no-repeat;
+									background-size: auto 80%;
+									background-position: center;
+								}
+							}
+
+							.notdel {
+								background: url('../../imgs/icons/notdel.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+							}
+
+							.vadd {
+								background: url('../../imgs/icons/n-kuo.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+
+								&:hover {
+									background: url('../../imgs/icons/a-kuo.png') no-repeat;
+									background-size: auto 80%;
+									background-position: center;
+								}
+							}
+
+							.nadd {
+								background: url('../../imgs/icons/notkuo.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+							}
+
+							.vdel {
+								background: url('../../imgs/icons/n-suo.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+								&:hover {
+									background: url('../../imgs/icons/a-suo.png') no-repeat;
+									background-size: auto 80%;
+									background-position: center;
+								}
+							}
+
+							.nvdel {
+								background: url('../../imgs/icons/notsuo.png') no-repeat;
+								background-size: auto 80%;
+								background-position: center;
+							}
+						}
+					}
+				}
+
+				/*
+				 * 目录部分css
+				 */
+				
+				.catalog {
+					.setup();
+					width: 400px;
+					height: auto;
+					top: 0;
+					
+					li {
+						height: auto;
+						h2 {
+							line-height: 35px;
 							font-size: 18px;
-							line-height: 28px;
+							letter-spacing: 0;
+							text-indent: 0;
+							color: #26a69a;
+							margin-left: 30px;
+							margin-top: 40px;
+							border-bottom: 1px solid #26a69a;
 						}
+					}
 
-						.canadd {
-							background: url('../../imgs/icons/n-add.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
+					.cat_main {
+						width: calc( 100% - 60px);
+						padding: 5px 30px;
+						margin: 0 auto;
+						margin-top: 10px;
 
-							&:hover {
-								background: url('../../imgs/icons/a-add.png') no-repeat;
-								background-size: auto 80%;
-								background-position: center;
+						li {
+							position: relative;
+							h3 {
+								margin: 0;
+								font-size: 16px;
+								letter-spacing: 3px;
+								width: 100%;
+								height: 40px;
+								line-height: 40px;
+							}
+							list-style: none;
+
+							.close {
+								width: 30px;
+								height: 30px;
+								position: absolute;
+								top: 5px;
+								right: 5px;
 							}
 						}
 
-						.notadd {
-							background: url('../../imgs/icons/notadd.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-						}
-
-						.candel {
-							background: url('../../imgs/icons/n-del.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-							&:hover {
-								background: url('../../imgs/icons/a-del.png') no-repeat;
-								background-size: auto 80%;
-								background-position: center;
+						.chapter {
+							border-bottom: 1px solid gray;
+							position: relative;
+							a {
+								font-size: 13px;
+								font-weight: 1;
+								width: auto;
+								height: auto;
+								display: block;
+								position: absolute;
+								top: 0;
+								right: 0;
+								color: gray;
+								&:hover{
+									color:#26a69a;
+								}
 							}
 						}
 
-						.notdel {
-							background: url('../../imgs/icons/notdel.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-						}
+						.details {
+							width: 100%;
+							margin: 0;
+							padding: 0;
+							padding-bottom: 10px;
+							li {
+								list-style: none;
+								margin: 0;
+								height: 40px;
+								line-height: 40px;
+								color: gray;
+								font-size: 14px;
+								border-bottom: 1px solid lightgray;
 
-						.vadd {
-							background: url('../../imgs/icons/n-kuo.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-
-							&:hover {
-								background: url('../../imgs/icons/a-kuo.png') no-repeat;
-								background-size: auto 80%;
-								background-position: center;
+								&:hover{
+									color:#26a69a;
+								}
 							}
-						}
 
-						.nadd {
-							background: url('../../imgs/icons/notkuo.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-						}
-
-						.vdel {
-							background: url('../../imgs/icons/n-suo.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
-							&:hover {
-								background: url('../../imgs/icons/a-suo.png') no-repeat;
-								background-size: auto 80%;
-								background-position: center;
+							.nothing {
+								color: gray;
+								&:hover{
+									color:gray;
+								}
 							}
-						}
 
-						.nvdel {
-							background: url('../../imgs/icons/notsuo.png') no-repeat;
-							background-size: auto 80%;
-							background-position: center;
+							.now_active {
+								color: #26a69a;
+								font-weight: bold;
+							}
 						}
 					}
 				}
 			}
 		}
-	}
-	
-	.re_body {
-		width: 800px;
-		height: auto;
-		margin-left: 20px;
-		
-		.header {
-			margin: 0;
-			font-size: 14px;
-			height: 35px;
-			
-			.split {
-				font-weight: bold;
-				color: rgb(190,190,190);
-				font-family: "黑体";
-			}
 
-			a {
-				padding: 0 10px;
-
-				&:hover{
-					color:#26a69a;
-				}
-			}
-		}
-
-		.inner_body {
-			width: 100%;
-			padding: 20px 0;
+		.re_body {
+			width: 800px;
 			height: auto;
-			margin-bottom: 20px;
-			font-size: 16px;
-
-			h2 {
-				text-indent: 30px;
-				font-size: 25px;
-				margin-bottom: 10px;
-			}
-			.link {
-				width: 92%;
-				margin: 0 auto;
+			margin-left: 20px;
+			
+			.header {
+				margin: 0;
 				font-size: 14px;
-				margin-bottom: 15px;
-				display: flex;
+				height: 35px;
+				
+				.split {
+					font-weight: bold;
+					color: rgb(190,190,190);
+					font-family: "黑体";
+				}
 
 				a {
-					color:gray;
-					display: flex;
-					align-items: center;
-					height: 100%;
-					width: auto;
-					padding: 3px 10px;
+					padding: 0 10px;
 
-					&:hover {
+					&:hover{
 						color:#26a69a;
-
-						.book {
-							background: url('../../imgs/icons/a-book.png') no-repeat;
-							background-size: 75% auto;
-							background-position: center;
-						}
-						.author {
-							background: url('../../imgs/icons/a-author.png') no-repeat;
-							background-size: 75% auto;
-							background-position: center;
-						}
-					}
-
-					.icon {
-						display: inline-block;
-						width: 30px;
-						height: 30px;
-					}
-					
-					.book {
-						background: url('../../imgs/icons/n-book.png') no-repeat;
-						background-size: 75% auto;
-						background-position: center;
-					}
-
-					.author {
-						background: url('../../imgs/icons/n-author.png') no-repeat;
-						background-size: 75% auto;
-						background-position: center;
-					}
-
-					.length {
-						background: url('../../imgs/icons/num.png') no-repeat;
-						background-size: 75% auto;
-						background-position: center;
-					}
-
-					.date {
-						background: url('../../imgs/icons/date.png') no-repeat;
-						background-size: 55% auto;
-						background-position: center;
 					}
 				}
-
-				.no-hover {
-					&:hover {
-						color: gray;
-					}
-				}
-
 			}
 
-			.main {
-				width: calc(100% - 60px);
+			.inner_body {
+				width: 100%;
+				padding: 20px 0;
 				height: auto;
-				padding-bottom: 20px;
-				margin: 0 auto;
-				word-wrap: break-word;
-				white-space : normal;
-				p{
-					margin: 0;
-					white-space: pre-wrap;
+				margin-bottom: 20px;
+				font-size: 16px;
+
+				h2 {
+					text-indent: 30px;
+					font-size: 25px;
+					margin-bottom: 10px;
 				}
-			}
-		}	
+				.link {
+					width: 92%;
+					margin: 0 auto;
+					font-size: 14px;
+					margin-bottom: 15px;
+					display: flex;
 
-		.re_footer {
-			width: 100%;
-			height: 80px;
-			display: flex;
-			align-items: center;
-			margin-bottom: 20px;
-			justify-content: space-between;
+					a {
+						color:gray;
+						display: flex;
+						align-items: center;
+						height: 100%;
+						width: auto;
+						padding: 3px 10px;
 
-			.btn {
-				width: 33%;
-				height: 100%;
+						&:hover {
+							color:#26a69a;
+
+							.book {
+								background: url('../../imgs/icons/a-book.png') no-repeat;
+								background-size: 75% auto;
+								background-position: center;
+							}
+							.author {
+								background: url('../../imgs/icons/a-author.png') no-repeat;
+								background-size: 75% auto;
+								background-position: center;
+							}
+						}
+
+						.icon {
+							display: inline-block;
+							width: 30px;
+							height: 30px;
+						}
+						
+						.book {
+							background: url('../../imgs/icons/n-book.png') no-repeat;
+							background-size: 75% auto;
+							background-position: center;
+						}
+
+						.author {
+							background: url('../../imgs/icons/n-author.png') no-repeat;
+							background-size: 75% auto;
+							background-position: center;
+						}
+
+						.length {
+							background: url('../../imgs/icons/num.png') no-repeat;
+							background-size: 75% auto;
+							background-position: center;
+						}
+
+						.date {
+							background: url('../../imgs/icons/date.png') no-repeat;
+							background-size: 55% auto;
+							background-position: center;
+						}
+					}
+
+					.no-hover {
+						&:hover {
+							color: gray;
+						}
+					}
+
+				}
+
+				.main {
+					width: calc(100% - 60px);
+					height: auto;
+					padding-bottom: 20px;
+					margin: 0 auto;
+					word-wrap: break-word;
+					white-space : normal;
+					p{
+						margin: 0;
+						white-space: pre-wrap;
+					}
+				}
+			}	
+
+			.re_footer {
+				width: 100%;
+				height: 80px;
 				display: flex;
 				align-items: center;
-				&:hover{
-					background:rgb(240,240,240);
+				margin-bottom: 20px;
+				justify-content: space-between;
+
+				.btn {
+					width: 33%;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					&:hover{
+						background:rgb(240,240,240);
+					}
+					p {
+						width: 100%;
+						font-size: 18px;
+						line-height: 40px;
+						text-align: center;
+						height: 40px;
+					}
 				}
-				p {
-					width: 100%;
-					font-size: 18px;
-					line-height: 40px;
-					text-align: center;
-					height: 40px;
-				}
+			}
+
+			#cmt_cover {
+				width: 100%;
+				height: auto;
 			}
 		}
 
-		#cmt_cover {
-			width: 100%;
-			height: auto;
+		@media (max-width: 950px) {
+			.left_nav {
+				position: fixed;
+				top:190px;
+				left: 0;
+			}
+
+			.re_body {
+				margin: 0;
+				margin-left: 80px;
+			}
 		}
 	}
+
 }
 
 /*正常 白色*/
@@ -501,6 +622,10 @@
 			.setup {
 				background: @mcolor
 			}
+
+			.catalog {
+				background: @mcolor
+			}
 		}
 	}
 	.re_body {
@@ -509,7 +634,6 @@
 		}	
 		.re_footer {
 			background: @mcolor;
-	
 		}
 
 		.cmt_cover {
@@ -529,6 +653,9 @@
 			}
 
 			.setup {
+				background: @mcolor
+			}
+			.catalog {
 				background: @mcolor
 			}
 		}
@@ -559,6 +686,9 @@
 			}
 
 			.setup {
+				background: @mcolor
+			}
+			.catalog {
 				background: @mcolor
 			}
 		}
@@ -592,6 +722,9 @@
 			.setup {
 				background: @mcolor
 			}
+			.catalog {
+				background: @mcolor
+			}
 		}
 	}
 	.re_body {
@@ -623,6 +756,10 @@
 			.setup {
 				background: @mcolor
 			}
+
+			.catalog {
+				background: @mcolor
+			}
 		}
 	}
 	.re_body {
@@ -652,6 +789,10 @@
 			}
 
 			.setup {
+				background: @mcolor
+			}
+
+			.catalog {
 				background: @mcolor
 			}
 		}

@@ -26,6 +26,13 @@ function trans(cont) {
 	return List
 }
 
+function filterArr ( arr, num) {
+	let narr = arr.filter( val => {
+		return val.branchId != num
+	})
+	return narr;
+}
+
 class Reader extends Component {
 	constructor(props) {
 		super(props)
@@ -60,8 +67,11 @@ class Reader extends Component {
 			},
 			backnum: 0, 		//主题id
 			showSetup: false, 	//是否展示设置
+			showCatlog: false,	//是否展示目录
 			focused: (ifFocused(this.props.focus, bookId) !== -1),	//是否关注了此书
-			started: false												//是否收藏了此书
+			started: false,											//是否收藏了此书
+			nextChapter: [],	//下一章数组
+			sameChapter: []		//当前章其他续写
 		}
 		this.handleStyle = this.handleStyle.bind(this);		//换class
 		this.setFamliy = this.setFamliy.bind(this);			//换字体
@@ -71,22 +81,56 @@ class Reader extends Component {
 		this.setFocued = this.setFocued.bind(this);
 		this.focusBook = this.focusBook.bind(this);
 		this.unfocusBook = this.unfocusBook.bind(this);
+		this.getNext = this.getNext.bind(this);				//获取下一章
+		this.getSame = this.getSame.bind(this);				//获取当前章其他续写
 	}
 
 	componentDidMount() {
 		let index = this.state.index - 1;
-		axios.get("http://47.95.207.40/branch/book/branch/"+this.state.branchId)
-			 .then( res => {
+		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId).then( 
+			res => {
 				this.setState({
 					data: res.data.data,
 					List: trans(res.data.data.content),
 					author: res.data.data.author,
 					num: res.data.data.content.length
+				},()=>{
+					this.getNext();
+					this.getSame();
 				})
-			 })
-			 .catch( err => {
+			}).catch( err => {
 				console.log(err);
 			})
+	}
+
+	getNext() {
+		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId + "/branch",
+		{
+			params : {
+				parentId: this.state.data.branchId
+			}
+		}).then(res => {
+			this.setState({
+				nextChapter: res.data.data
+			})
+		}).catch(err => {
+			console.log(err);
+		})
+	}
+
+	getSame() {
+		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId + "/branch",
+		{
+			params : {
+				parentId: this.state.data.parentId
+			}
+		}).then(res => {
+			this.setState({
+				sameChapter: filterArr(res.data.data, this.state.branchId)
+			})
+		}).catch(err => {
+			console.log(err);
+		})
 	}
 
 	//收藏本章节
@@ -120,6 +164,7 @@ class Reader extends Component {
 
 	}
 
+	//设置背景（主题）
 	handleStyle(e) {
 		this.setState({
 			class: e.target.className.split("_")[2],
@@ -127,6 +172,7 @@ class Reader extends Component {
 		})
 	}
 
+	//设置字体
 	setFamliy(e) {
 		let index = e.target.getAttribute("index");
 		this.setState({
@@ -138,6 +184,7 @@ class Reader extends Component {
 		})
 	}
 
+	//设置字体大小
 	setSize(e) {
 		let index = e.target.getAttribute("index") - 0;
 		let font = index + this.state.fontSize;
@@ -155,6 +202,7 @@ class Reader extends Component {
 		})
 	}
 
+	//设置宽度
 	setWidth(e) {
 		let index = e.target.getAttribute("index") - 0;
 		let readW = index + this.state.readW;
@@ -172,16 +220,72 @@ class Reader extends Component {
 
 	render() {
 		const data = this.state.data;
+		const nextList = this.state.nextChapter.map( val => {
+			return (
+				<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} key={val.branchId}>
+					<li>{val.title}</li>
+				</a>
+			)
+		})
+
+		const sameList =  this.state.sameChapter.map( val => {
+			return (
+				<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} key={val.branchId}>
+					<li>{val.title}</li>
+				</a>
+			)
+		})
+
 		return (
 			<div className={"reader " + this.state.class}>
 				<div className="left_nav">
 					<div className="nav_li">
-						<a href="javascript:">
+						<a href="javascript:" onClick={() => this.setState({showCatlog: !this.state.showCatlog})}>
 							<div className="icon list"></div>
 							<div className="words">目录</div>
 						</a>
+						{
+							this.state.showCatlog ? 
+							(	
+								<div className="gap"></div>
+							) : ""
+						}
+						{
+							this.state.showCatlog ? 
+							(
+								<div className="catalog">
+									<li>
+										<h2>目 录</h2>
+										<a href="javascript:" onClick={()=> this.setState({showCatlog: false})}><div className="close"></div></a>
+									</li>
+									<ul className="cat_main">
+										<li className="chapter">
+											<h3>上一章<div></div></h3>
+										</li>
+										<ul className="details">
+											{ this.state.data.parentId == 0 ? (<li className="nothing">无上一章</li>) : (<a href="javascript:"><li>上一章名字</li></a>)}
+										</ul>
+										<li className="chapter">
+											<h3>该章其他续写 <a href="javascript:">更多</a></h3>
+										</li>
+										<ul className="details">
+											<a href={"read?bookId=" + this.state.data.bookId + "&branchId=" + this.state.data.branchId + "&bookName=" + this.state.data.bookName + "&bookType=" + this.state.data.bookIndex} key={this.state.data.branchId}>
+												<li className="now_active">{this.state.data.title}</li>
+											</a>
+											{ sameList.splice(0,4) }
+										</ul>
+										<li className="chapter">
+											<h3>下一章 <a href="javascript:">更多</a></h3>
+										</li>
+										<ul className="details">
+											{ nextList.length ? nextList.splice(0,5) : (<li className="nothing">暂无下一章</li>) }
+										</ul>
+									</ul>
+								</div>
+							) : ""
+						}
 					</div>
-					
+
 					<div className="nav_li">
 						<a href="javascript:" onClick={() => this.setState({showSetup: !this.state.showSetup})}>
 							<div className="icon shezhi"></div>
