@@ -265,6 +265,8 @@ class AllPage extends Component {
 		this.setState({
 			sort: transSort(now),
 			now: now
+		},()=>{
+			this.getBooks();
 		})
 	}
 	toAll() {

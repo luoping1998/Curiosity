@@ -57,7 +57,70 @@ class StartList extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			arr: []
+			arr: [],
+			count: 0,
+			pageNow: 1,
+			pageShow: 1,
+			book:[]
+		}
+		this.getBooks = this.getBooks.bind(this);
+		this.goBack = this.goBack.bind(this);
+		this.goNext = this.goNext.bind(this);
+		this.goPage = this.goPage.bind(this);
+		this.handleGo = this.handleGo.bind(this);
+	}
+	goBack() {
+		let val = Number(this.state.pageNow) - 1;
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		},()=>{
+			this.getBooks();
+		})
+	}
+
+	goNext() {
+		let val = Number(this.state.pageNow) + 1;
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		},()=>{
+			this.getBooks();
+		})
+	}
+
+	goPage(e) {
+		let val = Number(e.target.innerHTML);
+		
+		this.setState({
+			pageNow: val,
+			pageShow: val
+		},()=>{
+			this.getBooks();
+		})
+	}
+
+	getBooks() {
+		if(this.state.arr.length) {
+			let start = (this.state.pageNow - 1) * 10;
+			let end = (start + 10) > this.state.arr.length ? this.state.arr.length : (start + 10);
+			this.setState({
+				book: this.state.arr.slice(start, end + 1)
+			})
+		}
+	}
+
+	handleGo() {
+		if(this.state.pageShow > this.state.count || this.state.pageShow < 1) {
+			this.setState({
+				pageShow: ''
+			})
+		}else {
+			this.setState({
+				pageNow: this.state.pageShow
+			},()=>{
+				this.getBooks();
+			})
 		}
 	}
 
@@ -67,9 +130,11 @@ class StartList extends Component {
 				Authorization: "Bearer " + this.props.token.access_token
 			}
 		}).then(res => {
-			console.log(res);
 			this.setState({
-				arr: res.data.data
+				arr: res.data.data,
+				count: Math.ceil(res.data.data.length / 10)
+			},()=>{
+				this.getBooks();
 			})
 		}).catch(err => {
 			if(err.response.data.error === "invalid_token") {
@@ -79,7 +144,7 @@ class StartList extends Component {
 	}
 
 	render() {
-		const List = this.state.arr.map( val => (
+		const List = this.state.book.map( val => (
 			<StartCard {...val} key={val.bookId}/>
 		))
 		return (
@@ -89,16 +154,16 @@ class StartList extends Component {
 						<div className="btn"> <span className="big">+</span> 添加发起</div>
 					</Link>
 				</div>
-				{
-					List.length ? (List) : (	
-						<div className="nt_box">		
-							<div className="nothing">
-								<img src={require("../../imgs/others/cry.jpg")} />
-								<p>你还没有发起哦~</p>	
-							</div>
-						</div>
-					)
-				}
+				{List}
+				<Paging 
+					now={this.state.pageNow} 
+					value={this.state.pageShow}
+					count={this.state.count} 
+					goBack={this.goBack}
+					goNext={this.goNext}
+					goPage={this.goPage}
+					handleChange={this.handleChange}
+					handleGo={this.handleGo}/>
 			</div>
 		)
 	}

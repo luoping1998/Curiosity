@@ -6,6 +6,11 @@ import Commit from '../../components/commit/commit.js'
 import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
 
+function ifFocused( arr, num) {
+	let narr = arr.map(val => (val.bookId == num));
+	return narr.indexOf(true);
+}
+
 function trans(cont) {
 	let arr = cont.split("\n");
 	arr = arr.filter( val => {
@@ -25,11 +30,13 @@ class Reader extends Component {
 	constructor(props) {
 		super(props)
 		let arr = this.props.location.search.split('=');
+		let bookId = arr[1].split("&")[0];
 		this.state = {
 			branchId: arr[2].split("&")[0],
-			bookId: arr[1].split("&")[0],
+			bookId: bookId,
 			bookName: decodeURI(arr[3].split('&')[0]),
-			bookType: changeStyle(arr[4]).words,
+			bookType: changeStyle(Number(arr[4])).words,
+			bookIndex: Number(arr[4]),
 			data: [],
 			List: [],
 			author: {},
@@ -52,14 +59,18 @@ class Reader extends Component {
 				width: '800px'
 			},
 			backnum: 0, 		//主题id
-			showSetup: false 	//是否展示设置
+			showSetup: false, 	//是否展示设置
+			focused: (ifFocused(this.props.focus, bookId) !== -1),	//是否关注了此书
+			started: false												//是否收藏了此书
 		}
 		this.handleStyle = this.handleStyle.bind(this);		//换class
 		this.setFamliy = this.setFamliy.bind(this);			//换字体
 		this.setSize = this.setSize.bind(this);				//换字体大小
 		this.setWidth = this.setWidth.bind(this);			//换屏宽
+		//关注书/取消关注
 		this.setFocued = this.setFocued.bind(this);
 		this.focusBook = this.focusBook.bind(this);
+		this.unfocusBook = this.unfocusBook.bind(this);
 	}
 
 	componentDidMount() {
@@ -80,7 +91,6 @@ class Reader extends Component {
 
 	//收藏本章节
 	addStart() {
-
 	}
 
 	setFocued(val) {
@@ -92,26 +102,21 @@ class Reader extends Component {
 	//关注本书
 	focusBook() {
 		if(this.props.logif) {
-			this.props.addFocus(this.state.bookId, this.props.token, this.setFocued);
-			// axios.put("http://47.95.207.40/branch/user/focusOn/book/" + this.state.bookId,
-			// 	{},
-			// 	{
-			// 		headers: {
-			// 			"Authorization": "Bearer " + this.props.token.access_token
-			// 		}
-			// 	}
-			// ).then( res => {
-			// 	this.props.showSucPopup(res.data.message);
-			// 	this.props.getFocus(this.props.token);
-			// 	this.setState({
-			// 		focused: true
-			// 	})
-			// }).catch( err => {
-			// 	this.props.showFailPopup(err.response.data.error_description);
-			// })
+			this.props.addFocus(this.state.bookId, this.props.token,()=>{
+				this.props.getFocus(this.props.token);
+				this.setFocued(true);
+			});
 		}else {
 			this.props.showFailPopup("您还没有登录呢！");
 		}
+	}
+
+	//取消关注
+	unfocusBook() {
+		this.props.cancelFocus(this.state.bookId, this.props.token, ()=>{
+			this.props.getFocus(this.props.token);
+			this.setFocued(false);	
+		});
 
 	}
 
@@ -271,21 +276,34 @@ class Reader extends Component {
 					</div>
 
 					<div className="nav_li">
-						<a href="javascript:" onClick={this.focusBook}>
-							<div className="icon foc"></div>
-							<div className="words">关注本书</div>
-						</a>
+					{
+						(this.state.focused === true && this.props.logif) ? 
+						(
+							<a href="javascript:" onClick={this.unfocusBook}>
+								<div className="icon hasfoc"></div>
+								<div className="words">√已关注</div>
+							</a>
+						):
+						(
+							<a href="javascript:" onClick={this.focusBook}>
+								<div className="icon foc"></div>
+								<div className="words">关注本书</div>
+							</a>
+						) 
+
+					}
+
 					</div>		
 					
 					<div className="nav_li">
-						<a href="javascript:">
+						<a href="#cmt_cover" >
 							<div className="icon cmt"></div>
 							<div className="words">评论</div>
 						</a>
 					</div>	
 
 					<div className="nav_li">
-						<a href="javascript:">
+						<a href="#">
 							<div className="icon top"></div>
 							<div className="words">置顶</div>
 						</a>
@@ -296,7 +314,7 @@ class Reader extends Component {
 					<div className="header">
 						<a href="/">首页</a>
 						<span className="split">></span>
-						<a href={"/all?type=" + changeStyle(this.state.bookType.index)}>{this.state.bookType}</a>
+						<a href={"/all?type=" + this.state.bookIndex}>{this.state.bookType}</a>
 						<span className="split">></span>
 						<a href={ "/book_details?bookId=" + this.state.bookId }> {this.state.bookName} </a>
 						<span className="split">></span>
@@ -326,6 +344,7 @@ class Reader extends Component {
 						</div>
 					</div>
 					<div className="cmt_cover">
+						<a name="cmt_cover"></a>
 						<Commit head="章节评论区" />
 					</div>
 				</div>
@@ -343,6 +362,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	getFocus: token => dispatch(ACTIONS.FOCUS.getFocus(token)),
 	addFocus: (focused, token, callback) => dispatch(ACTIONS.FOCUS.addFocus(focused, token, callback)),
+	cancelFocus: (bookId, token, callback) => dispatch(ACTIONS.FOCUS.cancelFocus(bookId, token, callback)),
 	showFailPopup: mes => dispatch(ACTIONS.POPUP.showFailPopup(mes)),
 	showSucPopup: mes => dispatch(ACTIONS.POPUP.showSucPopup(mes))
 })

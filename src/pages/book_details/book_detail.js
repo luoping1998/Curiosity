@@ -23,7 +23,7 @@ class Author extends Component {
 		return (
 			<div className="author">
 				<div className="infor_card">
-					<img className="avater" src={"http://47.95.207.40/branch/file/user/" + author.icon}/>
+					<img className="avater" src={"http://47.95.207.40/branch/file/user/" + (author.icon || "default_avatr.jpg")}/>
 					<h2 className="name">{author.username}</h2>
 					<p className="sign">{author.signText}</p>
 					<div className="details">
@@ -68,61 +68,50 @@ class BookDetails extends Component {
 		this.focusBook = this.focusBook.bind(this);
 		this.unfocusBook = this.unfocusBook.bind(this);
 		this.getBook = this.getBook.bind(this);
+		this.setFocus = this.setFocus.bind(this);
+	}
+
+	setFocus(val) {
+		this.setState({
+			focused: val
+		})
 	}
 
 	focusBook() {
 		if(this.props.logif) {
-			axios.put("http://47.95.207.40/branch/user/focusOn/book/" + this.state.bookId,
-				{},
-				{
-					headers: {
-						"Authorization": "Bearer " + this.props.token.access_token
-					}
-				}
-			).then( res => {
-				this.props.showSucPopup(res.data.message);
-				this.props.getFocus(this.props.token);
-				this.setState({
-					focused: true
-				})
-			}).catch( err => {
-				this.props.showFailPopup(err.response.data.error_description);
-			})
+			this.props.addFocus(this.state.bookId, this.props.token, ()=>{
+				this.setFocus(true);
+				this.props.getFocus(this.props.token)
+			});
 		}else {
 			this.props.showFailPopup("您还没有登录呢！");
 		}
-
 	}
 
 	unfocusBook() {
-		axios.delete("http://47.95.207.40/branch/user/focusOn/book/" + this.state.bookId,
-			{
-				headers: {
-					"Authorization": "Bearer " + this.props.token.access_token
-				}
-			}
-		).then( res => {
-			this.props.showSucPopup(res.data.message);
+		this.props.cancelFocus(this.state.bookId, this.props.token, ()=>{
+			this.setFocus(false);
 			this.props.getFocus(this.props.token);
-			this.setState({
-				focused: false
-			})
-		}).catch( err => {
-			this.props.showFailPopup(err.response.data.message);
-		})		
+		});
+
 	}
 
 	getBook() {
 		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId)
 			 .then(res=> {
-				console.log(res);
 			 	this.setState({
 			 		bookInfor: res.data.data,
 			 		author: res.data.data.author
 			 	})
 			 })
 			 .catch(err => {
-				this.props.showFailPopup(err.response.data.message);
+			 	let mes = '';
+			 	if(err.response.data) {
+			 		mes = err.response.data.message;
+			 	}else {
+			 		mes= '网络异常！';
+			 	}
+				this.props.showFailPopup(mes);
 		})
 	}
 
@@ -136,8 +125,13 @@ class BookDetails extends Component {
 				firstBranchId: res.data.data[0].branchId
 			})
 		}).catch( err => {
-			this.props.showFailPopup(err.response.data.message);
-
+			let mes = '';
+			 if(err.response.data) {
+			 	mes = err.response.data.message;
+			 }else {
+			 	mes= '网络异常！';
+			 }
+			this.props.showFailPopup(mes);
 		})
 	}
 
@@ -158,7 +152,7 @@ class BookDetails extends Component {
 			<div className="main_body book_details">
 				<p className="sub_nav"><a href="/">首页</a>><a href={"/all?type=" + cont.index}>{cont.words}</a>><a href="">{bookInfor.bookName}</a></p>
 				<div className="book_intro">
-					<img className="book_img" src={"http://47.95.207.40/branch/file/book/" + bookInfor.bookImage}/>
+					<img className="book_img" src={"http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage || "default_book.jpg")}/>
 					<div className="book_infor">
 						<h1 className="book_name">{bookInfor.bookName}<span className="author">{this.state.author.username} 发起</span></h1>
 						<div className="types">
@@ -184,7 +178,7 @@ class BookDetails extends Component {
 							<a href={"/read?bookId=" + this.state.bookId + "&branchId=" + this.state.firstBranchId + "&bookName=" + bookInfor.bookName+ "&bookType=" + cont.index }><div className="btn">开始阅读</div></a>
 							<a href="javascript:"><div className="btn more">参与续写</div></a>
 							{
-								this.state.focused === true ? (
+								(this.state.focused === true && this.props.logif )? (
 									<a href="javascript:"><div className="btn more" onClick={this.unfocusBook}>√已关注</div></a>
 								) : (
 									<a href="javascript:"><div className="btn more" onClick={this.focusBook}>关注本书</div></a>
@@ -231,6 +225,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	getFocus: token => dispatch(ACTIONS.FOCUS.getFocus(token)),
+	addFocus: (bookId, token, callback) => dispatch(ACTIONS.FOCUS.addFocus(bookId, token, callback)),
+	cancelFocus: (bookId, token, callback) => dispatch(ACTIONS.FOCUS.cancelFocus(bookId, token, callback)),
 	showFailPopup: mes => dispatch(ACTIONS.POPUP.showFailPopup(mes)),
 	showSucPopup: mes => dispatch(ACTIONS.POPUP.showSucPopup(mes))
 })
