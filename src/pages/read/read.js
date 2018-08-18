@@ -33,6 +33,31 @@ function filterArr ( arr, num) {
 	return narr;
 }
 
+function starmove(top){
+ 	let timer = '';
+   	let  speed = 1;
+    timer = setInterval(function(){
+	  	var t = document.documentElement.scrollTop || document.body.scrollTop;
+	   	if(t < top){
+	       	speed += Math.ceil((top - t)/5) ;
+	       	document.documentElement.scrollTop = speed;
+	   	}else{
+	       	clearInterval(timer);
+	   	}
+	},10);
+}
+
+function skipToCmt() {
+	let oSkip = document.getElementById("tocmt");
+   	let oTarget = document.getElementById("cmt_cover");
+   	oSkip.onclick = function(){
+   		let oTarget_Top = oTarget.offsetTop;
+     	starmove(oTarget_Top);
+   	}
+}
+
+
+
 class Reader extends Component {
 	constructor(props) {
 		super(props)
@@ -71,12 +96,14 @@ class Reader extends Component {
 			focused: (ifFocused(this.props.focus, bookId) !== -1),	//是否关注了此书
 			started: false,											//是否收藏了此书
 			nextChapter: [],	//下一章数组
-			sameChapter: []		//当前章其他续写
+			sameChapter: [],	//当前章其他续写
+			catShow: false 		//下一章目录是否展示
 		}
 		this.handleStyle = this.handleStyle.bind(this);		//换class
 		this.setFamliy = this.setFamliy.bind(this);			//换字体
 		this.setSize = this.setSize.bind(this);				//换字体大小
 		this.setWidth = this.setWidth.bind(this);			//换屏宽
+
 		//关注书/取消关注
 		this.setFocued = this.setFocued.bind(this);
 		this.focusBook = this.focusBook.bind(this);
@@ -86,6 +113,7 @@ class Reader extends Component {
 	}
 
 	componentDidMount() {
+		skipToCmt();
 		let index = this.state.index - 1;
 		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId).then( 
 			res => {
@@ -161,7 +189,6 @@ class Reader extends Component {
 			this.props.getFocus(this.props.token);
 			this.setFocued(false);	
 		});
-
 	}
 
 	//设置背景（主题）
@@ -236,11 +263,24 @@ class Reader extends Component {
 			)
 		})
 
+		const CatList = this.state.nextChapter.map( val => {
+			return (
+				<li key={val.branchId}>
+					<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} ><h3>{ val.title }</h3></a>
+					<p>{ val.summary }</p>
+					<div className="author">
+						<a href="javascript:"><img className="avater" src={"http://47.95.207.40/branch/file/user/" + (val.author.icon || "default_avatr.jpg") }/></a>
+						<a href="javascript:"><p>{val.author.username}</p></a>
+					</div>
+				</li>
+			)
+		})
+
 		return (
 			<div className={"reader " + this.state.class}>
 				<div className="left_nav">
 					<div className="nav_li">
-						<a href="javascript:" onClick={() => this.setState({showCatlog: !this.state.showCatlog})}>
+						<a href="javascript:" onClick={() => this.setState({showCatlog: !this.state.showCatlog, showSetup: false})}>
 							<div className="icon list"></div>
 							<div className="words">目录</div>
 						</a>
@@ -275,7 +315,7 @@ class Reader extends Component {
 											{ sameList.splice(0,4) }
 										</ul>
 										<li className="chapter">
-											<h3>下一章 <a href="javascript:">更多</a></h3>
+											<h3>下一章 <a href="#next_char" onClick={()=>{this.setState({catShow: true, showCatlog: false})}}>更多</a></h3>
 										</li>
 										<ul className="details">
 											{ nextList.length ? nextList.splice(0,5) : (<li className="nothing">暂无下一章</li>) }
@@ -287,7 +327,7 @@ class Reader extends Component {
 					</div>
 
 					<div className="nav_li">
-						<a href="javascript:" onClick={() => this.setState({showSetup: !this.state.showSetup})}>
+						<a href="javascript:" onClick={() => this.setState({showSetup: !this.state.showSetup, showCatlog: false})}>
 							<div className="icon shezhi"></div>
 							<div className="words">设置</div>
 						</a>
@@ -394,13 +434,11 @@ class Reader extends Component {
 								<div className="words">关注本书</div>
 							</a>
 						) 
-
 					}
-
 					</div>		
 					
-					<div className="nav_li">
-						<a href="#cmt_cover" >
+					<div className="nav_li" id="tocmt">
+						<a href="javascript:">
 							<div className="icon cmt"></div>
 							<div className="words">评论</div>
 						</a>
@@ -413,7 +451,6 @@ class Reader extends Component {
 						</a>
 					</div>	
 				</div>
-
 				<div className="re_body" style={this.state.fastyle}>
 					<div className="header">
 						<a href="/">首页</a>
@@ -428,30 +465,74 @@ class Reader extends Component {
 						<h2>{data.title}</h2>
 						<p className="link">
 							<a href={ "/book_details?bookId=" + this.state.bookId }><span className="icon book"></span>{this.state.bookName}</a>
-							<a><span className="icon author"></span>{this.state.author.username}</a>
+							<a href="javascript:"><span className="icon author"></span>{this.state.author.username}</a>
 							<a className="no-hover"><span className="icon length"></span>{this.state.num}字</a>
 							<a className="no-hover"><span className="icon date"></span>{data.createTime}</a>
 						</p>
 						<div className="main" style={this.state.style}>
 							{this.state.List}
+							<div className="author_card">
+								<div className="card">
+									<img className="avater" src={"http://47.95.207.40/branch/file/user/" + (this.state.author.icon || 'default_avatr.jpg')}/>
+									<div className="infor">
+										<h3><a href="javascript:">{this.state.author.username}</a></h3>
+										<p>{this.state.author.signText}</p>
+									</div>
+									<a href="javascript:"><div className="focus">+ 关 注</div></a>
+								</div>
+								<p>{this.state.author.signText}</p>
+							</div>
 						</div>
 					</div>
+					<a name="next_char"></a>
 					<div className="re_footer">
+						{
+							this.state.data.parentId == 0 ? 
+							( 
+								<div className="btn nothing">
+									<p>上一章</p>
+								</div>
+							) : 
+							(
+								<div className="btn">
+									<a href="javascript:"><p>上一章</p></a>
+								</div>
+							)
+						}
+						
 						<div className="btn">
-							<p>上一章</p>
+							<a href="javascript:"><p>目 录</p></a>
 						</div>
-						<div className="btn">
-							<p>目 录</p>
-						</div>
-						<div className="btn">
-							<p>下一章</p>
-						</div>
+						{
+							this.state.nextChapter.length ? 
+							(
+								<div className="btn" onClick={()=>{this.setState({ catShow : true })}}>
+									<a href="javascript:"><p className="noborder">下一章</p></a>
+								</div>
+							) :
+							(
+								<div className="btn nothing">
+									<p className="noborder">暂无下一章</p>
+								</div>
+							)
+
+						}
 					</div>
-					<div className="cmt_cover">
-						<a name="cmt_cover"></a>
+					{
+						this.state.catShow ? 
+						(
+							<ul className="next_char">
+								<h2>下一章 <div className="close" onClick={()=>{this.setState({catShow: false})}}></div></h2>
+								{ CatList }
+							</ul>
+						) : ""
+					}
+
+					<div id="cmt_cover">
 						<Commit head="章节评论区" />
 					</div>
 				</div>
+				
 			</div>
 		)
 	}

@@ -18,6 +18,12 @@
 				height: 70px;
 				position: relative;
 				border-bottom: 1px solid lightgray;
+
+				#tocmt {
+					width: 100%;
+					height: 100%;
+					z-index: 99;
+				}
 				/*
 				 * 以下为icon的css 
 				 */
@@ -133,6 +139,7 @@
 				 */
 				
 				.setup {
+					z-index: 100;
 					position: absolute;
 					margin: 0;
 					padding: 0;
@@ -155,22 +162,7 @@
 							text-indent: 20px;
 							margin: 0;
 						}
-						
-						.close {
-							width: 20px;
-							height: 20px;
-							position: absolute;
-							top: 15px;
-							right: 15px;
-							background: url('../../imgs/icons/n-close.png') no-repeat;
-							background-size: 80% auto;
-							background-position: center;
-							&:hover{
-								background: url('../../imgs/icons/a-close.png') no-repeat;
-								background-size: 80% auto;
-								background-position: center;
-							}
-						}
+					
 						.name_sub {
 							width: 100px;
 							height: 70px;
@@ -445,6 +437,7 @@
 			width: 800px;
 			height: auto;
 			margin-left: 20px;
+			position: relative;
 			
 			.header {
 				margin: 0;
@@ -466,33 +459,20 @@
 				}
 			}
 
-			.inner_body {
-				width: 100%;
-				padding: 20px 0;
-				height: auto;
-				margin-bottom: 20px;
-				font-size: 16px;
+			.link {
+				width: 92%;
+				font-size: 13px;
+				display: flex;
+				margin-top: 5px;
+				padding-left: 20px;
 
-				h2 {
-					text-indent: 30px;
-					font-size: 25px;
-					margin-bottom: 10px;
-				}
-				.link {
-					width: 92%;
-					margin: 0 auto;
-					font-size: 14px;
-					margin-bottom: 15px;
+				a {
+					color:gray;
 					display: flex;
-
-					a {
-						color:gray;
-						display: flex;
-						align-items: center;
-						height: 100%;
-						width: auto;
-						padding: 3px 10px;
-
+					align-items: center;
+					height: 100%;
+					width: auto;
+					padding: 3px 10px;
 						&:hover {
 							color:#26a69a;
 
@@ -513,7 +493,7 @@
 							width: 30px;
 							height: 30px;
 						}
-						
+								
 						.book {
 							background: url('../../imgs/icons/n-book.png') no-repeat;
 							background-size: 75% auto;
@@ -544,11 +524,23 @@
 							color: gray;
 						}
 					}
+			}
 
+			.inner_body {
+				width: 100%;
+				padding: 20px 0;
+				height: auto;
+				margin-bottom: 20px;
+				font-size: 16px;
+
+				h2 {
+					text-indent: 30px;
+					font-size: 25px;
+					margin-bottom: 10px;
 				}
 
 				.main {
-					width: calc(100% - 60px);
+					width: calc(100% - 70px);
 					height: auto;
 					padding-bottom: 20px;
 					margin: 0 auto;
@@ -557,6 +549,74 @@
 					p{
 						margin: 0;
 						white-space: pre-wrap;
+					}
+				}
+
+				.author_card {
+					width: 100%;
+					background: rgba(255, 255, 255, 0.3);
+					height: auto;
+					margin-top: 40px;
+					border-radius: 5px;
+					border: 1px solid rgb(230,230,230);
+					
+					.card {
+						width: 98%;
+						height: 80px;
+						margin: 0 auto;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						border-bottom: 1px solid lightgray;
+						.avater {
+							width: 60px;
+							height: 60px;
+							border-radius: 50%;
+							margin-right:20px;
+						}
+
+						.infor {
+							width: calc( 100% - 210px);
+							height: 60px;
+							
+							h3 {
+								width: 100%;
+								margin: 0;
+								height: 35px;
+								letter-spacing: 3px;
+								font-size: 20px;
+								line-height: 35px;
+								font-weight: 1;
+								}
+							
+							p {
+								width: 100%;
+								line-height: 25px;
+								text-indent: 0;
+								font-size: 14px;
+								color: gray;
+							}
+						}
+						.focus {
+							color: white;
+							width: 90px;
+							height: 40px;
+							background: #26a69a;
+							font-size: 16px;
+							text-align:center;
+							line-height: 40px;
+							border-radius: 50px;
+							margin-left: 10px;
+						}
+					}
+
+					p {
+						width: 95%;
+						height:60px;
+						line-height: 60px;
+						color: gray;
+						font-size: 15px;
+						text-indent: 20px;
 					}
 				}
 			}	
@@ -570,19 +630,37 @@
 				justify-content: space-between;
 
 				.btn {
-					width: 33%;
 					height: 100%;
 					display: flex;
 					align-items: center;
+					flex: 1;
 					&:hover{
 						background:rgb(240,240,240);
 					}
-					p {
+
+					a {
 						width: 100%;
+						height: 100%;
+						display: block;
+					}
+					p {
+						width: calc(100% - 1px);
 						font-size: 18px;
 						line-height: 40px;
 						text-align: center;
 						height: 40px;
+						border-right: 1px solid lightgray;
+					}
+					.noborder {
+						width: 100%;
+						border: none;
+					}
+				}
+
+				.nothing {
+					color: gray;
+					&:hover {
+						background:rgba(0,0,0,0);
 					}
 				}
 			}
@@ -590,10 +668,84 @@
 			#cmt_cover {
 				width: 100%;
 				height: auto;
+				margin-top: 20px;
+				padding: 0;
+			}
+
+			.next_char {
+				#cmt_cover();
+				background: white;
+				padding: 20px 0;
+				margin-top: -10px;
+				position: relative;
+
+				h2 {
+					width: 95%;
+					margin: 0 auto;
+					text-indent: 10px;
+					font-size: 16px;
+					border-left: 3px solid #26a69a;
+					letter-spacing: 4px;
+					margin-bottom: 25px;
+				}
+
+				li {
+					list-style: none;
+					width: calc( 95% - 20px);
+					margin:0 auto;
+					height: auto;
+					height: auto;
+					padding-bottom: 10px;
+					border-bottom: 1px solid lightgray;
+					h3 {
+						font-size: 16px;
+					}
+					p {
+						width: 100%;
+						height: auto;
+						margin: 0;
+						font-size: 14px;
+						margin-bottom: 10px;
+					}
+
+					.author {
+						width: 100%;
+						height: 50px;
+						display: flex;
+						align-items: center;
+						.avater {
+							width: 30px;
+							height: 30px;
+							border-radius: 50%;
+							border: 1px solid black;
+							margin-right: 10px;
+						}
+						p {
+							width: auto;
+							margin: 0;
+						}
+					}
+				}
 			}
 		}
 
-		@media (max-width: 950px) {
+		.close {
+			width: 20px;
+			height: 20px;
+			position: absolute;
+			top: 15px;
+			right: 15px;
+			background: url('../../imgs/icons/n-close.png') no-repeat;
+			background-size: 70% auto;
+			background-position: center;
+			&:hover{
+				background: url('../../imgs/icons/a-close.png') no-repeat;
+				background-size: 70% auto;
+				background-position: center;
+			}
+		}
+
+		@media (max-width: 1000px) {
 			.left_nav {
 				position: fixed;
 				top:190px;
@@ -636,7 +788,7 @@
 			background: @mcolor;
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
@@ -669,7 +821,7 @@
 	
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
@@ -702,7 +854,7 @@
 	
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
@@ -736,7 +888,7 @@
 	
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
@@ -771,7 +923,7 @@
 	
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
@@ -806,7 +958,7 @@
 	
 		}
 
-		.cmt_cover {
+		#cmt_cover {
 			background: @mcolor;
 		}
 	}
