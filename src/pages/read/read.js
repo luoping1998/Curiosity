@@ -6,11 +6,21 @@ import Commit from '../../components/commit/commit.js'
 import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
 
+//是否关注了该书
 function ifFocused( arr, num) {
 	let narr = arr.map(val => (val.bookId == num));
 	return narr.indexOf(true);
 }
 
+//是否收藏了该章节
+function ifStared(arr, num) {
+	console.log(arr);
+	let narr = arr.map(val => (val.branchId == num));
+	console.log(narr);
+	return narr.indexOf(true);
+}
+
+//转成文本展示
 function trans(cont) {
 	let arr = cont.split("\n");
 	arr = arr.filter( val => {
@@ -26,6 +36,7 @@ function trans(cont) {
 	return List
 }
 
+//过滤数组 除本章外的其他章节
 function filterArr ( arr, num) {
 	let narr = arr.filter( val => {
 		return val.branchId != num
@@ -33,6 +44,7 @@ function filterArr ( arr, num) {
 	return narr;
 }
 
+//跳转到某top值
 function starmove(top){
  	let timer = '';
    	let  speed = 1;
@@ -47,6 +59,7 @@ function starmove(top){
 	},10);
 }
 
+//给a链接绑定跳转
 function skipToCmt() {
 	let oSkip = document.getElementById("tocmt");
    	let oTarget = document.getElementById("cmt_cover");
@@ -55,8 +68,6 @@ function skipToCmt() {
      	starmove(oTarget_Top);
    	}
 }
-
-
 
 class Reader extends Component {
 	constructor(props) {
@@ -94,9 +105,10 @@ class Reader extends Component {
 			showSetup: false, 	//是否展示设置
 			showCatlog: false,	//是否展示目录
 			focused: (ifFocused(this.props.focus, bookId) !== -1),	//是否关注了此书
-			started: false,											//是否收藏了此书
+			stared: false,											//是否收藏了此书
 			nextChapter: [],	//下一章数组
 			sameChapter: [],	//当前章其他续写
+			lastChapter: {},	//上一章
 			catShow: false 		//下一章目录是否展示
 		}
 		this.handleStyle = this.handleStyle.bind(this);		//换class
@@ -108,8 +120,15 @@ class Reader extends Component {
 		this.setFocued = this.setFocued.bind(this);
 		this.focusBook = this.focusBook.bind(this);
 		this.unfocusBook = this.unfocusBook.bind(this);
+
+		//收藏该章/取消收藏
+		this.addStar = this.addStar.bind(this);
+		this.cancelStar = this.cancelStar.bind(this);
+
+		//获取当前章，上一章，下一章
 		this.getNext = this.getNext.bind(this);				//获取下一章
 		this.getSame = this.getSame.bind(this);				//获取当前章其他续写
+		this.getLast = this.getLast.bind(this);				//获取上一章
 	}
 
 	componentDidMount() {
@@ -118,6 +137,7 @@ class Reader extends Component {
 		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId).then( 
 			res => {
 				this.setState({
+					stared: (ifStared(this.props.star, this.state.branchId) !== -1),
 					data: res.data.data,
 					List: trans(res.data.data.content),
 					author: res.data.data.author,
@@ -125,6 +145,7 @@ class Reader extends Component {
 				},()=>{
 					this.getNext();
 					this.getSame();
+					this.getLast();
 				})
 			}).catch( err => {
 				console.log(err);
@@ -161,8 +182,64 @@ class Reader extends Component {
 		})
 	}
 
+	getLast() {
+		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.data.parentId).then( 
+			res => {
+				this.setState({
+					lastCharpter: res.data.data
+				})
+			}).catch(err =>{
+				console.log(err);
+			})
+	}
 	//收藏本章节
-	addStart() {
+	addStar() {
+		axios.put("http://47.95.207.40/branch/usr/collection/" + this.state.data.branchId, 
+			{},
+			{
+				headers: {
+					"Authorization": "Bearer " + this.props.token.access_token
+				}
+			}).then(res => {
+				this.props.showSucPopup(res.data.message);
+				this.setState({
+					stared: true
+				},()=>{
+					this.props.getStar(this.props.token);
+				})
+			}).catch(err => {
+				let mes = '';
+				if(err.response) {
+					mes = err.response.data.message || err.data.error;
+				}else {
+					mes= '网络异常！';
+				}
+				this.props.showFailPopup(mes);
+			})
+	}
+
+	//取消收藏
+	cancelStar() {
+		axios.delete("http://47.95.207.40/branch/usr/collection/" + this.state.data.branchId, {
+			headers: {
+				"Authorization": "Bearer " + this.props.token.access_token
+			}
+		}).then(res => {
+			this.props.showSucPopup(res.data.message);
+			this.setState({
+				stared: false
+			},()=>{
+				this.props.getStar(this.props.token);
+			})
+		}).catch( err => {
+			let mes = '';
+			if(err.response) {
+				mes = err.response.data.message || err.data.error;
+			}else {
+				mes= '网络异常！';
+			}
+			this.props.showFailPopup(mes);
+		})
 	}
 
 	setFocued(val) {
@@ -303,7 +380,12 @@ class Reader extends Component {
 											<h3>上一章<div></div></h3>
 										</li>
 										<ul className="details">
-											{ this.state.data.parentId == 0 ? (<li className="nothing">无上一章</li>) : (<a href="javascript:"><li>上一章名字</li></a>)}
+											{ this.state.data.parentId == 0 ? 
+												( <li className="nothing">无上一章</li> ) : 
+												(
+													<a href={"read?bookId=" + this.state.data.bookId + "&branchId=" + this.state.lastCharpter.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex}><li>{this.state.lastCharpter.title}</li></a>
+												)
+											}
 										</ul>
 										<li className="chapter">
 											<h3>该章其他续写 <a href="javascript:">更多</a></h3>
@@ -412,11 +494,23 @@ class Reader extends Component {
 						}
 					</div>
 
-					<div className="nav_li">
-						<a href="javascript:">
-							<div className="icon star"></div>
-							<div className="words">收藏本章</div>
-						</a>					
+					<div className="nav_li" >
+						{
+							(this.state.stared === true && this.props.logif) ?
+							(
+								<a href="javascript:" onClick={this.cancelStar}> 
+									<div className="icon hasstar"></div>
+									<div className="words">√已收藏</div>
+								</a>			
+							):
+							(
+								<a href="javascript:" onClick={this.addStar}>
+									<div className="icon star"></div>
+									<div className="words">收藏本章</div>
+								</a>
+							)
+						}
+		
 					</div>
 
 					<div className="nav_li">
@@ -459,7 +553,7 @@ class Reader extends Component {
 						<span className="split">></span>
 						<a href={ "/book_details?bookId=" + this.state.bookId }> {this.state.bookName} </a>
 						<span className="split">></span>
-						<a href="">第{data.parentId + 1}章</a>
+						<a href="">第{data.layer}章</a>
 					</div>
 					<div className="inner_body">
 						<h2>{data.title}</h2>
@@ -541,10 +635,13 @@ class Reader extends Component {
 const mapStateToProps = state => ({
 	token: state.token,
 	logif: state.logif,
-	focus: state.focus
+	focus: state.focus,
+	star: state.star
 })
 
 const mapDispatchToProps = dispatch => ({
+	saveStar: stars => dispatch(ACTIONS.STAR.saveStar(stars)),
+	getStar: token => dispatch(ACTIONS.STAR.getStar(token)),
 	getFocus: token => dispatch(ACTIONS.FOCUS.getFocus(token)),
 	addFocus: (focused, token, callback) => dispatch(ACTIONS.FOCUS.addFocus(focused, token, callback)),
 	cancelFocus: (bookId, token, callback) => dispatch(ACTIONS.FOCUS.cancelFocus(bookId, token, callback)),

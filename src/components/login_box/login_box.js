@@ -424,9 +424,17 @@ class LoginBox extends Component{
 					this.showSucPopup("登录成功！");
 					this.props.getInfor(this.props.token);
 					this.props.getFocus(this.props.token);
+					this.props.getStar(this.props.token);
 				}
 			}).catch(err=>{
-				this.showFailPopup(err.response.data.message);
+				console.log(err);
+				let mes = '';
+				 if(err.response) {
+				 	mes = err.response.data.message || err.data.error;
+				 }else {
+				 	mes= '网络异常！';
+				 }
+				this.showFailPopup(mes);
 				this.getImgCode();
 			})
 

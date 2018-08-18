@@ -98,15 +98,15 @@
 							line-height: 25px;
 							height: 25px;
 							color: white;
-							background: @mcolor;
+							background: rgb(255, 83, 77);
 							font-weight: bold;
 						}
 
 						.title {
 							width: 100%;
-							height: 40px;
-							line-height: 40px;
-							font-size: 17px;
+							height: 45px;
+							line-height: 45px;
+							font-size: 18px;
 							.ellip();
 						}
 
@@ -114,16 +114,20 @@
 							width: 100%;
 							height: 30px;
 							color: gray;
+							line-height: 30px;
 							font-size: 13px;
 							.ellip();
 
-							a {
-								color: gray;
-								text-decoration: none;
+							.author {
+								color: black;
+							}
+						}
+						
+						a {
+							text-decoration: none;
 
-								&:hover {
-									color: @mcolor;
-								}
+							&:hover {
+								color: @mcolor;
 							}
 						}
 					}
@@ -147,16 +151,25 @@
 					align-items: center;
 					justify-content: space-between;
 					
-					.index {
+					.index4, .index5, .index6, .index7, .index8, .index9 {
 						width: 25px;
 						height: 25px;
 						text-align: center;
-						background: @mcolor;
 						font-weight: bold;
 						color: white;
+						background: @mcolor;
 						line-height: 25px;
 					}
+					
+					.index2 {
+						.index4();
+						background: rgb(255, 99, 40);
+					}
 
+					.index3 {
+						.index4();
+						background: rgb(254, 212, 40);
+					}
 					.title {
 						width: calc(100% - 120px);
 						color: black;
@@ -169,6 +182,15 @@
 						width: 80px;
 						font-size: 13px;
 						.ellip();
+					}
+	
+					a {
+						width: 100%;
+						height: 100%;
+						color: black;
+						&:hover {
+							color: @mcolor;
+						}
 					}
 				}
 			}

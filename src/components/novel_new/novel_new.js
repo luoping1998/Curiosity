@@ -9,7 +9,6 @@ class NovelNew extends Component {
 		super(props);
 	}
 
-	component
 	render() {
 		return (
 			<div className="novel_new">

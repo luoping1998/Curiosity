@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import{Link, Route} from 'react-router-dom'
-
-
+import axios from 'axios'
+import { changeStyle } from '../../public/common.js'
 import './novel_bar.less'
 
 class TopOne extends Component {
@@ -62,6 +62,28 @@ class TopList extends Component {
 	}
 
 	render() {
+		const one = this.props.List[0];
+		let href = "/book_details?bookId=" + (one ? one.bookId : "");
+		let cont = changeStyle((one ? one.bookType : ""))
+		let style = {
+			border: "1px solid " + cont.color,
+			color: cont.color,
+			padding: "3px 5px"
+		}
+		const List = this.props.List.splice(1).map( (val, index) => {
+			let href = "/book_details?bookId=" + (val ? val.bookId : "")
+			return (
+					<div className="cont_item">
+						<div className={ "index" + (index + 2)}>{index + 2 }</div>
+						<div className="title">
+							<a href={href}>{ val ? val.bookName : "" }</a>
+						</div>
+						<div className="name">
+							<a>{ val ? val.author.username : "" }</a>
+						</div>
+					</div>	
+				)
+		})
 		return (
 			<div className="novel_toplist">
 				<div className="inner_bd">
@@ -72,47 +94,16 @@ class TopList extends Component {
 						<div className="top_one">
 							<div className="top_infor">
 								<div className="index">NO.1</div>
-								<div className="title">这是一本输的名字</div>
-								<div className="name"><a href="/">一个类型</a> · 一个名字</div>
+								<div className="title">
+									<a href={href}>{ one ? one.bookName : ""}</a>
+								</div>
+								<div className="name">
+									<a href="/" style={style}>{ one ? cont.words : ""}</a> · <a className="author" href="/">{one ? one.author.username : ""}</a>
+								</div>
 							</div>
-							<img src={require("../../imgs/90.jpg")} />
+							<img src={ "http://47.95.207.40/branch/file/book/" + (one ? one.bookImage : "default_book.jpg")} />
 						</div>
-						
-						<div className="cont_item">
-							<div className="index">3</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">4</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">5</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">6</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">7</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">8</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
-						<div className="cont_item">
-							<div className="index">9</div>
-							<div className="title">这是一个书名</div>
-							<div className="name">这是?????一个作a 者</div>
-						</div>
+						{ List }
 					</div>
 				</div>
 			</div>
@@ -122,13 +113,31 @@ class TopList extends Component {
 class NovelBar extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			list: []
+		}
 	}
-
+	componentDidMount() {
+		axios.get("http://47.95.207.40/branch/book",{
+			params: {
+				pageNo: 1,
+				pageSize: 9,
+				sort: 'READ_NUM',
+				sortType: 1
+			}
+		}).then(res => {
+			this.setState({
+				list: res.data.data.list
+			})
+		}).catch(err => {
+			console.log(err);
+		})
+	}
 	render() {
 		return (
 			<div className="novel_bar">
 				<NovelRcmd />
-				<TopList />
+				<TopList List={this.state.list}/>
 			</div>
 		)
 	}
