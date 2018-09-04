@@ -181,11 +181,15 @@ class PageItem extends Component {
 			color: cont.color,
 			border: "1px solid " + cont.color
 		}
+		const note = {
+			background: 'url(' + ("http://47.95.207.40/branch/file/book/" + (book.bookImage || "default_book.jpg")) + ') no-repeat',
+			backgroundSize: 'auto 100%',
+			backgroundPosition: 'center'
+		}
 		return (
 			<div className="page_item">
-				<div className="item_img">
+				<div className="item_img" style={note}>
 					<a href={ "/book_details?bookId=" + book.bookId } target="_blank">
-					<img src={"http://47.95.207.40/branch/file/book/" + book.bookImage}/>
 					</a>
 				</div>
 				<div className="item_infor">

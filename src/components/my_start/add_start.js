@@ -1,8 +1,12 @@
+//添加发起
 import React, { Component } from 'react'
 import Editor from '../editor/editor.js'
+
 import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
+
 import { withRouter } from 'react-router-dom'
+
 import axios from 'axios'
 import './my_start.less'
 

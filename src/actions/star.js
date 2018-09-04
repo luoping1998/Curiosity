@@ -20,19 +20,23 @@ export const deleteStar = () => ({
 //获取收藏
 export const getStar = token => dispatch => {
 	dispatch(requestStar());
-	return axios.get("http://47.95.207.40/branch/usr/collection",{
+	return axios.get("http://47.95.207.40/branch/user/collection",{
 		headers: {
 			Authorization: "Bearer " + token.access_token
 		}
 	}).then(res => {
 		dispatch(saveStar(res.data.data))
 	}).catch(err => {
-		let mes = '';
-		if(err.response) {
-			mes = err.response.data.message;
-		}else {
-			mes = '网络异常！';
+		if (err.response.data.status == 404) {
+			dispatch(saveStar([]));
+		} else {
+			let mes = '';
+			if(err.response) {
+				mes = err.response.data.message;
+			}else {
+				mes = '网络异常！';
+			}
+			dispatch(showFailPopup(mes));
 		}
-		dispatch(showFailPopup(mes));
 	})
 } 

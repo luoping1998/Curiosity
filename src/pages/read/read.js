@@ -14,10 +14,12 @@ function ifFocused( arr, num) {
 
 //是否收藏了该章节
 function ifStared(arr, num) {
-	console.log(arr);
-	let narr = arr.map(val => (val.branchId == num));
-	console.log(narr);
-	return narr.indexOf(true);
+	if(!arr) {
+		return -1;
+	}else {
+		let narr = arr.map(val => (val.branchId == num));
+		return narr.indexOf(true);
+	}
 }
 
 //转成文本展示
@@ -73,13 +75,13 @@ class Reader extends Component {
 	constructor(props) {
 		super(props)
 		let arr = this.props.location.search.split('=');
-		let bookId = arr[1].split("&")[0];
 		this.state = {
-			branchId: arr[2].split("&")[0],
-			bookId: bookId,
-			bookName: decodeURI(arr[3].split('&')[0]),
-			bookType: changeStyle(Number(arr[4])).words,
-			bookIndex: Number(arr[4]),
+			token: JSON.parse(localStorage.getItem("token")),
+			branchId: arr[1].split("&")[0],
+			bookId: 0,
+			bookName: '',		//书名
+			bookType: '',	//书类型中文changeStyle(Number(arr[4])).words
+			bookIndex: 0,		//书类型的index Number(arr[4])
 			data: [],
 			List: [],
 			author: {},
@@ -104,7 +106,7 @@ class Reader extends Component {
 			backnum: 0, 		//主题id
 			showSetup: false, 	//是否展示设置
 			showCatlog: false,	//是否展示目录
-			focused: (ifFocused(this.props.focus, bookId) !== -1),	//是否关注了此书
+			focused: false,	//是否关注了此书
 			stared: false,											//是否收藏了此书
 			nextChapter: [],	//下一章数组
 			sameChapter: [],	//当前章其他续写
@@ -115,6 +117,9 @@ class Reader extends Component {
 		this.setFamliy = this.setFamliy.bind(this);			//换字体
 		this.setSize = this.setSize.bind(this);				//换字体大小
 		this.setWidth = this.setWidth.bind(this);			//换屏宽
+
+		//喜欢该章
+		this.Like = this.Like.bind(this);
 
 		//关注书/取消关注
 		this.setFocued = this.setFocued.bind(this);
@@ -129,20 +134,33 @@ class Reader extends Component {
 		this.getNext = this.getNext.bind(this);				//获取下一章
 		this.getSame = this.getSame.bind(this);				//获取当前章其他续写
 		this.getLast = this.getLast.bind(this);				//获取上一章
+		
+		//获取书的信息
+		this.getBook = this.getBook.bind(this);
 	}
 
 	componentDidMount() {
 		skipToCmt();
 		let index = this.state.index - 1;
-		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId).then( 
+		axios.get(`http://47.95.207.40/branch/book/branch/${this.state.branchId}`,
+			{
+				headers: {
+					"Authorization": this.state.token.access_token
+				}
+			}).then( 
 			res => {
+				console.log(res);
+				const data = res.data.data;
 				this.setState({
 					stared: (ifStared(this.props.star, this.state.branchId) !== -1),
-					data: res.data.data,
-					List: trans(res.data.data.content),
-					author: res.data.data.author,
-					num: res.data.data.content.length
+					data:data,
+					List: trans(data.content),
+					author: data.author,
+					num: data.content.length,
+					bookId: data.bookId,
+					focused: (ifFocused(this.props.focus, data.bookId) !== -1)
 				},()=>{
+					this.getBook();
 					this.getNext();
 					this.getSame();
 					this.getLast();
@@ -152,8 +170,29 @@ class Reader extends Component {
 			})
 	}
 
+	getBook() {
+		axios.get(`http://47.95.207.40/branch/book/${this.state.bookId}`)
+			 .then(res=> {
+			 	const type = changeStyle(res.data.data.bookType);
+			 	this.setState({
+			 		bookName: res.data.data.bookName,
+			 		bookType: type.words,
+			 		bookIndex: type.index
+			 	})
+			 })
+			 .catch(err => {
+			 	let mes = '';
+			 	if(err.response.data) {
+			 		mes = err.response.data.message;
+			 	}else {
+			 		mes= '网络异常！';
+			 	}
+				this.props.showFailPopup(mes);
+		})
+	}
+
 	getNext() {
-		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId + "/branch",
+		axios.get(`http://47.95.207.40/branch/book/${this.state.bookId}/branch`,
 		{
 			params : {
 				parentId: this.state.data.branchId
@@ -168,12 +207,13 @@ class Reader extends Component {
 	}
 
 	getSame() {
-		axios.get("http://47.95.207.40/branch/book/" + this.state.bookId + "/branch",
+		axios.get(`http://47.95.207.40/branch/book/${this.state.bookId}/branch`,
 		{
 			params : {
 				parentId: this.state.data.parentId
 			}
 		}).then(res => {
+			console.log(res);
 			this.setState({
 				sameChapter: filterArr(res.data.data, this.state.branchId)
 			})
@@ -183,7 +223,7 @@ class Reader extends Component {
 	}
 
 	getLast() {
-		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.data.parentId).then( 
+		axios.get(`http://47.95.207.40/branch/book/branch/${this.state.data.parentId}`).then( 
 			res => {
 				this.setState({
 					lastCharpter: res.data.data
@@ -194,11 +234,11 @@ class Reader extends Component {
 	}
 	//收藏本章节
 	addStar() {
-		axios.put("http://47.95.207.40/branch/usr/collection/" + this.state.data.branchId, 
+		axios.put(`http://47.95.207.40/branch/user/collection/${this.state.data.branchId}`, 
 			{},
 			{
 				headers: {
-					"Authorization": "Bearer " + this.props.token.access_token
+					"Authorization": `Bearer ${this.props.token.access_token}`
 				}
 			}).then(res => {
 				this.props.showSucPopup(res.data.message);
@@ -210,7 +250,11 @@ class Reader extends Component {
 			}).catch(err => {
 				let mes = '';
 				if(err.response) {
-					mes = err.response.data.message || err.data.error;
+					if(err.response.data.error == "invalid_token") {
+						mes = "用户未登录！";
+					}else {
+						mes = err.response.data.message || err.data.error
+					}
 				}else {
 					mes= '网络异常！';
 				}
@@ -220,9 +264,9 @@ class Reader extends Component {
 
 	//取消收藏
 	cancelStar() {
-		axios.delete("http://47.95.207.40/branch/usr/collection/" + this.state.data.branchId, {
+		axios.delete(`http://47.95.207.40/branch/user/collection/${this.state.data.branchId}`, {
 			headers: {
-				"Authorization": "Bearer " + this.props.token.access_token
+				"Authorization": `Bearer ${this.props.token.access_token}`
 			}
 		}).then(res => {
 			this.props.showSucPopup(res.data.message);
@@ -266,6 +310,34 @@ class Reader extends Component {
 			this.props.getFocus(this.props.token);
 			this.setFocued(false);	
 		});
+	}
+
+	//喜欢 点赞
+	Like() {
+		const data = {
+			status:1
+		}
+		axios.post(`http://47.95.207.40/branch/user/${this.state.branchId}/vote`,
+		data: data,
+		{
+			headers: {
+				"Authorization": `Bearer ${this.props.token.access_token}`
+			}
+		}).then(res => {
+			this.props.showSucPopup("点赞成功！");
+		}).catch(err => {
+			if(err.response.data.error_description) {
+				this.props.showFailPopup("用户未登录或身份过期");				
+			}else {
+				let mes = '';
+				if(err.response) {
+					mes = err.response.data.message || err.data.error;
+				}else {
+					mes= '网络异常！';
+				}
+				this.props.showFailPopup(mes);
+			}
+		})
 	}
 
 	//设置背景（主题）
@@ -326,7 +398,7 @@ class Reader extends Component {
 		const data = this.state.data;
 		const nextList = this.state.nextChapter.map( val => {
 			return (
-				<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} key={val.branchId}>
+				<a href={"read?branchId=" + val.branchId} key={val.branchId}>
 					<li>{val.title}</li>
 				</a>
 			)
@@ -334,7 +406,7 @@ class Reader extends Component {
 
 		const sameList =  this.state.sameChapter.map( val => {
 			return (
-				<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} key={val.branchId}>
+				<a href={"read?&branchId=" + val.branchId} key={val.branchId}>
 					<li>{val.title}</li>
 				</a>
 			)
@@ -343,7 +415,7 @@ class Reader extends Component {
 		const CatList = this.state.nextChapter.map( val => {
 			return (
 				<li key={val.branchId}>
-					<a href={"read?bookId=" + this.state.bookId + "&branchId=" + val.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex} ><h3>{ val.title }</h3></a>
+					<a href={`read?branchId=${val.branchId}`}><h3>{ val.title }</h3></a>
 					<p>{ val.summary }</p>
 					<div className="author">
 						<a href="javascript:"><img className="avater" src={"http://47.95.207.40/branch/file/user/" + (val.author.icon || "default_avatr.jpg") }/></a>
@@ -383,7 +455,7 @@ class Reader extends Component {
 											{ this.state.data.parentId == 0 ? 
 												( <li className="nothing">无上一章</li> ) : 
 												(
-													<a href={"read?bookId=" + this.state.data.bookId + "&branchId=" + this.state.lastCharpter.branchId + "&bookName=" + this.state.bookName + "&bookType=" + this.state.bookIndex}><li>{this.state.lastCharpter.title}</li></a>
+													<a href={"/read?branchId=" + this.state.lastCharpter.branchId}><li>{this.state.lastCharpter.title}</li></a>
 												)
 											}
 										</ul>
@@ -391,7 +463,7 @@ class Reader extends Component {
 											<h3>该章其他续写 <a href="javascript:">更多</a></h3>
 										</li>
 										<ul className="details">
-											<a href={"read?bookId=" + this.state.data.bookId + "&branchId=" + this.state.data.branchId + "&bookName=" + this.state.data.bookName + "&bookType=" + this.state.data.bookIndex} key={this.state.data.branchId}>
+											<a href={`/read?branchId=${this.state.data.branchId}`} key={this.state.data.branchId}>
 												<li className="now_active">{this.state.data.title}</li>
 											</a>
 											{ sameList.splice(0,4) }
@@ -549,22 +621,23 @@ class Reader extends Component {
 					<div className="header">
 						<a href="/">首页</a>
 						<span className="split">></span>
-						<a href={"/all?type=" + this.state.bookIndex}>{this.state.bookType}</a>
+						<a href={`/all?type=${this.state.bookIndex}`}>{this.state.bookType}</a>
 						<span className="split">></span>
-						<a href={ "/book_details?bookId=" + this.state.bookId }> {this.state.bookName} </a>
+						<a href={`/book_details?bookId=${this.state.bookId}`}> {this.state.bookName} </a>
 						<span className="split">></span>
 						<a href="">第{data.layer}章</a>
 					</div>
 					<div className="inner_body">
 						<h2>{data.title}</h2>
 						<p className="link">
-							<a href={ "/book_details?bookId=" + this.state.bookId }><span className="icon book"></span>{this.state.bookName}</a>
+							<a href={ `/book_details?bookId=${this.state.bookId}`}><span className="icon book"></span>{this.state.bookName}</a>
 							<a href="javascript:"><span className="icon author"></span>{this.state.author.username}</a>
 							<a className="no-hover"><span className="icon length"></span>{this.state.num}字</a>
 							<a className="no-hover"><span className="icon date"></span>{data.createTime}</a>
 						</p>
 						<div className="main" style={this.state.style}>
 							{this.state.List}
+
 							<div className="author_card">
 								<div className="card">
 									<img className="avater" src={"http://47.95.207.40/branch/file/user/" + (this.state.author.icon || 'default_avatr.jpg')}/>
@@ -575,6 +648,10 @@ class Reader extends Component {
 									<a href="javascript:"><div className="focus">+ 关 注</div></a>
 								</div>
 								<p>{this.state.author.signText}</p>
+							</div>
+							<div className="add_footer">
+								<a href="javascript:;" onClick={this.Like}><div className="btn"><div className="like"></div><span>喜欢|{this.state.data.likeNum}</span></div></a>
+								<a href={"/write?branchId=" + this.state.branchId + "&bookName=" +this.state.bookName}><div className="jion">续写该章</div></a>
 							</div>
 						</div>
 					</div>
@@ -613,7 +690,7 @@ class Reader extends Component {
 						}
 					</div>
 					{
-						this.state.catShow ? 
+						this.state.catShow && this.state.nextChapter.length? 
 						(
 							<ul className="next_char">
 								<h2>下一章 <div className="close" onClick={()=>{this.setState({catShow: false})}}></div></h2>
@@ -626,7 +703,6 @@ class Reader extends Component {
 						<Commit head="章节评论区" />
 					</div>
 				</div>
-				
 			</div>
 		)
 	}

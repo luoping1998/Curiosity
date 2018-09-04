@@ -148,11 +148,16 @@ class BookDetails extends Component {
 			border: '1px solid ' + cont.color,
 			color: cont.color
 		}
+		const note = {
+			background: 'url(' + ("http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage || "default_book.jpg")) + ') no-repeat',
+			backgroundSize: 'auto 100%',
+			backgroundPosition: 'center'
+		}
 		return (
 			<div className="main_body book_details">
 				<p className="sub_nav"><a href="/">首页</a>><a href={"/all?type=" + cont.index}>{cont.words}</a>><a href="">{bookInfor.bookName}</a></p>
 				<div className="book_intro">
-					<img className="book_img" src={"http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage || "default_book.jpg")}/>
+					<div className="book_img" style={note}/>
 					<div className="book_infor">
 						<h1 className="book_name">{bookInfor.bookName}<span className="author">{this.state.author.username} 发起</span></h1>
 						<div className="types">
@@ -162,7 +167,7 @@ class BookDetails extends Component {
 						</div>
 						<div className="count">
 							<div className="item">
-								<span className="big">n</span>关注量
+								<span className="big">{bookInfor.focusOnNum}</span>关注量
 							</div>
 							<div className="item">
 								<span className="big">{bookInfor.joinUsers}</span>参与
@@ -175,7 +180,7 @@ class BookDetails extends Component {
 							<div className="text">{bookInfor.content}</div>
 						</div>
 						<div className="actions">
-							<a href={"/read?bookId=" + this.state.bookId + "&branchId=" + this.state.firstBranchId + "&bookName=" + bookInfor.bookName+ "&bookType=" + cont.index }><div className="btn">开始阅读</div></a>
+							<a href={"/read?branchId=" + this.state.firstBranchId}><div className="btn">开始阅读</div></a>
 							<a href="javascript:"><div className="btn more">参与续写</div></a>
 							{
 								(this.state.focused === true && this.props.logif )? (

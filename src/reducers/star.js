@@ -3,13 +3,9 @@ const star = (state = initialState, action) => {
 	switch(action.type) {
 		case 'SAVE_STAR': 
 			localStorage.setItem("star", JSON.stringify(action.stars));
-			return Object.assign([], [], [
-				...action.stars
-			])			
+			return [...action.stars]			
 		case 'DELETE_STAR':
-			return Object.assign({}, state, {
-				...initialState
-			})
+			return []
 		case 'REQUEST_STAR': 
 		default:
 			return state

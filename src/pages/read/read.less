@@ -451,7 +451,7 @@
 			height: auto;
 			margin-left: 20px;
 			position: relative;
-			
+
 			.header {
 				margin: 0;
 				font-size: 14px;
@@ -565,6 +565,62 @@
 					}
 				}
 
+				.add_footer {
+					margin-top: 20px;
+					width:100%;
+					height: 100px;
+					display: flex;
+					align-items: center;
+					justify-content: space-between;
+
+					.btn {
+						min-width: 125px;
+						height: 55px;
+						border-radius: 90px;
+						border: 2px solid #26a69a;
+						color:#26a69a;
+						line-height: 55px;
+						font-size: 19px;
+						letter-spacing: 10px;
+						padding-right: 20px;
+						padding-left: 10px;
+						display: flex;
+						align-items: center;
+		
+						.like {
+							width: 50px;
+							height: 40px;
+							float: right;
+							background: url("../../imgs/icons/a-foc.png") no-repeat;
+							background-size: auto 70%;
+							background-position: center;
+						}
+
+						&:hover{
+							background: rgba(38, 166, 154, 0.1);
+						}
+					}
+
+					.acbtn {
+						background: #26a69a;
+						color: white;
+						.like {
+							background: url('../../imgs/icons/liked.png') no-repeat;
+							background-size: auto 65%;
+							background-position: center;
+						}
+					}
+
+
+					.jion {
+						padding: 5px 16px;
+						color: white;
+						margin-right: 10px;						
+						float: right;
+						background:#26a69a;
+						font-weight: bold;
+					}				
+				}
 				.author_card {
 					width: 100%;
 					background: rgba(255, 255, 255, 0.3);
@@ -756,12 +812,12 @@
 				background-position: center;
 			}
 		}
-
 		@media (max-width: 1000px) {
 			.left_nav {
 				position: fixed;
 				top:190px;
 				left: 0;
+				z-index: 99;
 			}
 
 			.re_body {

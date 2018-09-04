@@ -73,7 +73,7 @@ class TopList extends Component {
 		const List = this.props.List.splice(1).map( (val, index) => {
 			let href = "/book_details?bookId=" + (val ? val.bookId : "")
 			return (
-					<div className="cont_item">
+					<div className="cont_item" key={val.bookId}>
 						<div className={ "index" + (index + 2)}>{index + 2 }</div>
 						<div className="title">
 							<a href={href}>{ val ? val.bookName : "" }</a>
@@ -98,7 +98,7 @@ class TopList extends Component {
 									<a href={href}>{ one ? one.bookName : ""}</a>
 								</div>
 								<div className="name">
-									<a href="/" style={style}>{ one ? cont.words : ""}</a> · <a className="author" href="/">{one ? one.author.username : ""}</a>
+									<a href={"/all?type=" + cont.index} style={style}>{ one ? cont.words : ""}</a> · <a className="author" href="/">{one ? one.author.username : ""}</a>
 								</div>
 							</div>
 							<img src={ "http://47.95.207.40/branch/file/book/" + (one ? one.bookImage : "default_book.jpg")} />

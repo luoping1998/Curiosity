@@ -137,9 +137,17 @@ class StartList extends Component {
 				this.getBooks();
 			})
 		}).catch(err => {
-			if(err.response.data.error === "invalid_token") {
-				this.props.showFailPopup("用户未登录或者登录过期")
+			let mes = '';
+			if(err.response) {
+				if(err.response.data.error === "invalid_token") {
+					mes= "用户未登录或者登录过期";
+				}else {
+					mes = err.response.data.message;
+				}
+			}else {
+				mes = '网络异常！';
 			}
+			this.props.showFailPopup(mes);
 		})
 	}
 

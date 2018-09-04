@@ -4,13 +4,9 @@ const focus = ( state = initialState, action) => {
 	switch(action.type) {
 		case 'SAVE_FOCUS':
 			localStorage.setItem("focus", JSON.stringify(action.focus));
-			return Object.assign([], [], [
-				...action.focus
-			])
+			return [...action.focus]
 		case 'DELETE_FOCUS':
-			return Object.assign({}, state, {
-
-			})
+			return []
 		case 'REQUEST_FOCUS':
 		default:
 			return state
