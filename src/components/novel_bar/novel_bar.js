@@ -4,25 +4,6 @@ import axios from 'axios'
 import { changeStyle } from '../../public/common.js'
 import './novel_bar.less'
 
-class TopOne extends Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
-		return (
-			<div className="top_one">
-				<div className="top_infor">
-					<div className="index">NO.1</div>
-					<div className="title">{this.props.title}</div>
-					<div className="name"><a href="/">{this.props.type}</a> · {this.props.name}</div>
-				</div>
-				<img src={this.props.src} />
-			</div>
-		)
-	}
-}
-
 class ListItem extends Component {
 	constructor(props) {
 		super(props);
@@ -70,7 +51,8 @@ class TopList extends Component {
 			color: cont.color,
 			padding: "3px 5px"
 		}
-		const List = this.props.List.splice(1).map( (val, index) => {
+		const List = this.props.List.splice(1,7).map( (val, index) => {
+			console.log(val.author);
 			let href = "/book_details?bookId=" + (val ? val.bookId : "")
 			return (
 					<div className="cont_item" key={val.bookId}>
@@ -79,11 +61,16 @@ class TopList extends Component {
 							<a href={href}>{ val ? val.bookName : "" }</a>
 						</div>
 						<div className="name">
-							<a>{ val ? val.author.username : "" }</a>
+							<a href={"/author?userId=" + val.userId}>{ val ? val.author.username : "" }</a>
 						</div>
 					</div>	
 				)
 		})
+		const note = {
+			background: "url(" + ("http://47.95.207.40/branch/file/book/" + (one ? one.bookImage : "default_book.jpg")) + ") no-repeat",
+			backgroundPosition: "center",
+			backgroundSize: "auto 100%"
+		}
 		return (
 			<div className="novel_toplist">
 				<div className="inner_bd">
@@ -98,10 +85,10 @@ class TopList extends Component {
 									<a href={href}>{ one ? one.bookName : ""}</a>
 								</div>
 								<div className="name">
-									<a href={"/all?type=" + cont.index} style={style}>{ one ? cont.words : ""}</a> · <a className="author" href="/">{one ? one.author.username : ""}</a>
+									<a href={"/all?type=" + cont.index} style={style}>{ one ? cont.words : ""}</a> · <a className="author" href={"/author?userId=" + (one ? one.author.userId : "")}>{one ? one.author.username : ""}</a>
 								</div>
 							</div>
-							<img src={ "http://47.95.207.40/branch/file/book/" + (one ? one.bookImage : "default_book.jpg")} />
+							<div className="oneimg" style={note}></div>
 						</div>
 						{ List }
 					</div>

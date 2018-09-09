@@ -80,6 +80,7 @@ class Member extends Component {
 	}
 
 	render() {
+		console.log(this.props);
 		return (
 			<div className="myself_cont member">
 				<div className="inner_box">
@@ -121,9 +122,33 @@ class Member extends Component {
 						)
 					}
 					<div className="box_cards">
-						<div className="card">我的作品</div>
-						<div className="card">我的关注</div>
-						<div className="card">我的粉丝</div>
+						<div className="card">
+							<div className="card_cvr">
+								<div className="uper">
+									<div className="icon prod"></div>
+									<p>我的作品</p>
+								</div>
+								<div className="num"></div>
+							</div>
+						</div>
+						<div className="card">
+							<div className="card_cvr">
+								<div className="uper">
+									<div className="icon focs"></div>
+									<p>我的关注</p>
+								</div>
+								<div className="num"></div>
+							</div>
+						</div>
+						<div className="card">
+							<div className="card_cvr">
+								<div className="uper">
+									<div className="icon fans"></div>
+									<p>我的粉丝</p>
+								</div>
+								<div className="num"></div>
+							</div>
+						</div>
 					</div>
 					<div className="box_works">
 						<h2 className="works_header">

@@ -39,7 +39,6 @@ class FollowItem extends Component {
 			"backgroundSize": "100% auto",
 			"backgroundPosition": "center"
 		}
-		console.log(this.props);
 		return (
 			<div className="my_follow_item">
 				<div className="item_infor">
@@ -135,7 +134,7 @@ class MyFollow extends Component {
 			let start = (this.state.pageNow - 1) * 10;
 			let end = (start + 10) > this.props.focus.length ? this.props.focus.length : (start + 10);
 			this.setState({
-				book: this.props.focus.slice(start, end + 1)
+				book: this.props.focus.slice(start, end)
 			})
 		}
 	}

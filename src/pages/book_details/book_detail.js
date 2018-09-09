@@ -150,8 +150,8 @@ class BookDetails extends Component {
 		}
 		const note = {
 			background: 'url(' + ("http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage || "default_book.jpg")) + ') no-repeat',
-			backgroundSize: 'auto 100%',
-			backgroundPosition: 'center'
+			backgroundPosition: "center",
+			backgroundSize: "auto 100%",
 		}
 		return (
 			<div className="main_body book_details">

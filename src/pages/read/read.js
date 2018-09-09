@@ -6,6 +6,40 @@ import Commit from '../../components/commit/commit.js'
 import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
 
+//定位左侧
+function LeftPos(ele, tar) {
+	if(tar.offsetLeft <= 90) {
+		ele.style.left = '0px';
+		tar.style.marginLeft = '90px';
+	}else {
+		ele.style.left = tar.offsetLeft - 90 +'px';
+	}
+}
+
+function TopPos(ele, rele) {
+	const top = document.documentElement.scrollTop;
+	if(top == 0) {
+		rele.style.bottom = '-70px';
+	}else {
+		rele.style.bottom = '0px';
+	}
+
+	if( top <= 225) {
+		ele.style.top = (225 - 1 *  top)+ 'px';
+	}else {
+		ele.style.top = '0px';
+	}
+}
+
+//定位右侧
+function RightPos(ele, tar) {
+	if(tar.offsetLeft >= 90) {
+		ele.style.right = tar.offsetLeft - 90 +'px';
+	}else {
+		ele.style.right = '20px';
+	}
+}
+
 //是否关注了该书
 function ifFocused( arr, num) {
 	let narr = arr.map(val => (val.bookId == num));
@@ -119,7 +153,7 @@ class Reader extends Component {
 		this.setWidth = this.setWidth.bind(this);			//换屏宽
 
 		//喜欢该章
-		this.Like = this.Like.bind(this);
+		this.Likeif = this.Likeif.bind(this);
 
 		//关注书/取消关注
 		this.setFocued = this.setFocued.bind(this);
@@ -140,12 +174,27 @@ class Reader extends Component {
 	}
 
 	componentDidMount() {
+		let lele = document.getElementsByClassName("left_nav")[0];
+		let rele = document.getElementsByClassName("action_card")[0];
+		let tar = document.getElementsByClassName("re_body")[0];
+		LeftPos(lele, tar);
+		RightPos(rele, tar);
+		TopPos(lele, rele);
+		window.onscroll = () => {
+			TopPos(lele, rele);
+		}
+		window.onresize = () =>{
+			LeftPos(lele, tar);
+			RightPos(rele, tar);
+		}
 		skipToCmt();
 		let index = this.state.index - 1;
+		const token = this.props.token.access_token || "";
+
 		axios.get(`http://47.95.207.40/branch/book/branch/${this.state.branchId}`,
 			{
 				headers: {
-					"Authorization": this.state.token.access_token
+					"Authorization": token
 				}
 			}).then( 
 			res => {
@@ -234,11 +283,12 @@ class Reader extends Component {
 	}
 	//收藏本章节
 	addStar() {
+		const token = this.props.token.access_token || "";
 		axios.put(`http://47.95.207.40/branch/user/collection/${this.state.data.branchId}`, 
 			{},
 			{
 				headers: {
-					"Authorization": `Bearer ${this.props.token.access_token}`
+					"Authorization": `Bearer ${token}`
 				}
 			}).then(res => {
 				this.props.showSucPopup(res.data.message);
@@ -264,11 +314,13 @@ class Reader extends Component {
 
 	//取消收藏
 	cancelStar() {
+		const token = this.props.token.access_token || "";
 		axios.delete(`http://47.95.207.40/branch/user/collection/${this.state.data.branchId}`, {
 			headers: {
-				"Authorization": `Bearer ${this.props.token.access_token}`
+				"Authorization": `Bearer ${token}`
 			}
 		}).then(res => {
+			console.log(res);
 			this.props.showSucPopup(res.data.message);
 			this.setState({
 				stared: false
@@ -312,26 +364,29 @@ class Reader extends Component {
 		});
 	}
 
-	//喜欢 点赞
-	Like() {
+	//喜欢或不喜欢
+	Likeif(status) {
 		const data = {
-			status:1
+			status:status
 		}
+		const token = this.props.token.access_token || "";
+
 		axios.post(`http://47.95.207.40/branch/user/${this.state.branchId}/vote`,
 		data: data,
 		{
 			headers: {
-				"Authorization": `Bearer ${this.props.token.access_token}`
+				"Authorization": `Bearer ${token}`
 			}
 		}).then(res => {
-			this.props.showSucPopup("点赞成功！");
+			if(!status)	this.props.showSucPopup("点赞成功！");
+			else this.props.showSucPopup("吐槽成功！");
 		}).catch(err => {
 			if(err.response.data.error_description) {
 				this.props.showFailPopup("用户未登录或身份过期");				
 			}else {
 				let mes = '';
 				if(err.response) {
-					mes = err.response.data.message || err.data.error;
+					mes = status == 0 ? "用户已经点过赞了" : "用户已经吐槽过了";
 				}else {
 					mes= '网络异常！';
 				}
@@ -391,11 +446,18 @@ class Reader extends Component {
 			fastyle: {
 				width: readW + 'px'
 			}
+		},()=>{
+			let ele = document.getElementsByClassName("left_nav")[0];
+			let tar = document.getElementsByClassName("re_body")[0];
+			let rele = document.getElementsByClassName("action_card")[0];
+			RightPos(rele, tar);
+			LeftPos(ele, tar);
 		})
 	}
 
 	render() {
 		const data = this.state.data;
+		console.log(data);
 		const nextList = this.state.nextChapter.map( val => {
 			return (
 				<a href={"read?branchId=" + val.branchId} key={val.branchId}>
@@ -427,207 +489,202 @@ class Reader extends Component {
 
 		return (
 			<div className={"reader " + this.state.class}>
-				<div className="left_nav">
-					<div className="nav_li">
-						<a href="javascript:" onClick={() => this.setState({showCatlog: !this.state.showCatlog, showSetup: false})}>
-							<div className="icon list"></div>
-							<div className="words">目录</div>
-						</a>
-						{
-							this.state.showCatlog ? 
-							(	
-								<div className="gap"></div>
-							) : ""
-						}
-						{
-							this.state.showCatlog ? 
-							(
-								<div className="catalog">
-									<li>
-										<h2>目 录</h2>
-										<a href="javascript:" onClick={()=> this.setState({showCatlog: false})}><div className="close"></div></a>
-									</li>
-									<ul className="cat_main">
-										<li className="chapter">
-											<h3>上一章<div></div></h3>
+
+				<div className="re_body" style={this.state.fastyle}>
+					<div className="left_nav">
+						<div className="nav_li">
+							<a href="javascript:" onClick={() => this.setState({showCatlog: !this.state.showCatlog, showSetup: false})}>
+								<div className="icon list"></div>
+								<div className="words">目录</div>
+							</a>
+							{
+								this.state.showCatlog ? 
+								(	
+									<div className="gap"></div>
+								) : ""
+							}
+							{
+								this.state.showCatlog ? 
+								(
+									<div className="catalog">
+										<li>
+											<h2>目 录</h2>
+											<a href="javascript:" onClick={()=> this.setState({showCatlog: false})}><div className="close"></div></a>
 										</li>
-										<ul className="details">
-											{ this.state.data.parentId == 0 ? 
-												( <li className="nothing">无上一章</li> ) : 
-												(
-													<a href={"/read?branchId=" + this.state.lastCharpter.branchId}><li>{this.state.lastCharpter.title}</li></a>
-												)
-											}
+										<ul className="cat_main">
+											<li className="chapter">
+												<h3>上一章<div></div></h3>
+											</li>
+											<ul className="details">
+												{ this.state.data.parentId == 0 ? 
+													( <li className="nothing">无上一章</li> ) : 
+													(
+														<a href={"/read?branchId=" + this.state.lastCharpter.branchId}><li>{this.state.lastCharpter.title}</li></a>
+													)
+												}
+											</ul>
+											<li className="chapter">
+												<h3>该章其他续写 <a href="javascript:">更多</a></h3>
+											</li>
+											<ul className="details">
+												<a href={`/read?branchId=${this.state.data.branchId}`} key={this.state.data.branchId}>
+													<li className="now_active">{this.state.data.title}</li>
+												</a>
+												{ sameList.splice(0,4) }
+											</ul>
+											<li className="chapter">
+												<h3>下一章 <a href="#next_char" onClick={()=>{this.setState({catShow: true, showCatlog: false})}}>更多</a></h3>
+											</li>
+											<ul className="details">
+												{ nextList.length ? nextList.splice(0,5) : (<li className="nothing">暂无下一章</li>) }
+											</ul>
 										</ul>
-										<li className="chapter">
-											<h3>该章其他续写 <a href="javascript:">更多</a></h3>
+									</div>
+								) : ""
+							}
+						</div>
+
+						<div className="nav_li">
+							<a href="javascript:" onClick={() => this.setState({showSetup: !this.state.showSetup, showCatlog: false})}>
+								<div className="icon shezhi"></div>
+								<div className="words">设置</div>
+							</a>
+							{
+								this.state.showSetup ? 
+								(	
+									<div className="gap"></div>
+								) : ""
+							}
+							{
+								this.state.showSetup ? 
+								(	
+									<ul className="setup">
+										<li>
+											<h2>设置</h2>
+											<div className="close" onClick={()=>{this.setState({showSetup: false})}}></div>
 										</li>
-										<ul className="details">
-											<a href={`/read?branchId=${this.state.data.branchId}`} key={this.state.data.branchId}>
-												<li className="now_active">{this.state.data.title}</li>
-											</a>
-											{ sameList.splice(0,4) }
-										</ul>
-										<li className="chapter">
-											<h3>下一章 <a href="#next_char" onClick={()=>{this.setState({catShow: true, showCatlog: false})}}>更多</a></h3>
+										<li>
+											<div className="name_sub">阅读背景</div>
+											<div className={"c_circle c_normal" + (this.state.backnum == 0 ? " c_active" : "")} index={0} onClick={this.handleStyle}></div>
+											<div className={"c_circle c_kraft" + (this.state.backnum == 1 ? " c_active" : "")} index={1} onClick={this.handleStyle}></div>
+											<div className={"c_circle c_eye" + (this.state.backnum == 2 ? " c_active" : "")} index={2} onClick={this.handleStyle}></div>
+											<div className={"c_circle c_pink" + (this.state.backnum == 3 ? " c_active" : "")} index={3} onClick={this.handleStyle}></div>
+											<div className={"c_circle c_pure" + (this.state.backnum == 4 ? " c_active" : "")} index={4} onClick={this.handleStyle}></div>
+											<div className={"c_circle c_blue" + (this.state.backnum == 5 ? " c_active" : "")} index={5} onClick={this.handleStyle}></div>
+											</li>
+										<li>
+											<div className="name_sub">正文字体</div>
+											<a href="javascript:"><div 
+												className={"font_item font_Yahei" + (this.state.fontFamily == 0 ? " font_active" : "")} 
+												onClick={this.setFamliy}
+												index={0}
+												>雅黑
+											</div></a>
+											<a href="javascript:"><div 
+												className={"font_item font_SimSun" + (this.state.fontFamily == 1 ? " font_active" : "")} 
+												onClick={this.setFamliy}
+												index={1}
+												>宋体
+											</div></a>
+											<a href="javascript:"><div 
+												className={"font_item font_Kaiti" + (this.state.fontFamily == 2 ? " font_active" : "")} 
+												onClick={this.setFamliy}
+												index={2}
+												>楷书
+											</div></a>
 										</li>
-										<ul className="details">
-											{ nextList.length ? nextList.splice(0,5) : (<li className="nothing">暂无下一章</li>) }
-										</ul>
+										<li>
+											<div className="name_sub">字体大小</div>
+											<div className="con_nav">
+												{
+													this.state.canAdd ? 
+													( <a href="javascript:"className="con_nav_li canadd" onClick={this.setSize} index={2}></a> ) : 
+													( <div className="con_nav_li notadd" index={0}></div> )
+												}
+												<div className="con_nav_li">{this.state.fontSize}</div>
+												{
+													this.state.canDel ? 
+													( <a href="javascript:" className="con_nav_li candel" onClick={this.setSize} index={-2}></a> ) : 
+													( <div className="con_nav_li notdel" index={0}></div> )
+												}
+											</div>
+										</li>
+										<li>
+											<div className="name_sub">页面宽度</div>
+											<div className="con_nav">
+												{
+													this.state.canKuo ? 
+													( <a href="javascript:"className="con_nav_li vadd" onClick={this.setWidth} index={100}></a> ) : 
+													( <div className="con_nav_li nadd"></div> )
+												}
+												<div className="con_nav_li">{this.state.readW}</div>
+												{
+													this.state.canSuo ? 
+													( <a href="javascript:" className="con_nav_li vdel" onClick={this.setWidth} index={-100}></a> ) : 
+													( <div className="con_nav_li nvdel"></div> )
+												}
+											</div>
+										</li>
 									</ul>
-								</div>
-							) : ""
-						}
-					</div>
+								) : ""
+							}
+						</div>
 
-					<div className="nav_li">
-						<a href="javascript:" onClick={() => this.setState({showSetup: !this.state.showSetup, showCatlog: false})}>
-							<div className="icon shezhi"></div>
-							<div className="words">设置</div>
-						</a>
-						{
-							this.state.showSetup ? 
-							(	
-								<div className="gap"></div>
-							) : ""
-						}
-						{
-							this.state.showSetup ? 
-							(	
-								<ul className="setup">
-									<li>
-										<h2>设置</h2>
-										<div className="close" onClick={()=>{this.setState({showSetup: false})}}></div>
-									</li>
-									<li>
-										<div className="name_sub">阅读背景</div>
-										<div className={"c_circle c_normal" + (this.state.backnum == 0 ? " c_active" : "")} index={0} onClick={this.handleStyle}></div>
-										<div className={"c_circle c_kraft" + (this.state.backnum == 1 ? " c_active" : "")} index={1} onClick={this.handleStyle}></div>
-										<div className={"c_circle c_eye" + (this.state.backnum == 2 ? " c_active" : "")} index={2} onClick={this.handleStyle}></div>
-										<div className={"c_circle c_pink" + (this.state.backnum == 3 ? " c_active" : "")} index={3} onClick={this.handleStyle}></div>
-										<div className={"c_circle c_pure" + (this.state.backnum == 4 ? " c_active" : "")} index={4} onClick={this.handleStyle}></div>
-										<div className={"c_circle c_blue" + (this.state.backnum == 5 ? " c_active" : "")} index={5} onClick={this.handleStyle}></div>
-										</li>
-									<li>
-										<div className="name_sub">正文字体</div>
-										<a href="javascript:"><div 
-											className={"font_item font_Yahei" + (this.state.fontFamily == 0 ? " font_active" : "")} 
-											onClick={this.setFamliy}
-											index={0}
-											>雅黑
-										</div></a>
-										<a href="javascript:"><div 
-											className={"font_item font_SimSun" + (this.state.fontFamily == 1 ? " font_active" : "")} 
-											onClick={this.setFamliy}
-											index={1}
-											>宋体
-										</div></a>
-										<a href="javascript:"><div 
-											className={"font_item font_Kaiti" + (this.state.fontFamily == 2 ? " font_active" : "")} 
-											onClick={this.setFamliy}
-											index={2}
-											>楷书
-										</div></a>
-									</li>
-									<li>
-										<div className="name_sub">字体大小</div>
-										<div className="con_nav">
-											{
-												this.state.canAdd ? 
-												( <a href="javascript:"className="con_nav_li canadd" onClick={this.setSize} index={2}></a> ) : 
-												( <div className="con_nav_li notadd" index={0}></div> )
-											}
-											<div className="con_nav_li">{this.state.fontSize}</div>
-											{
-												this.state.canDel ? 
-												( <a href="javascript:" className="con_nav_li candel" onClick={this.setSize} index={-2}></a> ) : 
-												( <div className="con_nav_li notdel" index={0}></div> )
-											}
-										</div>
-									</li>
-									<li>
-										<div className="name_sub">页面宽度</div>
-										<div className="con_nav">
-											{
-												this.state.canKuo ? 
-												( <a href="javascript:"className="con_nav_li vadd" onClick={this.setWidth} index={100}></a> ) : 
-												( <div className="con_nav_li nadd"></div> )
-											}
-											<div className="con_nav_li">{this.state.readW}</div>
-											{
-												this.state.canSuo ? 
-												( <a href="javascript:" className="con_nav_li vdel" onClick={this.setWidth} index={-100}></a> ) : 
-												( <div className="con_nav_li nvdel"></div> )
-											}
-										</div>
-									</li>
-								</ul>
-							) : ""
-						}
-					</div>
+						<div className="nav_li" >
+							{
+								(this.state.stared === true && this.props.logif) ?
+								(
+									<a href="javascript:" onClick={this.cancelStar}> 
+										<div className="icon hasstar"></div>
+										<div className="words">√已收藏</div>
+									</a>			
+								):
+								(
+									<a href="javascript:" onClick={this.addStar}>
+										<div className="icon star"></div>
+										<div className="words">收藏本章</div>
+									</a>
+								)
+							}
+			
+						</div>
 
-					<div className="nav_li" >
+						<div className="nav_li">
 						{
-							(this.state.stared === true && this.props.logif) ?
+							(this.state.focused === true && this.props.logif) ? 
 							(
-								<a href="javascript:" onClick={this.cancelStar}> 
-									<div className="icon hasstar"></div>
-									<div className="words">√已收藏</div>
-								</a>			
+								<a href="javascript:" onClick={this.unfocusBook}>
+									<div className="icon hasfoc"></div>
+									<div className="words">√已关注</div>
+								</a>
 							):
 							(
-								<a href="javascript:" onClick={this.addStar}>
-									<div className="icon star"></div>
-									<div className="words">收藏本章</div>
+								<a href="javascript:" onClick={this.focusBook}>
+									<div className="icon foc"></div>
+									<div className="words">关注本书</div>
 								</a>
-							)
+							) 
 						}
-		
-					</div>
-
-					<div className="nav_li">
-					{
-						(this.state.focused === true && this.props.logif) ? 
-						(
-							<a href="javascript:" onClick={this.unfocusBook}>
-								<div className="icon hasfoc"></div>
-								<div className="words">√已关注</div>
+						</div>		
+						
+						<div className="nav_li" id="tocmt">
+							<a href="javascript:">
+								<div className="icon cmt"></div>
+								<div className="words">评论</div>
 							</a>
-						):
-						(
-							<a href="javascript:" onClick={this.focusBook}>
-								<div className="icon foc"></div>
-								<div className="words">关注本书</div>
-							</a>
-						) 
-					}
-					</div>		
-					
-					<div className="nav_li" id="tocmt">
-						<a href="javascript:">
-							<div className="icon cmt"></div>
-							<div className="words">评论</div>
-						</a>
-					</div>	
-
-					<div className="nav_li">
-						<a href="#">
-							<div className="icon top"></div>
-							<div className="words">置顶</div>
-						</a>
-					</div>	
-				</div>
-				<div className="re_body" style={this.state.fastyle}>
-					<div className="header">
-						<a href="/">首页</a>
-						<span className="split">></span>
-						<a href={`/all?type=${this.state.bookIndex}`}>{this.state.bookType}</a>
-						<span className="split">></span>
-						<a href={`/book_details?bookId=${this.state.bookId}`}> {this.state.bookName} </a>
-						<span className="split">></span>
-						<a href="">第{data.layer}章</a>
+						</div>	
 					</div>
-					<div className="inner_body">
+					<div className="main_nav">
+						<div className="header">
+							<a href="/">首页</a>
+							<span className="split">></span>
+							<a href={`/all?type=${this.state.bookIndex}`}>{this.state.bookType}</a>
+							<span className="split">></span>
+							<a href={`/book_details?bookId=${this.state.bookId}`}> {this.state.bookName} </a>
+							<span className="split">></span>
+							<a href="">第{data.layer}章</a>
+						</div>
+						<div className="inner_body">
 						<h2>{data.title}</h2>
 						<p className="link">
 							<a href={ `/book_details?bookId=${this.state.bookId}`}><span className="icon book"></span>{this.state.bookName}</a>
@@ -637,7 +694,6 @@ class Reader extends Component {
 						</p>
 						<div className="main" style={this.state.style}>
 							{this.state.List}
-
 							<div className="author_card">
 								<div className="card">
 									<img className="avater" src={"http://47.95.207.40/branch/file/user/" + (this.state.author.icon || 'default_avatr.jpg')}/>
@@ -649,58 +705,81 @@ class Reader extends Component {
 								</div>
 								<p>{this.state.author.signText}</p>
 							</div>
-							<div className="add_footer">
-								<a href="javascript:;" onClick={this.Like}><div className="btn"><div className="like"></div><span>喜欢|{this.state.data.likeNum}</span></div></a>
-								<a href={"/write?branchId=" + this.state.branchId + "&bookName=" +this.state.bookName}><div className="jion">续写该章</div></a>
+						</div>
+						</div>
+						<a name="next_char"></a>
+						<div className="re_footer">
+							{
+								this.state.data.parentId == 0 ? 
+								( 
+									<div className="btn nothing">
+										<p>上一章</p>
+									</div>
+								) : 
+								(
+									<div className="btn">
+										<a href="javascript:"><p>上一章</p></a>
+									</div>
+								)
+							}
+							
+							<div className="btn">
+								<a href="javascript:"><p>目 录</p></a>
 							</div>
-						</div>
-					</div>
-					<a name="next_char"></a>
-					<div className="re_footer">
-						{
-							this.state.data.parentId == 0 ? 
-							( 
-								<div className="btn nothing">
-									<p>上一章</p>
-								</div>
-							) : 
-							(
-								<div className="btn">
-									<a href="javascript:"><p>上一章</p></a>
-								</div>
-							)
-						}
-						
-						<div className="btn">
-							<a href="javascript:"><p>目 录</p></a>
+							{
+								this.state.nextChapter.length ? 
+								(
+									<div className="btn" onClick={()=>{this.setState({ catShow : true })}}>
+										<a href="javascript:"><p className="noborder">下一章</p></a>
+									</div>
+								) :
+								(
+									<div className="btn nothing">
+										<p className="noborder">暂无下一章</p>
+									</div>
+								)
+
+							}
 						</div>
 						{
-							this.state.nextChapter.length ? 
+							this.state.catShow && this.state.nextChapter.length? 
 							(
-								<div className="btn" onClick={()=>{this.setState({ catShow : true })}}>
-									<a href="javascript:"><p className="noborder">下一章</p></a>
-								</div>
-							) :
-							(
-								<div className="btn nothing">
-									<p className="noborder">暂无下一章</p>
-								</div>
-							)
-
+								<ul className="next_char">
+									<h2>下一章 <div className="close" onClick={()=>{this.setState({catShow: false})}}></div></h2>
+									{ CatList }
+								</ul>
+							) : ""
 						}
-					</div>
-					{
-						this.state.catShow && this.state.nextChapter.length? 
-						(
-							<ul className="next_char">
-								<h2>下一章 <div className="close" onClick={()=>{this.setState({catShow: false})}}></div></h2>
-								{ CatList }
-							</ul>
-						) : ""
-					}
 
-					<div id="cmt_cover">
-						<Commit head="章节评论区" />
+						<div id="cmt_cover">
+							<Commit head="章节评论区" />
+						</div>
+					</div>
+					<div className="action_card">
+						<div className="nav_li">
+							<a href={"/write?branchId=" + this.state.branchId + "&bookName=" +this.state.bookName}>
+								<div className="icon jion"></div>
+								<div className="words">续写该章</div>
+							</a>
+						</div>
+						<div className="nav_li">
+							<a href="javascript:" onClick={()=> {this.Likeif(0)}}>
+								<div className="icon like"></div>
+								<div className="words">喜欢 {this.state.data.likeNum}</div>
+							</a>
+						</div>
+						<div className="nav_li">
+							<a href="javascript:" onClick={()=> {this.Likeif(1)}}>
+								<div className="icon dislike"></div>
+								<div className="words">不喜欢 {this.state.data.dislikeNum}</div>
+							</a>
+						</div>
+						<div className="nav_li">
+							<a href="#">
+								<div className="icon top"></div>
+								<div className="words">置顶</div>
+							</a>
+						</div>
 					</div>
 				</div>
 			</div>

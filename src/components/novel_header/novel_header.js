@@ -74,7 +74,7 @@ class NoverHeader extends Component{
 						(
 							<ul>
 								<li className="show">
-									<NavLink activeClassName="active" to="/all">
+									<NavLink activeClassName="active" to="/all?type=-1">
 										<div className="icon"></div>全部分类
 									</NavLink>
 									<AllList />

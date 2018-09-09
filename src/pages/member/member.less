@@ -131,14 +131,71 @@
 
 			.box_cards {
 				width: 100%;
-				height: 200px;
+				height: 160px;
 				display: flex;
 				justify-content: space-between;
 
 				.card {
-					width: 32%;
-					height: 95%;
-					border: 1px solid black;
+					width: 30%;
+					height: 100%;
+					box-shadow: 1px 1px 5px black;
+					position: relative;
+					overflow: hidden;
+					
+					.card_cvr {
+						position: absolute;
+						width: 100%;
+						height: 200%;
+						top:0;
+						transition:top .5s;
+						-moz-transition:top .5s; /* Firefox 4 */
+						-webkit-transition:top .5s; /* Safari and Chrome */
+						-o-transition:top .5s; /* Opera */
+						transition-timing-function: ease-in-out;
+						&:hover {
+							top:-100%;
+						}
+
+						.uper {
+							width: 100%;
+							height: 50%;
+							p {
+								margin-top: -20px;
+								text-align: center;
+								color: #26a69a;
+							}
+
+							.icon {
+								width: 100%;
+								height: 120px;
+							}
+
+							.prod {
+								background: url('../../imgs/icons/zuopin.png') no-repeat;
+								background-position: center;
+								background-size: auto 45%;
+							}
+
+							.focs {
+								background: url('../../imgs/icons/foc.png') no-repeat;
+								background-position: center;
+								background-size: auto 45%;
+							}
+
+							.fans {
+								background: url('../../imgs/icons/fans.png') no-repeat;
+								background-position: center;
+								background-size: auto 45%;
+							}
+						}
+
+						.num {
+							width: 100%;
+							height: 50%;
+							color: #26a69a;
+						}
+					}
+
 				}
 
 				.following {

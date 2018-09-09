@@ -30,8 +30,8 @@ class AddStart extends Component{
 			text: '',
 			blob: '',
 			src: '',
-			bookId: ''
-
+			bookId: '',
+			style: {}
 		}
 		this.writeFirst = this.writeFirst.bind(this);
 		this.handleBack = this.handleBack.bind(this);
@@ -48,7 +48,7 @@ class AddStart extends Component{
 	}
 
 	handleImg(e) {
-		let oImg = document.getElementById("bookImg");
+		let oImg = new Image();
 		let files = e.target.files;    //为了获取存储图片的信息的File对象
   		let _this = this;
 	    let reader = new FileReader();     //创建FileReader对象 
@@ -58,11 +58,18 @@ class AddStart extends Component{
 
 	    reader.onload = function(e) {        //监听reader读取完成事件
 	    //当读取完成时，reader.result就是要的base64
+	        let style = {
+		    	background: "url(" + this.result + ") no-repeat",
+		    	backgroundSize: "auto 100%",
+		    	backgroundPosition: "center"
+		    }
 	        _this.setState({
-	        	src: this.result
+	        	src: this.result,
+	        	style: style
 	        })
 	        oImg.src = this.result;
 	    }
+
 
 	    oImg.onload = () => {
 	        let canvas = document.createElement("canvas");
@@ -214,7 +221,7 @@ class AddStart extends Component{
 	sendImg() {
 		let formData = new FormData();
 		formData.append("file", this.state.blob);
-		axios.post("http://47.95.207.40/branch/book/upload/book_image/" + this.state.bookId,
+		axios.post("http://47.95.207.40/branch/upload/book_image/" + this.state.bookId,
 				formData ,{
 					headers: {
 						"Authorization": "Bearer " + this.props.token.access_token,
@@ -239,7 +246,7 @@ class AddStart extends Component{
 						<div className="add_infor">
 							<div className="add_img">
 								<div className="input_cover">
-									<img id="bookImg" src={this.state.src}/>
+									<div id="bookimg" style={this.state.style}></div>
 									<input type="file" onChange={this.handleImg}/>
 								</div>
 								<p>请选择一张图片作为书的封面</p>

@@ -29,7 +29,8 @@ class AllNav extends Component {
 		super(props);
 	}
 	render() {
-		let index = this.props.index;
+		let index = this.props.index - 0;
+		console.log(index);
 		return (
 			<ul className="all_nav">
 				<div className="selected">
@@ -131,32 +132,32 @@ class AllHeader extends Component {
 			<ul className="page_header">
 				<a href="javascript:">
 				<li className={now === 0 ? "active" : ''} index={0} onClick={this.props.handleSort}>
-					阅读量
+					总阅读量
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 1 ? "active" : ''} index={1} onClick={this.props.handleSort}>
-					关注量
+					总关注量
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 2 ? "active" : ''} index={2} onClick={this.props.handleSort}>
-					评论量
+					总评论量
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 3 ? "active" : ''} index={3} onClick={this.props.handleSort}>
-					参与数
+					总参与人数
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 4 ? "active" : ''} index={4} onClick={this.props.handleSort}>
-					字数
+					总字数
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 5 ? "active" : ''} index={5} onClick={this.props.handleSort}>
-					续写量
+					总续写量
 				</li>
 				</a>
 				<a href="javascript:">
@@ -230,16 +231,16 @@ class AllPage extends Component {
 	constructor(props) {
 		super(props);
 		let val = this.props.location.search.split("=")[1];
-		const index = (val!=="" ? Number(val) : -1);
+		const index = Number(val);
 		this.state = {
-			index: index || -1,	//当前类型对应的index
+			index: index,	//类型
 			count: 0,		//共count页
 			value: changeStyle(index).words || '全部',	//当前类型
 			books: [],		//当前页展示的book数组
 			pageNow: 1,		//当前页
 			pageShow: 1, 	//当前框显示数字
 			sort: 'READ_NUM',	//排序内容
-			sortType: 0,	//默认排序方式
+			sortType: 1,	//默认排序方式
 			now: 0
 		}
 		this.handleClick = this.handleClick.bind(this);
@@ -254,14 +255,7 @@ class AllPage extends Component {
 	}
 
 	handleClick(e) {
-		this.setState({
-			index: Number(e.target.getAttribute('index')),
-			value: e.target.innerHTML,
-			pageShow: 1,
-			pageNow: 1
-		},()=>{
-			this.getBooks();
-		})
+		window.location.href = "/all?type=" + Number(e.target.getAttribute('index'));
 	}
 
 	handleSort(e) {
@@ -364,6 +358,7 @@ class AllPage extends Component {
 	}
 
 	render() {
+		console.log(this.state);
 		return (
 			<div className="main_body all">
 				<AllNav 

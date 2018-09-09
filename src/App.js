@@ -15,6 +15,7 @@ import All from './pages/all/all.js'
 import BookDetails from './pages/book_details/book_detail.js'
 import Reader from './pages/read/read.js'
 import Write from './pages/write/write.js'
+import Author from './pages/author/author.js'
 
 import { connect } from 'react-redux'
 import ACTIONS from './actions/index.js'
@@ -54,7 +55,6 @@ class App extends Component{
 	}
 	
 	componentDidMount() {
-		console.log(this.props);
 		this.props.generatGuID();
 	}
 
@@ -77,6 +77,7 @@ class App extends Component{
 					<Route path="/book_details" component={BookDetails} />
 					<Route path="/read" component={Reader} />
 					<Route path="/write" component={Write} />
+					<Route path="/author" component={Author} />
 					<Footer />
 				</div>
 			</BrowserRouter>
