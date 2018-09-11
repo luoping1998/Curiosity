@@ -230,7 +230,7 @@ class AllBody extends Component {
 class AllPage extends Component {
 	constructor(props) {
 		super(props);
-		let val = this.props.location.search.split("=")[1];
+		let val = this.props.location.search.split("=")[1] || -1;
 		const index = Number(val);
 		this.state = {
 			index: index,	//类型

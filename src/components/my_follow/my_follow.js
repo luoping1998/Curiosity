@@ -19,10 +19,14 @@ class Tab extends Component {
 		return (
 			<div className="tab">
 				<label>
-				<input type="checkbox" className="check"/>全选
+				<input 
+					type="checkbox" 
+					className="check" 
+					onClick={this.props.selectAll}
+				/>全选
 				</label>
 				<a href="javascript:">置顶</a>
-				<a href="javascript:">删除</a>
+				<a href="javascript:" onClick={this.props.delSel}>删除</a>
 			</div>
 		)
 	}
@@ -42,7 +46,7 @@ class FollowItem extends Component {
 		return (
 			<div className="my_follow_item">
 				<div className="item_infor">
-					<input type="checkbox" className="check" />
+					<input type="checkbox" className="check" onClick={this.props.selectOne} index={this.props.bookId}/>
 					<div className="item_img" style={style}>
 						<div className={"item_state"+"_updating"}>更新中</div>
 					</div>
@@ -80,7 +84,8 @@ class MyFollow extends Component {
 			count: Math.ceil(this.props.focus.length / 10),
 			pageNow: 1,
 			pageShow: 1,
-			book:[]
+			book:[],
+			selbook:[]
 		}
 		this.getBooks = this.getBooks.bind(this);
 		this.goBack = this.goBack.bind(this);
@@ -88,6 +93,54 @@ class MyFollow extends Component {
 		this.goPage = this.goPage.bind(this);
 		this.handleGo = this.handleGo.bind(this);
 		this.cancelFocus = this.cancelFocus.bind(this);
+		this.selectAll = this.selectAll.bind(this);
+		this.selectOne = this.selectOne.bind(this);
+		this.delSel = this.delSel.bind(this);
+	}
+
+	delSel() {
+		const arr = this.state.selbook;
+		for( let i = 0; i < arr.length; i ++) {
+			this.props.cancelFocus(arr[i], this.props.token, ()=>{
+				this.props.getFocus(this.props.token);
+			})
+		}	
+	}
+
+	selectAll() {
+		const arr = this.state.book.map( val => {
+			return val.bookId;
+		})
+		const carr = document.getElementsByClassName("check");
+		const len = carr.length;
+		if(this.state.selbook.length == len - 1) {
+			for( let i = 0; i < len; i ++) {
+				carr[i].checked = false;
+			}
+		}else {
+			for( let i = 0; i < len; i ++) {
+				carr[i].checked = true;
+			}
+		}
+		this.setState({
+			selbook: (this.state.selbook.length == len - 1) ? [] : arr
+		})
+	}
+
+	selectOne(e) {
+		const index = Number(e.target.getAttribute("index"));
+		let arr = this.state.selbook;
+		let arr2;
+		if(arr.indexOf(index) == -1) {
+			arr.push(Number(index));
+		}else {
+			arr = arr.filter( val => {
+				return val !== Number(index)
+			})
+		}
+		this.setState({
+			selbook: arr
+		}) 
 	}
 
 	cancelFocus(e) {
@@ -166,7 +219,12 @@ class MyFollow extends Component {
 	render() {
 		const List = this.state.book.map(val => {
 			return (
-				<FollowItem {...val} key={val.bookId} cancelFocus={this.cancelFocus}/>
+				<FollowItem 
+					{...val} 
+					key={val.bookId} 
+					selectOne={this.selectOne} 
+					cancelFocus={this.cancelFocus}
+				/>
 			)
 		})
 		return (
@@ -181,7 +239,10 @@ class MyFollow extends Component {
 					goPage={this.goPage}
 					handleChange={this.handleChange}
 					handleGo={this.handleGo}/>
-				<Tab />
+				<Tab 
+					selectAll={this.selectAll}
+					delSel={this.delSel}
+					/>
 			</div>
 		)
 	}

@@ -19,13 +19,15 @@ class Write extends Component {
 			data: {},
 			tit: '',
 			text: '',
-			summary: ''
+			summary: '',
+			"pretext": ""
 		}
 		this.handleTitle = this.handleTitle.bind(this);
 		this.handleText = this.handleText.bind(this);
 		this.handleSummary = this.handleSummary.bind(this);
 		this.handleSend = this.handleSend.bind(this);
 		this.handleBack = this.handleBack.bind(this);
+		this.saveDraft = this.saveDraft.bind(this);
 	}
 
 	componentDidMount() {
@@ -45,7 +47,8 @@ class Write extends Component {
 			"bookId": this.state.data.bookId,
 			"title": this.state.tit,
 			"content": this.state.text,
-			"summary": this.state.summary
+			"summary": this.state.summary,
+			"status": 'STATUS_ONLINE',
 		}
 		axios.put("http://47.95.207.40/branch/branch",
 			data: data,
@@ -84,7 +87,9 @@ class Write extends Component {
 	}
 
 	handleText(e) {
+		const cont = this.state.text;
 		this.setState({
+			pretext: cont,
 			text: e.target.value
 		})
 	}
@@ -95,6 +100,44 @@ class Write extends Component {
 		})
 	}
 
+	saveDraft() {
+		if(!this.state.tit && !this.state.text) return;
+		this.setState({
+			pretext: this.state.text
+		})
+		const data = {
+			"parentId": this.state.branchId,
+			"bookId": this.state.data.bookId,
+			"title": this.state.tit,
+			"content": this.state.text,
+			"summary": this.state.summary,
+			"status": 'STATUS_DRAFT'
+		}
+		axios.put("http://47.95.207.40/branch/branch",
+			data: data,
+			{
+				headers: {
+					"Authorization": "Bearer " + this.props.token.access_token
+				}
+			}).then(res => {
+				this.props.showSucPopup("已保存至草稿箱！");
+			}).catch(err => {
+				if(err.response) {
+					if(err.response.data.error == 'invalid_token') {
+						this.props.showFailPopup("用户未登录！");
+					}
+				}else {
+					let mes = '';
+					if(err.response) {
+						mes = err.response.data.message;
+					}else {
+						mes = '网络异常！';
+					}
+					this.props.showFailPopup(mes);
+				}
+			})
+	}
+
 	render() {
 		return (
 			<div className="main_body writer">
@@ -103,11 +146,13 @@ class Write extends Component {
 					tit={this.state.tit}
 					text={this.state.text}
 					summary={this.state.summary}
+					pretext={this.state.pretext}
 					handleTitle={this.handleTitle}
 					handleText={this.handleText}
 					handleSummary={this.handleSummary}
 					handleBack={this.handleBack}
 					handleSend={this.handleSend}
+					saveDraft={this.saveDraft}
 				/>
 			</div>
 		)

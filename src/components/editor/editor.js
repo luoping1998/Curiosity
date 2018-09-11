@@ -3,6 +3,7 @@ import './editor.less'
 import { exec, qcstate } from '../../public/exec.js'
 import autoTextarea from '../../public/autoText.js'
 
+let timer;
 class Icon extends Component {
 	constructor(props) {
 		super(props);
@@ -22,14 +23,11 @@ class Icon extends Component {
 class Editor extends Component {
 	constructor(props) {
 		super(props)
-		this.state = {
-			text: '',
-			tit: ''
-		}
 
 		this.handleClick = this.handleClick.bind(this);
 		this.handleFont = this.handleFont.bind(this);
 		this.handleFamily = this.handleFamily.bind(this);
+		this.setTime = this.setTime.bind(this);
 	}
 
 	handleClick(e) {
@@ -44,8 +42,19 @@ class Editor extends Component {
 		document.getElementById("text").style.fontFamily = e.target.className.split('f-')[1];
 	}
 
+	setTime(text) {
+		timer = setTimeout(()=>{
+			if(this.props.pretext != this.props.text) {
+				this.props.saveDraft();
+			}
+			clearTimeout(timer);
+			this.setTime();
+		}, 5000);
+	}
+
 	componentDidMount() {
 		let text=document.getElementById("text");
+		this.setTime();
         autoTextarea(text);
 	}
 
@@ -82,13 +91,13 @@ class Editor extends Component {
 						</ul>
 					</a>
 					<Icon command="undo" handleClick={this.handleClick}>
-						<div className="undo"></div>
+						<div className="undo" title="撤回"></div>
 					</Icon>
 					<Icon command="redo" handleClick={this.handleClick}>
-						<div className="redo"></div>
+						<div className="redo" title="重做"></div>
 					</Icon>
-					<Icon command="save" handleClick={this.handleClick}>
-						<div className="save"></div>
+					<Icon command="save" handleClick={this.props.saveDraft}>
+						<div className="save" title="保存至草稿"></div>
 					</Icon>
 				</div>
 				<div className="e_body">

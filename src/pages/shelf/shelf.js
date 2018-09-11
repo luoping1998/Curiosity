@@ -8,11 +8,11 @@ import {
 
 import '../myself/myself.less'
 
-import MyFollow from '../../components/my_follow/my_follow.js'
-import SubLeader from '../../components/sub_leader/sub_leader.js'
-import MyStart from '../../components/my_start/my_start.js'
+import MyFollow from '../../components/my_follow/my_follow.js'	//我的关注
+import SubLeader from '../../components/sub_leader/sub_leader.js'		
+import MyStart from '../../components/my_start/my_start.js'		//我的发起
 import MyCollect from '../../components/my_collect/my_collect.js' 	//收藏
-
+import MyJion from '../../components/my_jion/my_jion.js'	//我的参与
 class Shelf extends Component {
 	constructor(props) {
 		super(props);
@@ -45,6 +45,7 @@ class Shelf extends Component {
 					<Redirect exact path="/my/shelf" to={{pathname: "/my/shelf/my_follow"}} />
 					<Route path="/my/shelf/my_start" component={MyStart} />
 					<Route path="/my/shelf/my_collect" component={MyCollect} />
+					<Route path="/my/shelf/my_jion" component={MyJion} />
 				</Switch>
 			</div>
 		)
