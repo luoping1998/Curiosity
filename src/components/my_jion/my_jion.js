@@ -6,15 +6,19 @@ import { connect } from 'react-redux'
 import ACTIONS from '../../actions/index.js'
 import { withRouter } from 'react-router-dom'
 
+import axios from 'axios'
+
 function getStatus(val) {
 	let cont = {
 		color: "red",
-		words: "未发布"
+		words: "未发布",
+		status: 0
 	}
 	if(val != "STATUS_DRAFT") {
 		cont = {
 			color: "blue",
-			words: "已发布"
+			words: "已发布",
+			status: 1
 		}
 	}
 	return cont;
@@ -24,7 +28,14 @@ class Item extends Component {
 	constructor(props) {
 		super(props);
 	}
+	//待完善
+	delItem() {
+		axios.delete("http://47.95.207.40/branch/branch/" + this.props.branchId, {
+			headers: {
 
+			}
+		})
+	}
 	render() {
 		const cont = getStatus(this.props.status);
 		const style = {
@@ -34,7 +45,15 @@ class Item extends Component {
 		return (
 			<div className="item_body">
 				<p className="status" style={style}>{cont.words}</p>
-				<h3>{this.props.title}</h3>
+				<h3>
+					{
+						cont.status ? (
+								<a href={"/read?branchId=" + this.props.branchId}>{this.props.title}</a>
+							) : (
+								<a href={"/write?branchId=" + this.props.branchId + "&bookName=" + this.props.bookName + "&id=" + this.props.branchId}>{this.props.title}</a>
+							)
+					}
+				</h3>
 				<div className="cont">
 					<p className="intro">{this.props.summary}</p>
 					<p className="time">{this.props.createTime}</p>
@@ -50,7 +69,12 @@ class Item extends Component {
 						<p className="words">吐槽数</p>
 						<p className="words">{this.props.dislikeNum}</p>
 					</div>
-
+					<div className="act_item">
+						<a href="javascript:;">
+							<div className="icon del"></div>
+							<p className="words">删除</p>
+						</a>
+					</div>
 				</div>
 			</div>
 		)
@@ -67,7 +91,7 @@ class JionItem extends Component {
 	render() {
 		console.log(this.props);
 		const List = this.props.chars.map((val) => (
-			<Item {...val} key={val.branchId}/>
+			<Item {...val} key={val.branchId} bookName={this.props.book.bookName}/>
 		))
 		const cont = changeStyle(this.props.book.bookType);
 		const style = {

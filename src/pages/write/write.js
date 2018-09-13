@@ -15,12 +15,16 @@ class Write extends Component {
 		const arr =  this.props.location.search.split('=');
 		this.state = {
 			branchId: arr[1].split('&')[0],
-			bookName: arr[2],
-			data: {},
+			bookName: arr[2].split('&')[0],
+			layer: '',		//续写章节
+			lastTitle: '',	//续写章节标题
+			bookId:'',		//书id
 			tit: '',
 			text: '',
 			summary: '',
-			"pretext": ""
+			pretext: "",
+			id: arr[3] ? arr[3] : '',
+			first: arr[3] ? false : true
 		}
 		this.handleTitle = this.handleTitle.bind(this);
 		this.handleText = this.handleText.bind(this);
@@ -28,23 +32,53 @@ class Write extends Component {
 		this.handleSend = this.handleSend.bind(this);
 		this.handleBack = this.handleBack.bind(this);
 		this.saveDraft = this.saveDraft.bind(this);
+		this.getDetails = this.getDetails.bind(this);
 	}
 
 	componentDidMount() {
-		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId).then( 
-			res => {
+		if(this.state.first) {
+			this.getDetails();
+		}else {
+			axios.get("http://47.95.207.40/branch/branch/branch_edit/" + this.state.id, {
+				headers: {
+					Authorization: "Bearer" + this.props.token.access_token
+				}
+			}).then(res => {
 				this.setState({
-					data : res.data.data
+					data: res.data.data,
+					bookId: res.data.data.bookId,
+					branchId: res.data.data.parentId,
+					tit: res.data.data.title,
+					summary: res.data.data.summary,
+					text: res.data.data.content,
+					pretext: res.data.data.content
+				},() => {
+					this.getDetails();
 				})
 			}).catch( err => {
 				console.log(err);
 			})
+		}
+
 	}
 
+	getDetails() {
+		axios.get("http://47.95.207.40/branch/book/branch/" + this.state.branchId)
+			.then( res => {
+				this.setState({
+				data : res.data.data,
+				layer: res.data.data.layer,
+				lastTitle: res.data.data.title,
+				bookId: res.data.data.bookId
+			})
+		}).catch( err => {
+			console.log(err);
+		})
+	}
 	handleSend() {
 		const data = {
 			"parentId": this.state.branchId,
-			"bookId": this.state.data.bookId,
+			"bookId": this.state.bookId,
 			"title": this.state.tit,
 			"content": this.state.text,
 			"summary": this.state.summary,
@@ -105,14 +139,21 @@ class Write extends Component {
 		this.setState({
 			pretext: this.state.text
 		})
-		const data = {
+		const newdata = {
 			"parentId": this.state.branchId,
-			"bookId": this.state.data.bookId,
+			"bookId": this.state.bookId,
 			"title": this.state.tit,
 			"content": this.state.text,
 			"summary": this.state.summary,
 			"status": 'STATUS_DRAFT'
 		}
+
+		const updata = {
+			...newdata,
+			branchId: this.state.id
+		}
+
+		const data = this.state.first ? newdata : updata;
 		axios.put("http://47.95.207.40/branch/branch",
 			data: data,
 			{
@@ -120,7 +161,14 @@ class Write extends Component {
 					"Authorization": "Bearer " + this.props.token.access_token
 				}
 			}).then(res => {
-				this.props.showSucPopup("已保存至草稿箱！");
+				if(!res.data.status) {
+					if(res.data.data) {
+						this.setState({
+							id: res.data.data.branchId,
+							first: false
+						})
+					}
+				}
 			}).catch(err => {
 				if(err.response) {
 					if(err.response.data.error == 'invalid_token') {
@@ -141,7 +189,7 @@ class Write extends Component {
 	render() {
 		return (
 			<div className="main_body writer">
-				<p className="header">正在续写 <a href={"/book_details?bookId=" + this.state.data.bookId}>《{decodeURI(this.state.bookName)}》</a> <a href={"/read?branchId="+this.state.branchId} className="cont">第{this.state.data.layer}章 {this.state.data.title}</a></p>
+				<p className="header">正在续写 <a href={"/book_details?bookId=" + this.state.bookId}>《{decodeURI(this.state.bookName)}》</a> <a href={"/read?branchId="+this.state.branchId} className="cont">第{this.state.layer}章 {this.state.lastTitle}</a></p>
 				<Editor 
 					tit={this.state.tit}
 					text={this.state.text}

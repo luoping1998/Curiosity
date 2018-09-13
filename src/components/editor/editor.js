@@ -23,7 +23,6 @@ class Icon extends Component {
 class Editor extends Component {
 	constructor(props) {
 		super(props)
-
 		this.handleClick = this.handleClick.bind(this);
 		this.handleFont = this.handleFont.bind(this);
 		this.handleFamily = this.handleFamily.bind(this);
@@ -42,7 +41,7 @@ class Editor extends Component {
 		document.getElementById("text").style.fontFamily = e.target.className.split('f-')[1];
 	}
 
-	setTime(text) {
+	setTime() {
 		timer = setTimeout(()=>{
 			if(this.props.pretext != this.props.text) {
 				this.props.saveDraft();

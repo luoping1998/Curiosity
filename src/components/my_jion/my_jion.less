@@ -7,6 +7,9 @@
 		width: 100%;
 		margin: 0 auto;
 		height: auto;
+		a:hover {
+			color: #26a69a;
+		}
 		.book_header {
 			width: 100%;
 			padding-top: 10px;
@@ -20,6 +23,7 @@
 
 			h2 {
 				font-size: 20px;
+				width: 250px;
 				margin-left: 20px;
 
 				.type {
@@ -90,13 +94,34 @@
 					color: gray;
 				}
 			}
-			
+		
+
 		.action {
 			width: 28%;
 			height: 50px;
 			display: flex;
 			align-items: center;
 			justify-content: space-around;
+			
+			a {
+				color: gray;
+				
+				.del {
+					background:url("../../imgs/icons/ndel.png") no-repeat;
+					background-size: 65% auto;
+					background-position: center;
+				}
+
+				&:hover {
+					color: #26a69a;
+
+					.del {
+						background:url("../../imgs/icons/adel.png") no-repeat;
+						background-size: 65% auto;
+						background-position: center;
+					}
+				}
+			}
 
 			.act_item {
 				width: 20%;
@@ -129,7 +154,9 @@
 					font-size: 10px;
 				}
 			}
+
 		}
+
 		}
 	}
 }

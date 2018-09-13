@@ -157,6 +157,7 @@ class LoginBox extends Component{
 			pass: '',		//密码
 			passone : '',	//注册验证时的首次密码
 			passtwo : '',	//重复密码
+			key: '',		//验证码验证成功返回值
 			commitone : {		//提示语句1
 				words : '',
 				color : 'red'
@@ -188,6 +189,7 @@ class LoginBox extends Component{
 		this.register = this.register.bind(this);
 		this.clear = this.clear.bind(this);
 		this.loginWithu = this.loginWithu.bind(this);
+		this.veriFacate = this.veriFacate.bind(this);
 	}
 
 	//跳转至账号登录页面
@@ -219,15 +221,38 @@ class LoginBox extends Component{
 
 	//跳转至注册信息页面
 	toSuc() {
+		//验证验证码然后注册个人信息
+		
 		if(isPoneAvailable(this.state.account)&&this.state.vcode.length===6){
-			this.setState({
-				suc : true,
-				log : false,
-				type : 0
-			})
+			this.veriFacate();
 		}else {
 			this.showFailPopup("请检查您的注册信息！");
 		}
+	}
+
+	//验证验证码
+	veriFacate() {
+		axios.get("http://47.95.207.40/branch/code/sms/verificate", {
+			headers: {
+				deviceId: this.props.uid,
+				validateCode: this.state.vcode,
+			},
+			params: {
+				phoneNum: this.state.account
+			}
+		}).then(res => {
+			console.log(res);
+			if(!res.status) {
+				this.setState({
+					suc : true,
+					log : false,
+					type : 0,
+					key: res.message
+				})
+			}
+		}).catch( err => {
+			this.showFailPopup(err.response.data.message);
+		})
 	}
 
 	//以下依次为输入的onChange函数对应的处理事件
@@ -487,7 +512,7 @@ class LoginBox extends Component{
 				data: data,
 				headers: {
 					deviceId: this.props.uid,
-					validateCode: this.state.vcode
+					key: this.state.key
 				}
 			}).then(res=>{
 				if(!res.data.status) {
