@@ -342,7 +342,7 @@ class AllPage extends Component {
 	handleGo() {
 		if(this.state.pageShow > this.state.count || this.state.pageShow < 1) {
 			this.setState({
-				pageShow: ''
+				pageShow: this.state.pageNow
 			})
 		}else {
 			this.setState({
@@ -358,7 +358,6 @@ class AllPage extends Component {
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<div className="main_body all">
 				<AllNav 
@@ -372,7 +371,7 @@ class AllPage extends Component {
 					<AllBody books={this.state.books} />
 					<Paging 
 						now={this.state.pageNow} 
-						value={this.state.pageShow}
+						show={this.state.pageShow}
 						count={this.state.count} 
 						goBack={this.goBack}
 						goNext={this.goNext}

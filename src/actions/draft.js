@@ -1,41 +1,41 @@
 import axios from 'axios'
 import { showFailPopup, showSucPopup } from './popup.js'
 
-//请求我的续写列表
-export const requestWriter = () => ({
-	type: 'REQUEST_WRITER'
+//请求我的草稿箱列表
+export const requestDraft = () => ({
+	type: 'REQUEST_DRAFT'
 })
 
-//保存我的续写
-export const saveWriter = (writer) => ({
-	type: 'SAVE_WRITER',
-	writer
+//保存我的草稿箱
+export const saveDraft = (draft) => ({
+	type: 'SAVE_DRAFT',
+	draft
 })
 
-//删除我的续写
-export const delWriter = () => ({
-	type: 'DEL_WRITER'
+//删除我的草稿箱
+export const delDraft = () => ({
+	type: 'DEL_DRAFT'
 })
 
-//获取我的续写
-export const getWriter = token => dispatch => {
-	dispatch(requestWriter());
+//获取我的草稿箱
+export const getDraft = token => dispatch => {
+	dispatch(requestDraft());
 	return axios.get("http://47.95.207.40/branch/user/branch", {
 		headers:  {
 			Authorization: "Bearer " + token.access_token
 		},
 		params: {
-			status: "STATUS_ONLINE"
+			status: "STATUS_DRAFT"
 		}
 	}).then( res => {
 		if(!res.data.status) {
-			dispatch(saveWriter(res.data.data));
+			dispatch(saveDraft(res.data.data));
 		}else {
 			dispatch(showFailPopup(res.data.message))
 		}
 	}).catch( err => {
 		if(err.response.status == 404) {
-			dispatch(saveWriter([]));
+			dispatch(saveDraft([]));
 		}else {
 			dispatch(showFailPopup(err.response.data.message))
 		}

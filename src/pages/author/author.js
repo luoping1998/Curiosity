@@ -21,7 +21,11 @@ class Author extends Component {
 	render() {
 		return (
 			<div className="main_body" id="author">
-
+				<div className="upper"></div>
+				<div className="show">
+					<div className=""></div>
+					<div className=""></div>
+				</div>
 			</div>
 		)
 	}

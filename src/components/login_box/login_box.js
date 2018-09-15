@@ -451,6 +451,8 @@ class LoginBox extends Component{
 					this.props.getFocus(this.props.token);
 					this.props.getStar(this.props.token);
 					this.props.getWriter(this.props.token);
+					this.props.getDraft(this.props.token);
+					this.props.getRecycle(this.props.token);
 				}
 			}).catch(err=>{
 				console.log(err);

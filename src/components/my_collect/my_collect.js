@@ -118,7 +118,7 @@ class MyCollect extends Component {
 	handleGo() {
 		if(this.state.pageShow > this.state.count || this.state.pageShow < 1) {
 			this.setState({
-				pageShow: ''
+				pageShow: this.state.pageNow
 			})
 		}else {
 			this.setState({
@@ -142,7 +142,7 @@ class MyCollect extends Component {
 				{List}
 				<Paging 
 					now={this.state.pageNow} 
-					value={this.state.pageShow}
+					show={this.state.pageShow}
 					count={this.state.count} 
 					goBack={this.goBack}
 					goNext={this.goNext}

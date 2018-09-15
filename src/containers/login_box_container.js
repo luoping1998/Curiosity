@@ -14,8 +14,9 @@ const mapDispatchToProps = dispatch => ({
 	getInfor: token => dispatch(ACTIONS.INFOR.getInfor(token)),	
 	getFocus: token => dispatch(ACTIONS.FOCUS.getFocus(token)),
 	getStar: token => dispatch(ACTIONS.STAR.getStar(token)),
-	getWriter: token => dispatch(ACTIONS.WRITER.getWriter(token))
-
+	getWriter: token => dispatch(ACTIONS.WRITER.getWriter(token)),
+	getDraft: token => dispatch(ACTIONS.DRAFT.getDraft(token)),
+	getRecycle: token => dispatch(ACTIONS.RECYCLE.getRecycle(token))
 })
 
 export default connect(

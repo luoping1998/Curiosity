@@ -53,7 +53,9 @@ class Editor extends Component {
 
 	componentDidMount() {
 		let text=document.getElementById("text");
-		this.setTime();
+		if(this.props.pretext !== undefined) {
+			this.setTime();
+		}
         autoTextarea(text);
 	}
 

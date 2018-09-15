@@ -14,11 +14,17 @@ function getStatus(val) {
 		words: "未发布",
 		status: 0
 	}
-	if(val != "STATUS_DRAFT") {
+	if(val == "STATUS_ONLINE") {
 		cont = {
 			color: "blue",
 			words: "已发布",
 			status: 1
+		}
+	}else if(val == 'STATUS_RECYCLE') {
+		cont = {
+			color: "gray",
+			words: "回收站",
+			status: 2
 		}
 	}
 	return cont;
@@ -28,14 +34,7 @@ class Item extends Component {
 	constructor(props) {
 		super(props);
 	}
-	//待完善
-	delItem() {
-		axios.delete("http://47.95.207.40/branch/branch/" + this.props.branchId, {
-			headers: {
 
-			}
-		})
-	}
 	render() {
 		const cont = getStatus(this.props.status);
 		const style = {
@@ -69,12 +68,24 @@ class Item extends Component {
 						<p className="words">吐槽数</p>
 						<p className="words">{this.props.dislikeNum}</p>
 					</div>
-					<div className="act_item">
-						<a href="javascript:;">
-							<div className="icon del"></div>
-							<p className="words">删除</p>
-						</a>
-					</div>
+					{
+						(cont.status == 0) ? (
+							<div className="act_item" >
+								<a href="javascript:;" onClick={this.props.delItem} index={this.props.branchId}>
+									<div className="icon del" index={this.props.branchId}></div>
+									<p className="words" index={this.props.branchId}>删除</p>
+								</a>
+							</div>
+						) : ((cont.status == 2) ? (
+							<div className="act_item" >
+								<a href="javascript:;" onClick={this.props.reStore} index={this.props.branchId}>
+									<div className="icon res" index={this.props.branchId}></div>
+									<p className="words" index={this.props.branchId}>恢复</p>
+								</a>
+							</div>
+							): "")
+					}
+
 				</div>
 			</div>
 		)
@@ -89,9 +100,14 @@ class JionItem extends Component {
 		}
 	}
 	render() {
-		console.log(this.props);
 		const List = this.props.chars.map((val) => (
-			<Item {...val} key={val.branchId} bookName={this.props.book.bookName}/>
+			<Item 
+				{...val} 
+				key={val.branchId} 
+				bookName={this.props.book.bookName}
+				delItem={this.props.delItem}
+				reStore={this.props.reStore}
+			/>
 		))
 		const cont = changeStyle(this.props.book.bookType);
 		const style = {
@@ -120,31 +136,116 @@ class JionItem extends Component {
 class MyJion extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			index: 1
+		}
+		this.delItem = this.delItem.bind(this);
+		this.reStore = this.reStore.bind(this);
+	}
+
+	delItem(e) {
+		const branchId = e.target.getAttribute("index");
+		axios.delete("http://47.95.207.40/branch/branch/" + branchId, {
+			headers: {
+				"Authorization": "Bearer " + this.props.token.access_token
+			}
+		}).then(res => {
+			this.props.getDraft(this.props.token);
+			this.props.getRecycle(this.props.token);
+			this.props.showSucPopup(res.data.message);
+		}).catch(err => {
+			console.log(err);
+		})
+	}
+
+	reStore(e) {
+		const branchId = e.target.getAttribute("index");
+		axios({
+			method: "POST",
+				url: `http://47.95.207.40/branch/branch/${branchId}/restore`,
+				headers: {
+					"Authorization": "Bearer " + this.props.token.access_token
+				}
+		}).then(res => {
+			this.props.getRecycle(this.props.token);
+			this.props.getDraft(this.props.token);
+			this.props.showSucPopup(res.data.message);
+		}).catch(err => {
+			console.log(err);
+		})
 	}
 
 	render() {
-		console.log(this.props.writer);
-		const List = this.props.writer.map(val => (
+		const pubList = this.props.writer.map(val => (
 			<JionItem 
 				chars={val.myWriteBranchDTOS} 
 				key={val.simpleBookDTO.bookId} 
 				book={val.simpleBookDTO}
+				token={this.props.token.access_token}
+				delItem={this.delItem}
 			/>
 		))
+
+		const draList = this.props.draft.map(val => (
+			<JionItem 
+				chars={val.myWriteBranchDTOS} 
+				key={val.simpleBookDTO.bookId} 
+				book={val.simpleBookDTO}
+				token={this.props.token.access_token}
+				delItem={this.delItem}
+			/>
+		))
+
+		const reList = this.props.recycle.map(val => (
+			<JionItem 
+				chars={val.myWriteBranchDTOS} 
+				key={val.simpleBookDTO.bookId} 
+				book={val.simpleBookDTO}
+				token={this.props.token.access_token}
+				reStore={this.reStore}
+			/>
+		))
+
 		return (
 			<div className="jion_item">
-				{List}
+				<ul className="jion_header">
+					<a href="javascript:;" onClick={()=>{this.setState({index: 1})}}>
+						<li className={ (this.state.index == 1) ? "active" : ""}>
+							<span className="show">√ </span>已发布
+						</li>
+					</a> 
+					<a href="javascript:;" onClick={()=>{this.setState({index: 2})}}>
+						<li className={ (this.state.index == 2) ? "active" : ""}>
+							<span className="show">√ </span>草稿箱
+						</li>
+					</a>
+					<a href="javascript:;" onClick={()=>{this.setState({index: 3})}}>
+						<li className={ (this.state.index == 3) ? "active" : ""}>
+							<span className="show">√ </span>回收站
+						</li>
+					</a>
+				</ul>
+				{
+					this.state.index == 1 ? (pubList) : (this.state.index == 2 ? (draList) : (reList))
+				}
 			</div>
 		)
 	}
 }
 
 const mapStateToProps = state => ({
-	writer: state.writer
+	writer: state.writer,
+	draft: state.draft,
+	recycle: state.recycle,
+	token: state.token
 })
 
 const mapDispatchToProps = dispatch => ({
-
+	showSucPopup: mess => dispatch(ACTIONS.POPUP.showSucPopup(mess)),
+	showFailPopup: mess => dispatch(ACTIONS.POPUP.showFailPopup(mess)),
+	getWriter: token => dispatch(ACTIONS.WRITER.getWriter(token)),
+	getDraft: token => dispatch(ACTIONS.DRAFT.getDraft(token)),
+	getRecycle: token => dispatch(ACTIONS.RECYCLE.getRecycle(token))
 })
 
 export default connect(

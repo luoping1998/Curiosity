@@ -132,7 +132,7 @@ class Paging extends Component {
 			<div className="paging">
 				<ul>
 					{List}
-					{ count === 0 ? "" : (<input type="text" value={this.props.value} onChange= {this.props.handleChange} />)}
+					{ count === 0 ? "" : (<input type="text" value={this.props.show} onChange= {this.props.handleChange} />)}
 					{ count === 0 ? "" : (<a href="javascript:"><li className="short" onClick = {this.props.handleGo}>GO</li></a>)}
 				</ul>
 			</div>

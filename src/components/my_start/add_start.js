@@ -34,6 +34,7 @@ class AddStart extends Component{
 			style: {}
 		}
 		this.writeFirst = this.writeFirst.bind(this);
+		this.saveDraft = this.saveDraft.bind(this);
 		this.handleBack = this.handleBack.bind(this);
 		this.handleSend = this.handleSend.bind(this);
 		this.handleWrite = this.handleWrite.bind(this);
@@ -215,7 +216,6 @@ class AddStart extends Component{
 				this.props.showFailPopup("请输入该章摘要")
 			}
 		}
-
 	}
 
 	sendImg() {
@@ -236,8 +236,43 @@ class AddStart extends Component{
 		})
 	}
 
+	saveDraft() {
+		if(!this.state.tit && !this.state.text) return;
+		const data = {
+			"bookName": this.state.name,
+		    "bookType": this.state.type,
+		    "bookIntroduce": this.state.intro,
+		    "firstTitle": this.state.tit,
+		    "firstContent": this.state.text,
+		    "firstSummary": this.state.summary,
+		    "status": "UNPUBLISHED"
+		}
+		axios.put("http://47.95.207.40/branch/book",
+			data: data,
+			{
+				headers: {
+					"Authorization": "Bearer " + this.props.token.access_token
+				}
+			}).then(res => {
+				console.log(res);
+			}).catch(err => {
+				if(err.response) {
+					if(err.response.data.error == 'invalid_token') {
+						this.props.showFailPopup("用户未登录！");
+					}
+				}else {
+					let mes = '';
+					if(err.response) {
+						mes = err.response.data.message;
+					}else {
+						mes = '网络异常！';
+					}
+					this.props.showFailPopup(mes);
+				}
+			})
+	}
+
 	render() {
-		console.log(this.state);
 		return (
 			<div className="my_start">
 				{
@@ -304,6 +339,7 @@ class AddStart extends Component{
 						</div>
 					) : (
 						<Editor 
+							saveDraft={this.saveDraft}
 							handleBack={this.handleBack}
 							handleSend={this.handleSend} 
 							handleTitle={this.handleTitle} 

@@ -33,7 +33,9 @@ class StartCard extends Component {
 								</h2>
 							</a>
 							<div className="type" style={style}>{cont.words}</div>
-							<div className="pub">已发布</div>
+							{
+								this.props.status == "PUBLISH" ? (<div className="pub">已发布</div>) : (<div className="notpub">未发布</div>)
+							}
 						</div>
 					</div>
 					<div className="details">
@@ -113,7 +115,7 @@ class StartList extends Component {
 	handleGo() {
 		if(this.state.pageShow > this.state.count || this.state.pageShow < 1) {
 			this.setState({
-				pageShow: ''
+				pageShow: this.state.pageNow
 			})
 		}else {
 			this.setState({
@@ -165,7 +167,7 @@ class StartList extends Component {
 				{List}
 				<Paging 
 					now={this.state.pageNow} 
-					value={this.state.pageShow}
+					show={this.state.pageShow}
 					count={this.state.count} 
 					goBack={this.goBack}
 					goNext={this.goNext}

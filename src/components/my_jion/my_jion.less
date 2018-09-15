@@ -3,6 +3,40 @@
 	height: auto;
 	margin-top: 20px;
 	background: rgba(255,255,255,0.4);
+	.jion_header {
+		width: 100%;
+		height: 50px;
+		background: white;
+		margin: 0;
+		border-bottom: 1px solid lightgray;
+		display: flex;
+		padding: 0;		
+		li {
+			list-style: none;
+			font-size: 16px;
+			line-height: 50px;
+			width: 100px;
+			text-align: center;
+			
+			&:hover {
+				color:#26a69a;
+				border-bottom: 1px solid #26a69a;
+			}
+
+			.show {
+				opacity: 0;
+			}
+		}
+
+		.active {
+			color: #26a69a;
+			border-bottom: 2px solid #26a69a;
+
+			.show {
+				opacity: 1;
+			}
+		}
+	}
 	.book_item {
 		width: 100%;
 		margin: 0 auto;
@@ -14,15 +48,13 @@
 			width: 100%;
 			padding-top: 10px;
 			background: white;
-
 			height: 60px;
 			display: flex;
 			justify-content: space-between;
 			align-items: center;
-			border-bottom: 1px solid lightgray;
-
+			margin-bottom: 2px;
 			h2 {
-				font-size: 20px;
+				font-size: 18px;
 				width: 250px;
 				margin-left: 20px;
 
@@ -112,12 +144,24 @@
 					background-position: center;
 				}
 
+				.res {
+					background:url("../../imgs/icons/nres.png") no-repeat;
+					background-size: 70% auto;
+					background-position: center;
+				}
+
 				&:hover {
 					color: #26a69a;
 
 					.del {
 						background:url("../../imgs/icons/adel.png") no-repeat;
 						background-size: 65% auto;
+						background-position: center;
+					}
+
+					.res {
+						background:url("../../imgs/icons/ares.png") no-repeat;
+						background-size: 70% auto;
 						background-position: center;
 					}
 				}
