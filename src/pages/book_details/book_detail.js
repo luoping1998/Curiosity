@@ -149,9 +149,7 @@ class BookDetails extends Component {
 			color: cont.color
 		}
 		const note = {
-			background: 'url(' + ("http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage || "default_book.jpg")) + ') no-repeat',
-			backgroundPosition: "center",
-			backgroundSize: "auto 100%",
+			background: 'url(' + "http://47.95.207.40/branch/file/book/" + (bookInfor.bookImage ? bookInfor.bookImage : "default_book.jpg") + ') center center / auto 100% no-repeat',
 		}
 		return (
 			<div className="main_body book_details">

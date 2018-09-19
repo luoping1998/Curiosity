@@ -1,68 +1,71 @@
 @mcolor : #26a69a;
-.novel_focus {
-	width: calc(100% - 40px);
-	height: 300px;
-	padding: 20px;
-	background: white;
-	margin-bottom: 20px;
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
+@media screen {
+	.novel_focus {
+		width: 100%;
+		height: 300px;
+		padding: 20px 0;
+		background: white;
+		margin-bottom: 20px;
+		display: flex;
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
 
-	.focus_notice {
-		width: calc(100% - 900px);
-		height: 100%;
+		.focus_notice {
+			width: calc(100% - 800px);
+			height: 100%;
 
-		.notice_header {
-			width: 90%;
-			height: 40px;
-			line-height: 35px;
-			font-weight: 1;
-			font-size: 20px;
-			padding: 0;
-			margin: 0;
-			border-bottom: 1px solid black;
-		}
+			.notice_header {
+				width: 90%;
+				height: 40px;
+				line-height: 35px;
+				font-weight: 1;
+				font-size: 20px;
+				padding: 0;
+				margin: 0;
+				border-bottom: 1px solid black;
+			}
 
-		.notice_item {
-			.notice_header();
-			height: 43px;
-			text-indent: 3px;
-			line-height: 45px;
-			font-size: 16px;
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			border-bottom: 1px solid lightgray;
-		}
+			.notice_item {
+				.notice_header();
+				height: 43px;
+				text-indent: 3px;
+				line-height: 45px;
+				font-size: 16px;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				border-bottom: 1px solid lightgray;
+			}
 
-		.no-border {
-			border: none;
-		}
+			.no-border {
+				border: none;
+			}
 
-		a {
-			color: black;
-			text-decoration: none;
+			a {
+				color: black;
+				text-decoration: none;
 
-			&:hover{
+				&:hover{
+					color: @mcolor;
+				}
+			}
+
+			.first {
 				color: @mcolor;
+				font-weight: bold;
 			}
 		}
 
-		.first {
-			color: @mcolor;
-			font-weight: bold;
-		}
-	}
+		.swiper-container {
+			width: 750px;
+			height: 280px;
 
-	.swiper-container {
-		width: 850px;
-		height: 300px;
-
-		.swiper-wrapper {
-			img {
-				width: 100%;
-				height: 100%;
+			.swiper-wrapper {
+				img {
+					width: 100%;
+					height: 100%;
+				}
 			}
 		}
 	}

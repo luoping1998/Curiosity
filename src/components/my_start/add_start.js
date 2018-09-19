@@ -30,7 +30,7 @@ class AddStart extends Component{
 			text: '',
 			blob: '',
 			src: '',
-			bookId: '',
+			bookId: window.location.href.split("=")[1] || "",
 			style: {}
 		}
 		this.writeFirst = this.writeFirst.bind(this);
@@ -75,7 +75,7 @@ class AddStart extends Component{
 	    oImg.onload = () => {
 	        let canvas = document.createElement("canvas");
 	        let context = canvas.getContext('2d');           //为canvas设置上下文
-	        let maxW = 180, maxH = 250;
+	        let maxW = 230, maxH = 310;
 	        //oImg的初始宽、高 
 	        let originW = oImg.width;               
 	        let originH = oImg.height;
@@ -110,6 +110,14 @@ class AddStart extends Component{
 
 	writeFirst() {
 		if(this.state.name && this.state.intro) {
+			//检测书名有bug
+			// axios.post("http://47.95.207.40/branch/book_check/bookName", {
+			// 	bookName: this.state.name
+			// }).then(res=>{
+			// 	console.log(res);
+			// }).catch(err=>{
+			// 	console.log(err);
+			// })
 			this.setState({
 				write : true
 			})
@@ -176,16 +184,22 @@ class AddStart extends Component{
 	}
 
 	handleSend() {
-		const data = {
+		const odata = {
 			"bookName": this.state.name,
 		    "bookType": this.state.type,
 		    "bookIntroduce": this.state.intro,
 		    "firstTitle": this.state.tit,
 		    "firstContent": this.state.text,
-		    "firstSummary": this.state.summary
+		    "firstSummary": this.state.summary,
+		    "status": "PUBLISH"
 		}
 
-		if(data.firstTitle && data.firstContent && data.firstSummary) {
+		const ndata = {
+			...odata,
+			"bookId": this.state.bookId
+		}
+		const data = this.state.data == "" ? odata : ndata;
+		if(data.firstTitle && data.firstContent) {
 			axios.put("http://47.95.207.40/branch/book",
 				data: data,
 				{
@@ -196,24 +210,21 @@ class AddStart extends Component{
 			)
 			.then( res => {
 				this.setState({
-					bookId: res.data.data.bookId
+					bookId: this.state.bookId || res.bookId
 				})
 				this.props.showSucPopup(res.data.message);
 				if(this.state.blob) {
 					this.sendImg();	
 				}else{
 					this.props.history.push('/book_details?bookId='+this.state.bookId);				}
-			})
-			.catch( err => {
-				this.props.showFailPopup(err.response.data.error_description);
+			}).catch( err => {
+				console.log(err);
 			})
 		}else {
 			if(!data.firstTitle) {
 				this.props.showFailPopup("请输入该章标题");
 			}else if(!data.firstContent) {
 				this.props.showFailPopup("请输入该章内容");
-			}else {
-				this.props.showFailPopup("请输入该章摘要")
 			}
 		}
 	}
@@ -237,8 +248,7 @@ class AddStart extends Component{
 	}
 
 	saveDraft() {
-		if(!this.state.tit && !this.state.text) return;
-		const data = {
+		const odata = {
 			"bookName": this.state.name,
 		    "bookType": this.state.type,
 		    "bookIntroduce": this.state.intro,
@@ -247,6 +257,13 @@ class AddStart extends Component{
 		    "firstSummary": this.state.summary,
 		    "status": "UNPUBLISHED"
 		}
+
+		const ndata = {
+			...odata,
+			"bookId": this.state.bookId
+		}
+
+		const data = this.state.bookId == "" ? odata : ndata;
 		axios.put("http://47.95.207.40/branch/book",
 			data: data,
 			{
@@ -254,7 +271,8 @@ class AddStart extends Component{
 					"Authorization": "Bearer " + this.props.token.access_token
 				}
 			}).then(res => {
-				console.log(res);
+				this.props.showSucPopup("保存成功！");
+				window.reload("/my/shelf/my_start/add?bookId="+res.data.bookId);
 			}).catch(err => {
 				if(err.response) {
 					if(err.response.data.error == 'invalid_token') {
@@ -270,6 +288,29 @@ class AddStart extends Component{
 					this.props.showFailPopup(mes);
 				}
 			})
+	}
+
+	componentWillMount() {
+		if(this.state.bookId == "") return;
+		axios.get(`http://47.95.207.40/branch/book_edit/${this.state.bookId}`, {
+			headers: {
+				Authorization: "Bearer " + this.props.token.access_token 
+			}
+		}).then(res => {
+			if(!res.data.status) {
+				const data = res.data.data;
+				this.setState({
+					data: data,
+					name: data.bookName,
+					intro: data.bookIntroduce,
+					tit: data.firstTitle,
+					text: data.firstContent,
+					summary: data.firstSummary
+				})
+			}
+		}).catch(err => {
+			console.log(err);
+		})
 	}
 
 	render() {

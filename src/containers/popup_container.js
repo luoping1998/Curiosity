@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import ACTIONS from '../actions/index.js'
 
 const mapStateToProps = state => ({
-	popup: state.popup
+	popup: state.popup,
 })
 
 const mapDispatchToProps = dispatch => ({

@@ -14,6 +14,9 @@ class StartCard extends Component {
 		super(props);
 	}
 
+	componentWillMount() {
+	}
+
 	render() {
 		const cont = changeStyle(this.props.bookType);
 		const style = {
@@ -27,7 +30,7 @@ class StartCard extends Component {
 							<img className="item_img" src={"http://47.95.207.40/branch/file/book/" + this.props.bookImage }/>
 						</a>
 						<div className="infor_detail">
-							<a href={"/book_details?bookId=" + this.props.bookId}>
+							<a href={this.props.status == "PUBLISH" ? ("/book_details?bookId=" + this.props.bookId) : ("javascript:;")}>
 								<h2 className="infor_name">
 								{this.props.bookName}
 								</h2>
@@ -42,13 +45,16 @@ class StartCard extends Component {
 						<p>当前共{this.props.joinUsers}人参与续写&nbsp;&nbsp;最快续写至第{this.props.maxLayer}章</p>
 						<div className="infor_intro">{this.props.content}</div>
 					</div>
-					<div className="actions">
-						<a href={"/book_details?bookId=" + this.props.bookId}><div className="btn">查看详情</div></a>
-						<p>
-							<a href="javascript:">编辑</a>
-							<a href="javascript:">删除</a>
-						</p>
-					</div>
+					{
+						this.props.status == "PUBLISH" ? 
+						( <div className="actions">
+							<a href={"/book_details?bookId=" + this.props.bookId}><div className="btn">查看详情</div></a>
+						 </div> ) : 
+						( <div className="actions">
+							<a href={"/my/shelf/my_start/add?bookId=" + this.props.bookId}><div className="btn">继续编辑</div></a>
+						 </div> )
+					}
+
 				</div>
 		)
 	}
@@ -70,7 +76,9 @@ class StartList extends Component {
 		this.goNext = this.goNext.bind(this);
 		this.goPage = this.goPage.bind(this);
 		this.handleGo = this.handleGo.bind(this);
+		this.handleChange = this.handleChange.bind(this);
 	}
+
 	goBack() {
 		let val = Number(this.state.pageNow) - 1;
 		this.setState({
@@ -93,7 +101,6 @@ class StartList extends Component {
 
 	goPage(e) {
 		let val = Number(e.target.innerHTML);
-		
 		this.setState({
 			pageNow: val,
 			pageShow: val
@@ -104,8 +111,8 @@ class StartList extends Component {
 
 	getBooks() {
 		if(this.state.arr.length) {
-			let start = (this.state.pageNow - 1) * 10;
-			let end = (start + 10) > this.state.arr.length ? this.state.arr.length : (start + 10);
+			let start = (this.state.pageNow - 1) * 4;
+			let end = (start + 4) > this.state.arr.length ? this.state.arr.length : (start + 4);
 			this.setState({
 				book: this.state.arr.slice(start, end + 1)
 			})
@@ -126,6 +133,12 @@ class StartList extends Component {
 		}
 	}
 
+	handleChange(e) {
+		this.setState({
+			count: e.target.value
+		})
+	}
+
 	componentWillMount() {
 		axios.get("http://47.95.207.40/branch/user/book",{
 			headers: {
@@ -134,7 +147,7 @@ class StartList extends Component {
 		}).then(res => {
 			this.setState({
 				arr: res.data.data,
-				count: Math.ceil(res.data.data.length / 10)
+				count: Math.ceil(res.data.data.length / 5)
 			},()=>{
 				this.getBooks();
 			})
@@ -186,6 +199,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
 	showSucPopup: mess => dispatch(ACTIONS.POPUP.showSucPopup(mess)),
 	showFailPopup: mess => dispatch(ACTIONS.POPUP.showFailPopup(mess)),
+	getWriter: token => dispatch(ACTIONS.WRITER.getWriter(token))
 }) 
 
 export default connect(

@@ -30,7 +30,7 @@ class NovelRcmd extends Component {
 			<div className="novel_rcmd">
 				<div className="inner_bd">
 					<h2 className="tit">热门推荐</h2>
-					<div className="inner_cont"></div>
+					<div className="inner_cont">等接口</div>
 				</div>
 			</div>
 		)

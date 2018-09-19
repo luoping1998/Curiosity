@@ -16,6 +16,7 @@ import BookDetails from './pages/book_details/book_detail.js'
 import Reader from './pages/read/read.js'
 import Write from './pages/write/write.js'
 import Author from './pages/author/author.js'
+import Toplist from './pages/toplist/toplist.js'
 
 import { connect } from 'react-redux'
 import ACTIONS from './actions/index.js'
@@ -72,6 +73,7 @@ class App extends Component{
 						read={this.state.read} 
 					/>
 					<Route exact path="/" component={Home} />
+					<Route path="/toplist" component={Toplist} />
 					<Route path="/my" component={Myslef} />
 					<Route path="/all" component={All} />
 					<Route path="/book_details" component={BookDetails} />
@@ -87,6 +89,7 @@ class App extends Component{
 
 const mapStateToProps = state => ({
 	logif: state.logif,
+	infor: state.infor,
 	icon: state.infor.icon
 }) 
 
