@@ -9,19 +9,13 @@ import { changeStyle } from '../../public/common.js'
 function transSort(num) {
 	switch(num) {
 		case 0:
-			return 'READ_NUM'
+			return 'CREATE_TIME'
 		case 1:
 			return 'FOUCUS_ON'
 		case 2:
 			return 'COMMENT'
 		case 3:
-			return 'JOIN_USERS'
-		case 4:
 			return 'WORDS'
-		case 5:
-			return 'BRANCH_NUM'
-		case 6:
-			return 'LAYER'
 	}
 }
 class AllNav extends Component {
@@ -30,7 +24,6 @@ class AllNav extends Component {
 	}
 	render() {
 		let index = this.props.index - 0;
-		console.log(index);
 		return (
 			<ul className="all_nav">
 				<div className="selected">
@@ -132,37 +125,22 @@ class AllHeader extends Component {
 			<ul className="page_header">
 				<a href="javascript:">
 				<li className={now === 0 ? "active" : ''} index={0} onClick={this.props.handleSort}>
-					总阅读量
+					更新时间{ now === 0 ? " ↓" : ""}
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 1 ? "active" : ''} index={1} onClick={this.props.handleSort}>
-					总关注量
+					总关注{ now === 1 ? " ↓" : ""}
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 2 ? "active" : ''} index={2} onClick={this.props.handleSort}>
-					总评论量
+					总评论{ now === 2 ? " ↓" : ""}
 				</li>
 				</a>
 				<a href="javascript:">
 				<li className={now === 3 ? "active" : ''} index={3} onClick={this.props.handleSort}>
-					总参与人数
-				</li>
-				</a>
-				<a href="javascript:">
-				<li className={now === 4 ? "active" : ''} index={4} onClick={this.props.handleSort}>
-					总字数
-				</li>
-				</a>
-				<a href="javascript:">
-				<li className={now === 5 ? "active" : ''} index={5} onClick={this.props.handleSort}>
-					总续写量
-				</li>
-				</a>
-				<a href="javascript:">
-				<li className={now === 6 ? "active" : ''} index={6} onClick={this.props.handleSort}>
-					续写进度
+					总字数{ now === 3 ? " ↓" : ""}
 				</li>
 				</a>
 			</ul>
@@ -239,7 +217,7 @@ class AllPage extends Component {
 			books: [],		//当前页展示的book数组
 			pageNow: 1,		//当前页
 			pageShow: 1, 	//当前框显示数字
-			sort: 'READ_NUM',	//排序内容
+			sort: 'CREATE_TIME',	//排序内容
 			sortType: 1,	//默认排序方式
 			now: 0
 		}
@@ -262,11 +240,14 @@ class AllPage extends Component {
 		let now = e.target.getAttribute('index') - 0;
 		this.setState({
 			sort: transSort(now),
-			now: now
+			now: now,
+			pageNow: 1,
+			pageShow: 1
 		},()=>{
 			this.getBooks();
 		})
 	}
+
 	toAll() {
 		this.setState({
 			index: -1,

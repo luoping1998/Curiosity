@@ -1,65 +1,117 @@
 #author {
 	margin-top: 20px;
-	padding: 10px 0;
-	background: white;
-
 	.upper {
-		width: 95%;
+		width: 100%;
 		margin:0 auto;
-		height: 200px;
+		height: 180px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;	
-
+		background: white;
 		.icon {
 			width: 100px;
 			height: 80%;
-			margin-right: 20px;
+			margin: 0 20px;
 
 			img {
 				width: 100px;
 				height: 100px;
-				border:1px solid black;
 			}
 		}
 
 		.infor {
-			width: calc(100% - 120px);
-			height: 80%;
-
+			width: calc(100% - 140px);
+			height: 160px;
+			
 			.inf_bd {
-				width: 100%;
+				width: 98%;
 				height: 100px;
+				text-indent: 10px;
 				border-bottom: 1px solid lightgray;
-				p {
-					border: none;
+				h2 {
+					margin: 0;
+					padding-top: 10px;
+					margin-bottom: 20px;
 				}
 			}
 
-			p {
-				height: 40px;
-				border-bottom: 1px solid lightgray;
+			.inf_dn {
+				width: 98%;
+				height: 60px;
+				line-height: 40px;
+				padding-left: 10px;
+				line-height: 60px;
+				.num {
+					font-size: 25px;
+					font-weight: bold;
+					margin-right: 40px;
+					margin-left: 10px;
+				}
+				
+				.act_sub {
+					width: 300px;
+					height: 100%;
+					display: flex;
+					align-items: center;
+					float: right;
+					justify-content: space-around;
+				}
+				.btn {
+					padding: 4px 14px;
+					width: 40px;
+					height: 20px;
+					font-size: 15px;
+					text-align: center;
+					float: right;
+					color: #26a69a;
+					border: 1px solid #26a69a;
+					line-height: 20px;
+					border-radius: 90px;
+					
+					a {
+						color: #26a69a;
+					}
+
+					&:hover{
+						background:#5cbcb3;
+						color: white;
+						border: 1px solid #5cbcb3;
+						
+						a {
+							color: white;
+						}
+					}
+				}
+				
+				.focued {
+					color: white;
+					background-color: #26a69a;
+					border: 1px solid #26a69a;
+					a {
+						color: white;
+					}
+				}
 			}
 		}
 	}
+
 	.show {
-		width: 95%;
-		margin:0 auto;
+		width: 100%;
+		margin:15px auto;
 		height: auto;
-		padding: 20px 0;
 		display: flex;
 		justify-content: space-between;
 
 		.lf_slider {
-			width: calc( 100% - 320px);
+			width: calc( 100% - 315px);
+			background: white;
 			height: 300px;
-			border: 1px solid black;
 		}
 
 		.rt_slider {
 			width:  300px;
+			background: white;
 			height: 400px;
-			border: 1px solid black;
 		}
 	}
 }

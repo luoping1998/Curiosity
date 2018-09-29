@@ -1,0 +1,128 @@
+@mcolor: #26a69a;
+.toplist {
+	padding: 10px;
+	background: white;
+	display:  flex;
+	justify-content: center;
+	flex-wrap: wrap;
+
+	a {
+		&:hover {
+			color:@mcolor;
+		}
+	}
+
+	.list_item {
+		width: calc( 25% - 45px);
+		height: auto;
+		padding: 10px 20px;
+
+		h2 {
+			width: 100%;
+			font-size: 18px;
+			height: 30px;
+			font-weight: 1;
+			margin-bottom: 5px;
+			border-bottom: 1px solid black;
+		}
+
+		.first {
+			width: 100%;
+			height: 100px;
+			padding: 10px 0;
+			display: flex;
+			justify-content: space-between;
+			
+			.infor {
+				width: calc( 100% - 100px);
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+
+				.num{
+					width: 40px;
+					background: #ff534d;
+					color:white;
+					padding: 0 3px;
+					font-size: 17px;
+					font-weight: bold;
+				}
+
+				.i_hd {
+					font-size: 17px;
+					font-weight: 1;
+					margin: 0;
+
+					.small {
+						margin-left: 5px;
+						font-size: 13px;
+					}
+				}
+
+				.special {
+					color: #ff534d;
+				}
+				.author {
+					font-size: 13px;
+					color: gray;
+					a {
+						color: gray;
+						&:hover {
+							color:@mcolor;
+						}
+					}
+				}
+			}
+			img {
+				width: 100px;
+				height: 100%;
+			}
+		}
+
+		.other {
+			width: 100%;
+			height: 40px;
+			margin-top: 5px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.num {
+				width: 25px;
+				height: 25px;
+				font-size: 16px;
+				line-height: 25px;
+				text-align: center;
+				font-weight: bold;
+				color: white;
+				background: @mcolor;
+			}
+
+			.num2 {
+				.num();
+				background: #ff6328;
+			}
+
+			.num3 {
+				.num();
+				background: #fed428;
+			}
+
+			.infor {
+				width: calc( 100% - 35px);
+				height: 90%;
+				border-top: 1px solid lightgray;
+				line-height: 36px;
+				font-size: 16px;
+
+				.r_num {
+					float: right;
+					font-size: 13px;
+					margin-right: 10px;
+					color: gray;
+				}
+			}
+		}
+	}
+}

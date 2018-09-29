@@ -3,21 +3,18 @@ import{Link, Route} from 'react-router-dom'
 import axios from 'axios'
 import { changeStyle } from '../../public/common.js'
 import './novel_bar.less'
-
-class ListItem extends Component {
-	constructor(props) {
-		super(props);
-	}
-
-	render() {
+const ListItem = (index, val, href) => {
 		return (
-			<div className="cont_item">
-				<div className="index">{this.props.index}</div>
-				<Link to={ "/book/"+this.props.bookID }><div className="title">{this.props.title}</div></Link>
-				<div className="name">{this.props.name}</div>
-			</div>
+			<div className="cont_item" key={val.bookId}>
+				<div className={ "index" + (index + 2)}>{index + 2 }</div>
+				<div className="title">
+					<a href={href}>{ val ? val.bookName : "" }</a>
+				</div>
+				<div className="name">
+					<a href={"/author?userId=" + val.author.userId}>{ val ? val.author.username : "" }</a>
+				</div>
+			</div>	
 		)
-	}
 } 
 
 class NovelRcmd extends Component {
@@ -52,19 +49,8 @@ class TopList extends Component {
 			padding: "3px 5px"
 		}
 		const List = this.props.List.splice(1,7).map( (val, index) => {
-			console.log(val.author);
 			let href = "/book_details?bookId=" + (val ? val.bookId : "")
-			return (
-					<div className="cont_item" key={val.bookId}>
-						<div className={ "index" + (index + 2)}>{index + 2 }</div>
-						<div className="title">
-							<a href={href}>{ val ? val.bookName : "" }</a>
-						</div>
-						<div className="name">
-							<a href={"/author?userId=" + val.userId}>{ val ? val.author.username : "" }</a>
-						</div>
-					</div>	
-				)
+			return ListItem(index, val, href);
 		})
 		const note = {
 			background: "url(" + ("http://47.95.207.40/branch/file/book/" + (one ? one.bookImage : "default_book.jpg")) + ") no-repeat",

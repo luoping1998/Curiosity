@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import Swiper from 'swiper'
 import 'swiper/dist/css/swiper.min.css'
-
+import '../../App.less'
 
 class FadeSlide extends Component {
 	constructor(props) {
@@ -21,7 +21,7 @@ class FadeSlide extends Component {
 		    pagination: {
       			el: '.swiper-pagination',
       			type: "bullets",
-      			 clickable: true,
+      			clickable: true,
     			clickableClass : 'my-pagination-clickable',
     		}
 	  })

@@ -128,7 +128,7 @@ class Member extends Component {
 									<div className="icon prod"></div>
 									<p>我的作品</p>
 								</div>
-								<div className="num"></div>
+								<div className="num">{this.props.infor.bookNum}</div>
 							</div>
 						</div>
 						<div className="card">
@@ -137,7 +137,7 @@ class Member extends Component {
 									<div className="icon focs"></div>
 									<p>我的关注</p>
 								</div>
-								<div className="num"></div>
+								<div className="num">{this.props.infor.focusOnNum}</div>
 							</div>
 						</div>
 						<div className="card">
@@ -146,7 +146,7 @@ class Member extends Component {
 									<div className="icon fans"></div>
 									<p>我的粉丝</p>
 								</div>
-								<div className="num"></div>
+								<div className="num">{this.props.infor.fansNum}</div>
 							</div>
 						</div>
 					</div>
