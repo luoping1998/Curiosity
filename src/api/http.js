@@ -82,4 +82,18 @@ export default class http {
 		};
 		return this.instance.post('/user/register', data, { headers });
 	}
+	
+	/**
+	 * 获取分页
+	 * @param {*} params 参数
+	 * 	pageNo 需要页数
+	 *	pageSize 每页个数
+	 *	sort: xx优先
+	 *		'CREATE_TIME' 
+	 *	sortType: 排序方式 
+	 *		 1
+	 */
+	getBook(params) {
+		return this.instance.get('/book', { params });
+	}
 }

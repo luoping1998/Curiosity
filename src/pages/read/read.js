@@ -372,7 +372,7 @@ class Reader extends Component {
 		const token = this.props.token.access_token || "";
 
 		axios.post(`http://47.95.207.40/branch/user/${this.state.branchId}/vote`,
-		data: data,
+		data,
 		{
 			headers: {
 				"Authorization": `Bearer ${token}`

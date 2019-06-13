@@ -2,7 +2,8 @@ import React, {Component} from 'react'
 import{Link, Route} from 'react-router-dom'
 import axios from 'axios'
 import { changeStyle } from '../../public/common.js'
-import './novel_bar.less'
+import './index.less'
+
 const ListItem = (index, val, href) => {
 		return (
 			<div className="cont_item" key={val.bookId}>

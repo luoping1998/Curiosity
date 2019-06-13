@@ -85,7 +85,7 @@ class Write extends Component {
 			"status": 'STATUS_ONLINE',
 		}
 		axios.put("http://47.95.207.40/branch/branch",
-			data: data,
+			data,
 			{
 				headers: {
 					"Authorization": "Bearer " + this.props.token.access_token
@@ -155,7 +155,7 @@ class Write extends Component {
 
 		const data = this.state.first ? newdata : updata;
 		axios.put("http://47.95.207.40/branch/branch",
-			data: data,
+			data,
 			{
 				headers: {
 					"Authorization": "Bearer " + this.props.token.access_token

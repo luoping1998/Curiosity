@@ -201,7 +201,7 @@ class AddStart extends Component{
 		const data = this.state.data == "" ? odata : ndata;
 		if(data.firstTitle && data.firstContent) {
 			axios.put("http://47.95.207.40/branch/book",
-				data: data,
+				data,
 				{
 					headers: {
 						"Authorization": "Bearer " + this.props.token.access_token
@@ -265,7 +265,7 @@ class AddStart extends Component{
 
 		const data = this.state.bookId == "" ? odata : ndata;
 		axios.put("http://47.95.207.40/branch/book",
-			data: data,
+			data,
 			{
 				headers: {
 					"Authorization": "Bearer " + this.props.token.access_token

@@ -3,7 +3,7 @@ import{Link, Route} from 'react-router-dom'
 
 import FadeSlide from '../fade_slide/fade_slide.js'
 
-import './novel_focus.less'
+import './index.less'
 
 import r0 from '../../imgs/slide/0.jpg';
 import r1 from '../../imgs/slide/1.jpg';

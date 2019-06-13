@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import{Link, Route} from 'react-router-dom'
 
-import './new_list.less'
+import './index.less'
 
 class NewList extends Component {
 	constructor(props) {

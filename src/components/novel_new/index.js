@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
-import './novel_new.less'
-import axios from 'axios'
+import './index.less'
+import client from '../../api';
 import NovelCard from '../novel_card/novel_card.js'
 
 
@@ -13,14 +13,15 @@ class NovelNew extends Component {
 	}
 
 	componentDidMount() {
-		axios.get("http://47.95.207.40/branch/book", {
-			params:{
-				pageNo: 1,
-				pageSize: 9,
-				sort: 'CREATE_TIME',
-				sortType: 1
-			}
-		}).then(res => {
+		const params = {
+			pageNo: 1,
+			pageSize: 9,
+			sort: 'CREATE_TIME',
+			sortType: 1
+		};
+
+		client.getBook(params)
+		.then(res => {
 			this.setState({
 				list: res.data.data.list
 			})

@@ -9,7 +9,7 @@ import Cover from './components/cover/cover.js'
 import LoginBoxContainer from './containers/login_box_container.js'
 import PopupContainer from './containers/popup_container.js'
 
-import Home from './pages/home/home.js'
+import Home from './pages/home'
 import Myslef from './pages/myself/myself.js'
 import All from './pages/all/all.js'
 import BookDetails from './pages/book_details/book_detail.js'
